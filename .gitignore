@@ -1,0 +1,5 @@
+.DS_Store
+.idea
+aws.json
+node_modules
+bower_components
