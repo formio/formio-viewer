@@ -20,11 +20,17 @@ _.each(['view'], function(type) {
     });
 
     // Create the minified js and css files.
-    gulp.task('useref:' + type, ['clean:' + type], function() {
+    gulp.task('minify:' + type, ['clean:' + type], function() {
         return gulp.src('src/' + type + '/index.html')
             .pipe(plugins.useref())
             .pipe(plugins.if('*.js', plugins.uglify()))
             .pipe(plugins.if('*.css', plugins.minifyCss()))
+            .pipe(plugins.if('*.html', plugins.htmlmin({
+                collapseWhitespace: true,
+                minifyJS: true,
+                minifyCSS: true,
+                processScripts: ['text/template']
+            })))
             .pipe(gulp.dest('dist/' + type));
     });
 
@@ -39,7 +45,7 @@ _.each(['view'], function(type) {
     });
 
     // Create the html.
-    gulp.task('html:' + type, ['useref:' + type, 'fonts:' + type, 'assets:' + type]);
+    gulp.task('html:' + type, ['minify:' + type, 'fonts:' + type, 'assets:' + type]);
 
     // Define the build task.
     buildTasks.push('build:' + type);
