@@ -18,14 +18,12 @@
   ],
   "dependencies": {
     "jquery": "^2.2.0",
-    "seamless": "^0.0.5"
+    "seamless": "^0.0.5",
+    "formio": "^0.9.1"
   },
   "overrides": {
     "bootstrap": {
-      "main": [
-        "dist/js/bootstrap.js",
-        "dist/css/bootstrap.css"
-      ]
+      "main": []
     },
     "seamless": {
       "main": "build/seamless.child.min.js"

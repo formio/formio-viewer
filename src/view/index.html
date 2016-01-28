@@ -43,9 +43,12 @@
             display: none !important;
         }
     </style>
+    <!-- build:css css/app.css -->
+    <!-- bower:css -->
     <link rel="stylesheet" href="../../bower_components/ui-select/dist/select.css" />
     <link rel="stylesheet" href="../../bower_components/formio/css/formio.css" />
-
+    <!-- endbower -->
+    <!-- endbuild -->
 </head>
 <body ng-app="formioFormApp">
     <script id="header" type="text/template">
@@ -117,10 +120,8 @@
         <formio src="formioSrc"></formio>
     </div>
     <!-- build:js js/app.js -->
-    <!-- bower:js -->
     <script src="../../bower_components/jquery/dist/jquery.js"></script>
     <script src="../../bower_components/seamless/build/seamless.child.min.js"></script>
-    <!-- endbower -->
     <!-- endbuild -->
     <script src="https://npmcdn.com/formio@latest/dist/formio-full.min.js"></script>
     <script type="text/javascript">
