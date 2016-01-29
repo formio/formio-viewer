@@ -28,6 +28,7 @@
         location.hash.substr(1).replace(/\?/g, '&').split("&").forEach(function(item) {
             query[item.split("=")[0]] = item.split("=")[1] && decodeURIComponent(item.split("=")[1]);
         });
+        query.wizard = parseInt(query.wizard, 10);
         if (query.theme) {
             var cssLink = '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/';
             cssLink += query.theme;
@@ -53,7 +54,8 @@
 <body ng-app="formioFormApp">
     <script id="header" type="text/template">
         <nav class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
+            <div class="container" style="position:relative;">
+                <small style="position:absolute;right:15px;bottom:0;"><a href="https://form.io">powered by &lt;form.io&gt;</a></small>
                 <div class="navbar-header">
                     <a class="navbar-brand" ng-cloak>{{ form.title }}</a>
                 </div>
@@ -117,18 +119,21 @@
 
     <!-- Add the form.io form. -->
     <div class="container main">
-        <formio src="formioSrc"></formio>
+        <formio src="formioSrc" ng-if="formioSrc"></formio>
+        <formio-wizard src="wizardSrc" ng-if="wizardSrc"></formio-wizard>
     </div>
-    <!-- build:js js/app.js -->
-    <script src="../../bower_components/jquery/dist/jquery.js"></script>
-    <script src="../../bower_components/seamless/build/seamless.child.min.js"></script>
-    <!-- endbuild -->
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script src="https://cdn.rawgit.com/travist/seamless.js/master/build/seamless.child.min.js"></script>
     <script src="https://npmcdn.com/formio@latest/dist/formio-full.min.js"></script>
+    <script src="https://cdn.rawgit.com/formio/formio-wizard/master/dist/wizard.js"></script>
     <script type="text/javascript">
-        $.seamless.connect();
-        angular.module('formioFormApp', ['formio'])
+        $.seamless.connect({
+            container: 'div.main'
+        });
+        angular.module('formioFormApp', ['formio', 'formio.wizard'])
             .run(['$rootScope', '$location', function($rootScope, $location) {
                 $rootScope.formioSrc = '';
+                $rootScope.wizardSrc = '';
                 var path = $location.path();
                 var query = $location.search();
                 var returnUrl = query.return;
@@ -142,7 +147,12 @@
                 }
 
                 // Set the form on the rootScope.
-                $rootScope.formioSrc = form;
+                if (parseInt(query.wizard, 10)) {
+                    $rootScope.wizardSrc = form;
+                }
+                else  {
+                    $rootScope.formioSrc = form;
+                }
 
                 // Bind when the form is loaded.
                 $rootScope.$on('formLoad', function(err, form) {
