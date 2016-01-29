@@ -51,7 +51,7 @@
     <!-- endbower -->
     <!-- endbuild -->
 </head>
-<body ng-app="formioFormApp">
+<body ng-app="formioFormApp" ng-class="{'wizard': wizardSrc}">
     <script id="header" type="text/template">
         <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="container" style="position:relative;">
@@ -110,6 +110,28 @@
         .hasheader .main {
             margin-top: 70px;
         }
+        .wizard.hasheader .main {
+            margin-top: 0px;
+        }
+        /*Form Wizard*/
+        .bs-wizard {border-bottom: solid 1px #e0e0e0; padding: 0 0 10px 0; margin-top: 70px;}
+        .bs-wizard > .bs-wizard-step {padding: 0; position: relative;}
+        .bs-wizard > .bs-wizard-step + .bs-wizard-step {}
+        .bs-wizard > .bs-wizard-step .bs-wizard-stepnum {color: #595959; font-size: 16px; margin-bottom: 5px;}
+        .bs-wizard > .bs-wizard-step .bs-wizard-info {color: #999; font-size: 14px;}
+        .bs-wizard > .bs-wizard-step > .bs-wizard-dot {position: absolute; width: 30px; height: 30px; display: block; background: #fbe8aa; top: 45px; left: 50%; margin-top: -15px; margin-left: -15px; border-radius: 50%;}
+        .bs-wizard > .bs-wizard-step > .bs-wizard-dot:after {content: ' '; width: 14px; height: 14px; background: #fbbd19; border-radius: 50px; position: absolute; top: 8px; left: 8px; }
+        .bs-wizard > .bs-wizard-step > .progress {position: relative; border-radius: 0px; height: 8px; box-shadow: none; margin: 20px 0;}
+        .bs-wizard > .bs-wizard-step > .progress > .progress-bar {width:0px; box-shadow: none; background: #fbe8aa;}
+        .bs-wizard > .bs-wizard-step.complete > .progress > .progress-bar {width:100%;}
+        .bs-wizard > .bs-wizard-step.active > .progress > .progress-bar {width:50%;}
+        .bs-wizard > .bs-wizard-step:first-child.active > .progress > .progress-bar {width:0%;}
+        .bs-wizard > .bs-wizard-step:last-child.active > .progress > .progress-bar {width: 100%;}
+        .bs-wizard > .bs-wizard-step.disabled > .bs-wizard-dot {background-color: #f5f5f5;}
+        .bs-wizard > .bs-wizard-step.disabled > .bs-wizard-dot:after {opacity: 0;}
+        .bs-wizard > .bs-wizard-step:first-child  > .progress {left: 50%; width: 50%;}
+        .bs-wizard > .bs-wizard-step:last-child  > .progress {width: 50%;}
+        .bs-wizard > .bs-wizard-step.disabled a.bs-wizard-dot{ pointer-events: none; }
     </style>
     <!--[if IE 6]><p class="browsehappy"><img />You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]-->
     <!--[if IE 7]><p class="browsehappy"><img src="https://cdn.rawgit.com/alrra/browser-logos/master/internet-explorer/internet-explorer_64x64.png" />You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]-->
@@ -118,9 +140,19 @@
     <!-- BROWSE HAPPY ENDS HERE -->
 
     <!-- Add the form.io form. -->
+    <div class="container" ng-if="wizardSrc" ng-cloak>
+        <div class="row bs-wizard" style="border-bottom:0;">
+            <div ng-class="{disabled: ($index > currentPage), active: ($index == currentPage), complete: ($index < currentPage)}" class="{{ colclass }} bs-wizard-step" ng-repeat="page in pages">
+                <div class="text-center bs-wizard-stepnum">{{ page }}</div>
+                <div class="progress"><div class="progress-bar"></div></div>
+                <a ng-click="gotoPage($index)" class="bs-wizard-dot"></a>
+            </div>
+        </div>
+        <style type="text/css">.bs-wizard > .bs-wizard-step:first-child { margin-left: {{ margin }}%; }</style>
+    </div>
     <div class="container main">
         <formio src="formioSrc" ng-if="formioSrc"></formio>
-        <formio-wizard src="wizardSrc" ng-if="wizardSrc"></formio-wizard>
+        <formio-wizard src="wizardSrc" ng-if="wizardSrc" storage="'wizard'"></formio-wizard>
     </div>
     <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
     <script src="https://cdn.rawgit.com/travist/seamless.js/master/build/seamless.child.min.js"></script>
@@ -134,6 +166,32 @@
             .run(['$rootScope', '$location', function($rootScope, $location) {
                 $rootScope.formioSrc = '';
                 $rootScope.wizardSrc = '';
+                $rootScope.pages = [];
+                $rootScope.currentPage = 0;
+                $rootScope.colclass = '';
+
+                $rootScope.gotoPage = function(index) {
+                    $rootScope.$broadcast('wizardGoToPage', index);
+                };
+
+                $rootScope.$on('wizardPage', function(event, page) {
+                    $rootScope.currentPage = page;
+                });
+
+                $rootScope.$on('wizardFormLoad', function(event, form) {
+                    angular.forEach(form.components, function(component) {
+                        $rootScope.pages.push(component.title);
+                    });
+                    if ($rootScope.pages.length > 6) {
+                        $rootScope.margin = ((1 - ($rootScope.pages.length * 0.0833333333)) / 2) * 100;
+                        $rootScope.colclass = 'col-sm-1';
+                    }
+                    else {
+                        $rootScope.margin = ((1 - ($rootScope.pages.length * 0.1666666667)) / 2) * 100;
+                        $rootScope.colclass = 'col-sm-2';
+                    }
+                });
+
                 var path = $location.path();
                 var query = $location.search();
                 var returnUrl = query.return;
