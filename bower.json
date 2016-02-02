@@ -20,7 +20,8 @@
     "jquery": "^2.2.0",
     "seamless": "^0.0.5",
     "formio": "^0.9.1",
-    "formio-wizard": "^0.0.6"
+    "formio-wizard": "^0.0.6",
+    "es6-promise": "^3.0.2"
   },
   "overrides": {
     "bootstrap": {
