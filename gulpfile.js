@@ -1,6 +1,5 @@
 var gulp = require('gulp');
 var plugins = require('gulp-load-plugins')();
-var wiredep = require('wiredep').stream;
 var del = require('del');
 var vinylPaths = require('vinyl-paths');
 var _ = require('lodash');
@@ -12,11 +11,6 @@ _.each(['view'], function(type) {
     cleanTasks.push('clean:' + type);
     gulp.task('clean:' + type, function() {
         return gulp.src('dist/' + type).pipe(vinylPaths(del));
-    });
-
-    // Wire the dependencies into index.html
-    gulp.task('wiredep:' + type, function() {
-        return gulp.src('src/' + type + '/index.html').pipe(wiredep()).pipe(gulp.dest('src/' + type));
     });
 
     // Create the minified js and css files.
@@ -44,12 +38,9 @@ _.each(['view'], function(type) {
         return gulp.src('assets/**/*').pipe(gulp.dest('dist/' + type + '/assets'));
     });
 
-    // Create the html.
-    gulp.task('html:' + type, ['minify:' + type, 'fonts:' + type, 'assets:' + type]);
-
     // Define the build task.
     buildTasks.push('build:' + type);
-    gulp.task('build:' + type, ['wiredep:' + type, 'html:' + type]);
+    gulp.task('build:' + type, ['minify:' + type, 'fonts:' + type, 'assets:' + type]);
 });
 
 // Clean the dist folder.

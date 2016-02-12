@@ -21,7 +21,6 @@
     "gulp-minify-css": "^1.2.3",
     "gulp-useref": "^3.0.5",
     "lodash": "^4.0.1",
-    "vinyl-paths": "^2.1.0",
-    "wiredep": "^3.0.0"
+    "vinyl-paths": "^2.1.0"
   }
 }
