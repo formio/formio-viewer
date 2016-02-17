@@ -215,8 +215,7 @@
                 });
 
                 // Bind to the submission of the form.
-                $rootScope.$on('formSubmission', function(err, submission) {
-                    if (err) { return; }
+                $rootScope.$on('formSubmission', function(event, submission) {
                     if (!submission) { return; }
                     if (returnUrl) {
                         var hasQuery = !!returnUrl.match(/\?/);
