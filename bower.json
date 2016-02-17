@@ -21,7 +21,8 @@
     "seamless": "^0.0.5",
     "ng-formio": "^1.2.1",
     "formio-wizard": "^1.0.0",
-    "es6-promise": "^3.0.2"
+    "es6-promise": "^3.0.2",
+    "signature_pad": "^1.5.2"
   },
   "overrides": {
     "bootstrap": {
