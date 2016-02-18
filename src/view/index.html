@@ -49,11 +49,11 @@
 <body ng-app="formioFormApp" ng-class="{'wizard': wizardSrc}">
     <script id="header" type="text/template">
         <nav class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container" style="position:relative;">
-                <small style="position:absolute;right:15px;bottom:0;"><a href="https://form.io">powered by &lt;form.io&gt;</a></small>
+            <div class="container">
                 <div class="navbar-header">
                     <a class="navbar-brand" ng-cloak>{{ form.title }}</a>
                 </div>
+                <p class="navbar-text navbar-right"><a href="https://form.io" class="navbar-link">powered by &lt;form.io&gt;</a></p>
             </div>
         </nav>
     </script>
@@ -111,6 +111,9 @@
         .iframe .navbar .container {
             margin:0;
             width: 100%;
+        }
+        .iframe .navbar .container .navbar-right {
+            margin-right: 0;
         }
         .hasheader .main {
             margin-top: 70px;
