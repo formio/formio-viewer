@@ -156,7 +156,7 @@
     <script src="https://npmcdn.com/ng-formio@latest/dist/formio-full.js"></script>
     <script src="https://cdn.rawgit.com/formio/formio-wizard/master/dist/wizard.js"></script>
     <script type="text/javascript">
-        $.seamless.connect({
+        var parentPage = $.seamless.connect({
             container: 'div.main'
         });
         angular.module('formioFormApp', ['formio', 'formio.wizard'])
@@ -217,6 +217,7 @@
                 // Bind to the submission of the form.
                 $rootScope.$on('formSubmission', function(event, submission) {
                     if (!submission) { return; }
+                    parentPage.send({formSubmission: submission});
                     if (returnUrl) {
                         var hasQuery = !!returnUrl.match(/\?/);
                         returnUrl += hasQuery ? '&' : '?';
