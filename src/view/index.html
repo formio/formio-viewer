@@ -46,7 +46,7 @@
     </style>
     <link rel="stylesheet" href="https://npmcdn.com/ng-formio@latest/dist/formio-full.css" />
 </head>
-<body ng-app="formioFormApp" ng-class="{'wizard': wizardSrc}" style="background-color: transparent;">
+<body ng-app="formioFormApp" ng-class="{'wizard': wizardSrc}">
     <script id="header" type="text/template">
         <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="container" style="position:relative;">
@@ -65,6 +65,9 @@
         }
         if (query.iframe && parseInt(query.iframe, 10)) {
             bodyClass += 'iframe ';
+            if (!query.theme) {
+                bodyClass += 'notheme ';
+            }
         }
         if (bodyClass) {
             document.body.className = bodyClass;
@@ -96,6 +99,9 @@
             height:64px;
             width:64px;
             display:inline-block;
+        }
+        .iframe.notheme {
+            background-color: transparent;
         }
         .iframe .main {
             margin:0;
