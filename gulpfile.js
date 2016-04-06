@@ -49,7 +49,9 @@ gulp.task('clean', cleanTasks, function() {
 });
 
 // Build the project.
-gulp.task('build', buildTasks);
+gulp.task('build', ['clean'], function() {
+    gulp.start(buildTasks);
+});
 
 // Deployments.
 var s3 = require("gulp-s3");

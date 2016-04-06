@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title></title>
     <meta name="viewport" content="width=device-width">
+    <script src="https://rawgit.com/dankogai/js-base64/master/base64.min.js"></script>
 
     <!-- Favicons -->
     <link rel="apple-touch-icon" sizes="57x57" href="assets/favicons/apple-touch-icon-57x57.png">
@@ -36,6 +37,14 @@
         }
         else {
             document.write('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />');
+        }
+
+        // Allow them to provide their own stylesheets.
+        if (query.styles) {
+            var styles = Base64.decode(query.styles);
+            if (styles && styles.length) {
+                document.write('<link rel="stylesheet" href="' + styles + '" />');
+            }
         }
     </script>
     <style type="text/css">
