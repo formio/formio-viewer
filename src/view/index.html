@@ -52,7 +52,7 @@
             display: none !important;
         }
     </style>
-    <link rel="stylesheet" href="https://npmcdn.com/ng-formio@latest/dist/formio-full.min.css" />
+    <link rel="stylesheet" href="https://npmcdn.com/ng-formio@2.1.7/dist/formio-full.min.css" />
 </head>
 <body ng-app="formioFormApp">
     <script id="header" type="text/template">
@@ -139,13 +139,11 @@
     <div class="container main">
         <formio src="formioSrc"></formio>
     </div>
-    <script src="https://cdn.rawgit.com/jakearchibald/es6-promise/v3.0.2/dist/es6-promise.min.js"></script>
-    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script src="https://npmcdn.com/ng-formio@2.1.7/dist/formio-full.min.js"></script>
     <script src="https://cdn.rawgit.com/travist/seamless.js/master/build/seamless.child.min.js"></script>
-    <script src="https://cdn.rawgit.com/szimek/signature_pad/v1.5.2/signature_pad.min.js"></script>
-    <script src="https://npmcdn.com/ng-formio@latest/dist/formio-full.min.js"></script>
+    <script src="https://npmcdn.com/signature_pad@1.5.3/signature_pad.min.js"></script>
     <script type="text/javascript">
-        var parentPage = $.seamless.connect({
+        var parentPage = jQuery.seamless.connect({
             container: 'div.main'
         });
         angular.module('formioFormApp', ['formio'])
