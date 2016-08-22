@@ -19,7 +19,7 @@
   "dependencies": {
     "jquery": "^2.2.0",
     "seamless": "^0.0.5",
-    "ng-formio": "^1.2.1",
+    "ng-formio": "^2.1.11",
     "formio-wizard": "^1.0.0",
     "es6-promise": "^3.0.2",
     "signature_pad": "^1.5.2"
