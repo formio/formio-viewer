@@ -3,6 +3,7 @@ var plugins = require('gulp-load-plugins')();
 var del = require('del');
 var vinylPaths = require('vinyl-paths');
 var _ = require('lodash');
+var runSequence = require('run-sequence');
 
 var cleanTasks = [];
 var buildTasks = [];
@@ -33,6 +34,11 @@ _.each(['view'], function(type) {
         return gulp.src('./bower_components/bootstrap/fonts/*.*').pipe(gulp.dest('dist/' + type + '/fonts'));
     });
 
+    // Copy the formio files.
+    gulp.task('formio:' + type, function() {
+        return gulp.src('./bower_components/ng-formio/dist/formio-full.min.*').pipe(gulp.dest('dist/' + type));
+    });
+
     // Copy the fonts.
     gulp.task('assets:' + type, function() {
         return gulp.src('assets/**/*').pipe(gulp.dest('dist/' + type + '/assets'));
@@ -40,7 +46,7 @@ _.each(['view'], function(type) {
 
     // Define the build task.
     buildTasks.push('build:' + type);
-    gulp.task('build:' + type, ['minify:' + type, 'fonts:' + type, 'assets:' + type]);
+    gulp.task('build:' + type, ['minify:' + type, 'fonts:' + type, 'formio:' + type, 'assets:' + type]);
 });
 
 // Clean the dist folder.
@@ -49,7 +55,9 @@ gulp.task('clean', cleanTasks, function() {
 });
 
 // Build the project.
-gulp.task('build', buildTasks);
+gulp.task('build', function(cb) {
+    runSequence(['clean'], buildTasks, cb)
+});
 
 // Deployments.
 var s3 = require("gulp-s3");
