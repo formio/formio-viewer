@@ -84,74 +84,87 @@
         }
     </script>
 
-    <!-- BROWSE HAPPY BEGINS HERE -->
-    <style>
-        .browsehappy {
-            display:block;
-            width:100%;
-            height:100px;
-            background-color:#f2dede;
-            margin: 0 0 10px;
-            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-            font-size: 22px;
-            line-height: 1.4;
-            color: #333;
-            padding-top: 15px;
-            vertical-align:middle;
-        }
-        .hasheader .browsehappy {
-            margin-top: 50px;
-        }
-        .browsehappy span {
-            vertical-align:middle;
-            margin:20px 20px 20px 20px;
-            background:url("https://cdn.rawgit.com/alrra/browser-logos/master/internet-explorer/internet-explorer_64x64.png") no-repeat;
-            height:64px;
-            width:64px;
-            display:inline-block;
-        }
-        .iframe.notheme {
-            background-color: transparent;
-        }
-        .iframe .main {
-            margin:0;
-            padding:0;
-            width: 100%;
-        }
-        .iframe .navbar .container {
-            margin:0;
-            width: 100%;
-        }
-        .navbar .container .navbar-right {
-            margin-right: 0;
-        }
-        .hasheader .main {
-            margin-top: 70px;
-        }
-    </style>
-    <!--[if IE 6]><p class="browsehappy"><img />You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]-->
-    <!--[if IE 7]><p class="browsehappy"><img src="https://cdn.rawgit.com/alrra/browser-logos/master/internet-explorer/internet-explorer_64x64.png" />You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]-->
-    <!--[if IE 8]><p class="browsehappy"><img src="https://cdn.rawgit.com/alrra/browser-logos/master/internet-explorer/internet-explorer_64x64.png" />You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]-->
-    <!--[if IE 9]><p class="browsehappy"><img src="https://cdn.rawgit.com/alrra/browser-logos/master/internet-explorer/internet-explorer_64x64.png" />You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]-->
-    <!-- BROWSE HAPPY ENDS HERE -->
+<!-- BROWSE HAPPY BEGINS HERE -->
+<style>
+    .browsehappy {
+        display:block;
+        width:100%;
+        height:100px;
+        background-color:#f2dede;
+        margin: 0 0 10px;
+        font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+        font-size: 22px;
+        line-height: 1.4;
+        color: #333;
+        padding-top: 15px;
+        vertical-align:middle;
+    }
+    .hasheader .browsehappy {
+        margin-top: 50px;
+    }
+    .browsehappy span {
+        vertical-align:middle;
+        margin:20px 20px 20px 20px;
+        background:url("https://cdn.rawgit.com/alrra/browser-logos/master/internet-explorer/internet-explorer_64x64.png") no-repeat;
+        height:64px;
+        width:64px;
+        display:inline-block;
+    }
+    .iframe.notheme {
+        background-color: transparent;
+    }
+    .iframe .main {
+        margin:0;
+        padding:0;
+        width: 100%;
+    }
+    .iframe .navbar .container {
+        margin:0;
+        width: 100%;
+    }
+    .navbar .container .navbar-right {
+        margin-right: 0;
+    }
+    .hasheader .main {
+        margin-top: 70px;
+    }
+</style>
+<!--[if IE 6]><p class="browsehappy"><img />You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]-->
+<!--[if IE 7]><p class="browsehappy"><img src="https://cdn.rawgit.com/alrra/browser-logos/master/internet-explorer/internet-explorer_64x64.png" />You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]-->
+<!--[if IE 8]><p class="browsehappy"><img src="https://cdn.rawgit.com/alrra/browser-logos/master/internet-explorer/internet-explorer_64x64.png" />You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]-->
+<!--[if IE 9]><p class="browsehappy"><img src="https://cdn.rawgit.com/alrra/browser-logos/master/internet-explorer/internet-explorer_64x64.png" />You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]-->
+<!-- BROWSE HAPPY ENDS HERE -->
 
-    <!-- Add the form.io form. -->
-    <div class="container main">
-        <formio src="formioSrc"></formio>
+<!-- Add the form.io form. -->
+<div class="container main">
+    <div>
+        <div ng-if="formValidate">
+            <div ng-if="toggleButton" ><button ng-click="generatePDF()">Download PDF</button></div>
+            <div><formio src="formioSrc" id="render_me"></formio></div>
+        </div>
+        <div ng-if="!formValidate"><formio src="login"></formio></div>
     </div>
-    <script src="formio-full.min.js"></script>
-    <script src="https://npmcdn.com/seamless@0.0.6/build/seamless.child.min.js"></script>
-    <script type="text/javascript">
-        var parentPage = jQuery.seamless.connect({
-            container: 'div.main'
-        });
-        angular.module('formioFormApp', ['formio'])
+</div>
+<script  src="formio-full.min.js"></script>
+<script src="https://npmcdn.com/seamless@0.0.6/build/seamless.child.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.2.61/jspdf.debug.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+
+<script type="text/javascript">
+    var parentPage = jQuery.seamless.connect({
+        container: 'div.main'
+    });
+    angular.module('formioFormApp', ['formio'])
             .run(['$rootScope', '$location', function($rootScope, $location) {
                 $rootScope.formioSrc = '';
                 var path = $location.path();
                 var query = $location.search();
                 var returnUrl = query.return;
                 var form = query.form;
+                var toggleButton = false;
+                var pdfName;
+                $rootScope.formValidate = true;
+
                 if (!path && !form) { return; }
                 if (!form && path) {
                     path = path.replace(/^\//, '');
@@ -167,9 +180,20 @@
                 $rootScope.$on('formLoad', function(err, form) {
                     $rootScope.form = form;
                 });
+                $rootScope.$on('submissionLoad', function(event, submission) {
+                    var checkSubmissionURL = new RegExp("/submission/");
+                    pdfName = submission._id;
+                    $rootScope.toggleButton = checkSubmissionURL.test(form);
+                });
+
+                $rootScope.$on('formError', function(error) {
+                    $rootScope.formValidate = false;
+                    $rootScope.login = 'https://formio.form.io/user/login';
+                });
 
                 // Bind to the submission of the form.
                 $rootScope.$on('formSubmission', function(event, submission) {
+                    $rootScope.formValidate = true;
                     if (!submission) { return; }
                     parentPage.send({formSubmission: submission});
                     if (returnUrl) {
@@ -180,6 +204,36 @@
                         window.location.href = returnUrl;
                     }
                 });
+
+                $rootScope.generatePDF = function () {
+                    var doc = new jsPDF('l', 'mm', 'a4');
+                    var elementHandler = {
+                        '#ignorePDF': function (element, renderer) {
+                            return true;
+                        }
+                    };
+                    var element = jQuery('#render_me');
+                    html2canvas(element, {
+                        onrendered: function(canvas) {
+                            var imgData = canvas.toDataURL('image/png');
+                            var imgWidth = doc.internal.pageSize.width - 20;
+                            var pageHeight = doc.internal.pageSize.height;
+                            var imgHeight = canvas.height * imgWidth / canvas.width;
+                            var heightLeft = imgHeight;
+                            var position = 10;
+
+                            doc.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                            heightLeft -= pageHeight;
+                            while (heightLeft >= 0) {
+                                position = (heightLeft + 10) - imgHeight;
+                                doc.addPage();
+                                doc.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                                heightLeft -= pageHeight;
+                            }
+                            doc.save( pdfName + '.pdf');
+                        }
+                    });
+                };
             }]);
     </script>
 </body>
