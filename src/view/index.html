@@ -139,7 +139,7 @@
 <div class="container main">
     <div>
         <div ng-if="formValidate">
-            <div ng-if="toggleButton" ><button ng-click="generatePDF()">Download PDF</button></div>
+            <div ng-if="toggleButton"><button ng-click="generatePDF()">Download PDF</button></div>
             <div><formio src="formioSrc" id="render_me"></formio></div>
         </div>
         <div ng-if="!formValidate"><formio src="login"></formio></div>
@@ -161,7 +161,6 @@
                 var query = $location.search();
                 var returnUrl = query.return;
                 var form = query.form;
-                var toggleButton = false;
                 var pdfName;
                 $rootScope.formValidate = true;
 
@@ -193,8 +192,11 @@
 
                 // Bind to the submission of the form.
                 $rootScope.$on('formSubmission', function(event, submission) {
+                    console.log("formSubmission called");
                     $rootScope.formValidate = true;
                     if (!submission) { return; }
+                    pdfName = submission._id;
+                    $rootScope.toggleButton = true;
                     parentPage.send({formSubmission: submission});
                     if (returnUrl) {
                         var hasQuery = !!returnUrl.match(/\?/);
