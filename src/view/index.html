@@ -164,6 +164,7 @@
                 var returnUrl = query.return;
                 var form = query.form;
                 var pdfName;
+                var basepathForLogin = 'https://formio.form.io/user/login';
                 $rootScope.formValidate = true;
 
                 if (!path && !form) { return; }
@@ -189,12 +190,11 @@
 
                 $rootScope.$on('formError', function(error) {
                     $rootScope.formValidate = false;
-                    $rootScope.login = 'https://formio.form.io/user/login';
+                    $rootScope.login = basepathForLogin;
                 });
 
                 // Bind to the submission of the form.
                 $rootScope.$on('formSubmission', function(event, submission) {
-                    console.log("formSubmission called");
                     $rootScope.formValidate = true;
                     if (!submission) { return; }
                     pdfName = submission._id;
