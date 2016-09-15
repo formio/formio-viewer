@@ -139,7 +139,9 @@
 <div class="container main">
     <div>
         <div ng-if="formValidate">
-            <div ng-if="toggleButton"><button ng-click="generatePDF()">Download PDF</button></div>
+            <div ng-if="toggleButton">
+                <button ng-click="generatePDF()" type="button" class="btn btn-primary">Download PDF</button>
+            </div>
             <div><formio src="formioSrc" id="render_me"></formio></div>
         </div>
         <div ng-if="!formValidate"><formio src="login"></formio></div>
