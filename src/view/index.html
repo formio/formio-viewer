@@ -55,34 +55,34 @@
     <link rel="stylesheet" href="formio-full.min.css" />
 </head>
 <body ng-app="formioFormApp">
-    <script id="header" type="text/template">
-        <nav class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <a class="navbar-brand" ng-cloak>{{ form.title }}</a>
-                </div>
-                <div class="collapse navbar-collapse">
-                    <p class="navbar-text navbar-right"><a href="https://form.io" class="navbar-link">powered by &lt;form.io&gt;</a></p>
-                </div>
+<script id="header" type="text/template">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" ng-cloak>{{ form.title }}</a>
             </div>
-        </nav>
-    </script>
-    <script>
-        var bodyClass = '';
-        if (!query.header || parseInt(query.header, 10)) {
-            document.write(document.getElementById('header').innerHTML);
-            bodyClass += 'hasheader ';
+            <div class="collapse navbar-collapse">
+                <p class="navbar-text navbar-right"><a href="https://form.io" class="navbar-link">powered by &lt;form.io&gt;</a></p>
+            </div>
+        </div>
+    </nav>
+</script>
+<script>
+    var bodyClass = '';
+    if (!query.header || parseInt(query.header, 10)) {
+        document.write(document.getElementById('header').innerHTML);
+        bodyClass += 'hasheader ';
+    }
+    if (query.iframe && parseInt(query.iframe, 10)) {
+        bodyClass += 'iframe ';
+        if (!query.theme) {
+            bodyClass += 'notheme ';
         }
-        if (query.iframe && parseInt(query.iframe, 10)) {
-            bodyClass += 'iframe ';
-            if (!query.theme) {
-                bodyClass += 'notheme ';
-            }
-        }
-        if (bodyClass) {
-            document.body.className = bodyClass;
-        }
-    </script>
+    }
+    if (bodyClass) {
+        document.body.className = bodyClass;
+    }
+</script>
 
 <!-- BROWSE HAPPY BEGINS HERE -->
 <style>
@@ -196,8 +196,6 @@
                 $rootScope.$on('formSubmission', function(event, submission) {
                     $rootScope.formValidate = true;
                     if (!submission) { return; }
-                    pdfName = submission._id;
-                    $rootScope.toggleButton = true;
                     parentPage.send({formSubmission: submission});
                     if (returnUrl) {
                         var hasQuery = !!returnUrl.match(/\?/);
@@ -216,6 +214,7 @@
                         }
                     };
                     var element = jQuery('#render_me');
+
                     html2canvas(element, {
                         onrendered: function(canvas) {
                             var imgData = canvas.toDataURL('image/png');
@@ -238,6 +237,6 @@
                     });
                 };
             }]);
-    </script>
+</script>
 </body>
 </html>
