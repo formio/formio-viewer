@@ -128,6 +128,7 @@
     .hasheader .main {
         margin-top: 70px;
     }
+
 </style>
 <!--[if IE 6]><p class="browsehappy"><img />You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]-->
 <!--[if IE 7]><p class="browsehappy"><img src="https://cdn.rawgit.com/alrra/browser-logos/master/internet-explorer/internet-explorer_64x64.png" />You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]-->
@@ -166,6 +167,7 @@
                 var pdfName;
                 $rootScope.login = 'https://formio.form.io/user/login';
                 $rootScope.formValidate = true;
+                var blankDivIndex = [];
 
                 if (!path && !form) { return; }
                 if (!form && path) {
@@ -195,6 +197,7 @@
                 // Bind to the submission of the form.
                 $rootScope.$on('formSubmission', function(event, submission) {
                     $rootScope.formValidate = true;
+                    $rootScope.toggleButton = false;
                     if (!submission) { return; }
                     parentPage.send({formSubmission: submission});
                     if (returnUrl) {
@@ -206,6 +209,25 @@
                     }
                 });
 
+                appendBlankDiv = function(element, index, test, pageHeight) {
+                    var partOfElementRenderedOnFirstPage = test - pageHeight;
+                    var partOfElementRenderedOnSecPage = pageHeight - partOfElementRenderedOnFirstPage;
+                    var blankDivSize =  partOfElementRenderedOnSecPage > partOfElementRenderedOnFirstPage ?
+                            partOfElementRenderedOnSecPage : partOfElementRenderedOnFirstPage;
+                    $rootScope.pageLimit = blankDivSize;
+                    var blankDiv = document.createElement('div');
+                    blankDiv.id = 'blankDiv' + index;
+                    blankDivIndex.push(index);
+                    document.getElementById(element.children()[1].children[index].id).appendChild(blankDiv);
+                    document.getElementById('blankDiv' + index).setAttribute("style","height:" + blankDivSize + "px;" );
+                };
+
+                appendContentDiv = function(id) {
+                    var element = jQuery(id);
+                    $rootScope.pageLimit = $rootScope.pageLimit + element.outerHeight(true);
+                };
+
+
                 $rootScope.generatePDF = function () {
                     var doc = new jsPDF('l', 'mm', 'a4');
                     var elementHandler = {
@@ -214,12 +236,33 @@
                         }
                     };
                     var element = jQuery('#render_me');
+                    var imgWidth = doc.internal.pageSize.width - 20;
+                    var pageHeight = doc.internal.pageSize.height;
+                    var numberOfChild = element.children()[1].length;
+                    var canChildElementGetRendrered;
+
+                    // To handle recursive downloading need to set the global scope variable to zero.
+                    blankDivIndex = [];
+                    $rootScope.pageLimit = 0;
+
+                    for (var i=0; i< numberOfChild - 1; i++) {
+                        var childElement = jQuery(element.children()[1].children[i]);
+                        if (childElement.outerHeight(true) <  pageHeight ) {
+                            canChildElementGetRendrered = $rootScope.pageLimit + childElement.outerHeight(true);
+                            if (canChildElementGetRendrered < pageHeight * 3.779527559) {
+                                appendContentDiv(element.children()[1].children[i])
+                            } else {
+                                var test = canChildElementGetRendrered / 3.779527559;
+                                appendBlankDiv(element, i - 1, test, pageHeight);
+                            }
+                        } else {
+                            //@TODO :- Need to handle the eleemnt which have height grater than page height.
+                        }
+                    }
 
                     html2canvas(element, {
                         onrendered: function(canvas) {
                             var imgData = canvas.toDataURL('image/png');
-                            var imgWidth = doc.internal.pageSize.width - 20;
-                            var pageHeight = doc.internal.pageSize.height;
                             var imgHeight = canvas.height * imgWidth / canvas.width;
                             var heightLeft = imgHeight;
                             var position = 10;
@@ -233,8 +276,13 @@
                                 heightLeft -= pageHeight;
                             }
                             doc.save( pdfName + '.pdf');
+
+                            // Need to remove appended blank div
+                            for (var index=0; index< blankDivIndex.length; index++) {
+                                jQuery('#blankDiv' + blankDivIndex[index]).remove();
+                            }
                         }
-                    });
+                    })
                 };
             }]);
 </script>
