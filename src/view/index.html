@@ -211,8 +211,8 @@
                     }
                 });
 
-                appendBlankDiv = function(element, index, test, pageHeight) {
-                    var partOfElementRenderedOnFirstPage = test - pageHeight;
+                appendBlankDiv = function(element, index, childElementNormalisesVal, pageHeight) {
+                    var partOfElementRenderedOnFirstPage = childElementNormalisesVal - pageHeight;
                     var partOfElementRenderedOnSecPage = pageHeight - partOfElementRenderedOnFirstPage;
                     var blankDivSize =  partOfElementRenderedOnSecPage > partOfElementRenderedOnFirstPage ?
                             partOfElementRenderedOnSecPage : partOfElementRenderedOnFirstPage;
@@ -243,6 +243,7 @@
                     var pageHeight = doc.internal.pageSize.height;
                     var numberOfChild = element.children()[1].length;
                     var canChildElementGetRendrered;
+                    var normalizePageScaleConversion = pageHeight * normalizeScaleConversion;
 
                     // To handle recursive downloading need to set the global scope variable to zero.
                     blankDivIndex = [];
@@ -252,14 +253,19 @@
                         var childElement = jQuery(element.children()[1].children[i]);
                         if (childElement.outerHeight(true) <  pageHeight ) {
                             canChildElementGetRendrered = $rootScope.pageLimit + childElement.outerHeight(true);
-                            if (canChildElementGetRendrered < pageHeight * normalizeScaleConversion) {
+                            if (canChildElementGetRendrered < normalizePageScaleConversion) {
                                 appendContentDiv(element.children()[1].children[i])
                             } else {
-                                var test = canChildElementGetRendrered / normalizeScaleConversion;
-                                appendBlankDiv(element, i - 1, test, pageHeight);
+                                var childElementNormalisesVal = canChildElementGetRendrered / normalizeScaleConversion;
+                                appendBlankDiv(element, i - 1, childElementNormalisesVal, pageHeight);
                             }
                         } else {
                             //@TODO :- Need to handle the eleemnt which have height grater than page height.
+                            var errorPageLimit = childElement.outerHeight(true);
+                            while (errorPageLimit > normalizePageScaleConversion) {
+                                errorPageLimit -= normalizePageScaleConversion
+                            }
+                            $rootScope.pageLimit = errorPageLimit;
                         }
                     }
 
@@ -268,14 +274,15 @@
                             var imgData = canvas.toDataURL('image/png');
                             var imgHeight = canvas.height * imgWidth / canvas.width;
                             var heightLeft = imgHeight;
-                            var position = 10;
+                            var height = 10;
+                            const width = 10;
 
-                            doc.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                            doc.addImage(imgData, 'PNG', width, height, imgWidth, imgHeight);
                             heightLeft -= pageHeight;
                             while (heightLeft >= 0) {
-                                position = (heightLeft + 10) - imgHeight;
+                                height = (heightLeft + width) - imgHeight;
                                 doc.addPage();
-                                doc.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+                                doc.addImage(imgData, 'PNG', width, height, imgWidth, imgHeight);
                                 heightLeft -= pageHeight;
                             }
                             doc.save( pdfName + '.pdf');
