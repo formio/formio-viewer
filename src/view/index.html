@@ -165,6 +165,8 @@
                 var returnUrl = query.return;
                 var form = query.form;
                 var pdfName;
+                const normalizeScaleConversion = 3.779527559;
+
                 $rootScope.login = 'https://formio.form.io/user/login';
                 $rootScope.formValidate = true;
                 var blankDivIndex = [];
@@ -229,6 +231,7 @@
 
 
                 $rootScope.generatePDF = function () {
+                    // If we change the page scale from mm to other scale then also update conversion factor(normalizeScaleConversion l168)
                     var doc = new jsPDF('l', 'mm', 'a4');
                     var elementHandler = {
                         '#ignorePDF': function (element, renderer) {
@@ -249,10 +252,10 @@
                         var childElement = jQuery(element.children()[1].children[i]);
                         if (childElement.outerHeight(true) <  pageHeight ) {
                             canChildElementGetRendrered = $rootScope.pageLimit + childElement.outerHeight(true);
-                            if (canChildElementGetRendrered < pageHeight * 3.779527559) {
+                            if (canChildElementGetRendrered < pageHeight * normalizeScaleConversion) {
                                 appendContentDiv(element.children()[1].children[i])
                             } else {
-                                var test = canChildElementGetRendrered / 3.779527559;
+                                var test = canChildElementGetRendrered / normalizeScaleConversion;
                                 appendBlankDiv(element, i - 1, test, pageHeight);
                             }
                         } else {
