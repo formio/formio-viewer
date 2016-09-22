@@ -187,18 +187,21 @@
                     $rootScope.form = form;
                 });
                 $rootScope.$on('submissionLoad', function(event, submission) {
+                    // Check for substring 'submission' to enable the download pdf button.
                     var checkSubmissionURL = new RegExp("/submission/");
                     pdfName = submission._id;
                     $rootScope.toggleButton = checkSubmissionURL.test(form);
                 });
 
                 $rootScope.$on('formError', function(error) {
+                    // On form error navigate user to login screen.
                     $rootScope.formValidate = false;
                 });
 
                 // Bind to the submission of the form.
                 $rootScope.$on('formSubmission', function(event, submission) {
                     $rootScope.formValidate = true;
+                    // Disable the download pdf button for those submission which created from viewer application.
                     $rootScope.toggleButton = false;
                     if (!submission) { return; }
                     parentPage.send({formSubmission: submission});
@@ -211,24 +214,37 @@
                     }
                 });
 
+                // Append the blank div to avoid pagination related issues.
                 appendBlankDiv = function(element, index, childElementNormalisesVal, pageHeight) {
+                    // Calculate the height element rendered on current page.
                     var partOfElementRenderedOnFirstPage = childElementNormalisesVal - pageHeight;
+
+                    // Calculate the height element rendered on next page.
                     var partOfElementRenderedOnSecPage = pageHeight - partOfElementRenderedOnFirstPage;
+
+                    // Pass the maximum among partOfElementRenderedOnSecPage and partOfElementRenderedOnFirstPage to blank div.
                     var blankDivSize =  partOfElementRenderedOnSecPage > partOfElementRenderedOnFirstPage ?
                             partOfElementRenderedOnSecPage : partOfElementRenderedOnFirstPage;
+
+                    // Update the global variable to set the page limit.
                     $rootScope.pageLimit = blankDivSize;
+
+                    // Create blank div.
                     var blankDiv = document.createElement('div');
                     blankDiv.id = 'blankDiv' + index;
                     blankDivIndex.push(index);
                     document.getElementById(element.children()[1].children[index].id).appendChild(blankDiv);
+
+                    //Set the dynamic blank div size.
                     document.getElementById('blankDiv' + index).setAttribute("style","height:" + blankDivSize + "px;" );
                 };
 
+                // Append content div.
                 appendContentDiv = function(id) {
+                    // Update the global variables to maintain the page limit.
                     var element = jQuery(id);
                     $rootScope.pageLimit = $rootScope.pageLimit + element.outerHeight(true);
                 };
-
 
                 $rootScope.generatePDF = function () {
                     // If we change the page scale from mm to other scale then also update conversion factor(normalizeScaleConversion l168)
@@ -251,24 +267,34 @@
 
                     for (var i=0; i< numberOfChild - 1; i++) {
                         var childElement = jQuery(element.children()[1].children[i]);
+
+                        //Check whether element size is greater than page size or not.
                         if (childElement.outerHeight(true) <  pageHeight ) {
                             canChildElementGetRendrered = $rootScope.pageLimit + childElement.outerHeight(true);
+
+                            //Check whether child element can render on current page or not.
                             if (canChildElementGetRendrered < normalizePageScaleConversion) {
                                 appendContentDiv(element.children()[1].children[i])
                             } else {
+                                // Else Append blank div.
                                 var childElementNormalisesVal = canChildElementGetRendrered / normalizeScaleConversion;
                                 appendBlankDiv(element, i - 1, childElementNormalisesVal, pageHeight);
                             }
                         } else {
                             //@TODO :- Need to handle the eleemnt which have height grater than page height.
+                            // Currently we are setting this type element as it is.
+
                             var errorPageLimit = childElement.outerHeight(true);
                             while (errorPageLimit > normalizePageScaleConversion) {
                                 errorPageLimit -= normalizePageScaleConversion
                             }
+
+                            // To maintain the page structure with element greater than page size.
                             $rootScope.pageLimit = errorPageLimit;
                         }
                     }
 
+                    // Generate pdf logic.
                     html2canvas(element, {
                         onrendered: function(canvas) {
                             var imgData = canvas.toDataURL('image/png');
