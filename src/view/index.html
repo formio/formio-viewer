@@ -129,6 +129,9 @@
         margin-top: 70px;
     }
 
+    [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+        display: none !important;
+    }
 </style>
 <!--[if IE 6]><p class="browsehappy"><img />You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]-->
 <!--[if IE 7]><p class="browsehappy"><img src="https://cdn.rawgit.com/alrra/browser-logos/master/internet-explorer/internet-explorer_64x64.png" />You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]-->
@@ -138,38 +141,67 @@
 
 <!-- Add the form.io form. -->
 <div class="container main">
-    <div>
+    <div ng-cloak>
+        <div class="alert alert-danger" ng-if="formError">{{ formError }}</div>
         <div ng-if="formValidate">
-            <div ng-if="toggleButton">
-                <button ng-click="generatePDF()" type="button" class="btn btn-primary">Download PDF</button>
-            </div>
-            <div><formio src="formioSrc" id="render_me"></formio></div>
+            <a ng-if="toggleButton" type="button" ng-click="generatePDF()" style="float:right;margin-top:-30px;cursor:pointer;"><img src="assets/download-pdf.png" style="height:30px" /></a>
+            <formio src="formioSrc" id="render_me"></formio>
         </div>
-        <div ng-if="!formValidate"><formio src="login"></formio></div>
+        <div ng-if="!formValidate">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h1 class="panel-title"><strong>Login to Form.io</strong></h1>
+                        </div>
+                        <div class="panel-body">
+                            <p>You must log into your <strong>Form.io</strong> account to view this submission.</p>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <formio src="login"></formio>
+                                </div>
+                            </div>
+                            <div class="row" ng-if="!isActive('auth.reset')">
+                                <div class="col-lg-12">
+                                    <small style="float: right;"><a target="_blank" href="https://portal.form.io/#/resetsend">Reset your Password</a></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <script  src="formio-full.min.js"></script>
-<script src="https://npmcdn.com/seamless@0.0.6/build/seamless.child.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.2.61/jspdf.debug.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
-
+<script src="//npmcdn.com/seamless@0.0.6/build/seamless.child.min.js"></script>
+<script src="//cdn.rawgit.com/MrRio/jsPDF/master/dist/jspdf.min.js"></script>
+<script src="//cdn.rawgit.com/niklasvh/html2canvas/0.5.0-alpha2/dist/html2canvas.min.js"></script>
 <script type="text/javascript">
     var parentPage = jQuery.seamless.connect({
         container: 'div.main'
     });
     angular.module('formioFormApp', ['formio'])
-            .run(['$rootScope', '$location', function($rootScope, $location) {
+        .run([
+            '$rootScope',
+            '$location',
+            'Formio',
+            function(
+                    $rootScope,
+                    $location,
+                    Formio
+            ) {
+                $rootScope.formError = '';
                 $rootScope.formioSrc = '';
                 var path = $location.path();
                 var query = $location.search();
                 var returnUrl = query.return;
                 var form = query.form;
                 var pdfName;
-                const normalizeScaleConversion = 3.779527559;
+                //const normalizeScaleConversion = 3.779527559;
 
                 $rootScope.login = 'https://formio.form.io/user/login';
-                $rootScope.formValidate = true;
-                var blankDivIndex = [];
+                $rootScope.formValidate = !!Formio.getToken();
 
                 if (!path && !form) { return; }
                 if (!form && path) {
@@ -193,16 +225,21 @@
                     $rootScope.toggleButton = checkSubmissionURL.test(form);
                 });
 
-                $rootScope.$on('formError', function(error) {
-                    // On form error navigate user to login screen.
-                    $rootScope.formValidate = false;
+                $rootScope.$on('formError', function(event, error) {
+                    $rootScope.formError = error;
+                    var unauthorized = (error === 'Unauthorized');
+                    $rootScope.formValidate = !unauthorized;
+                    if (unauthorized) {
+                        Formio.setUser(null);
+                    }
                 });
 
                 // Bind to the submission of the form.
                 $rootScope.$on('formSubmission', function(event, submission) {
-                    $rootScope.formValidate = true;
                     // Disable the download pdf button for those submission which created from viewer application.
                     $rootScope.toggleButton = false;
+                    $rootScope.formError = '';
+                    $rootScope.formValidate = !!Formio.getToken();
                     if (!submission) { return; }
                     parentPage.send({formSubmission: submission});
                     if (returnUrl) {
@@ -214,111 +251,51 @@
                     }
                 });
 
-                // Append the blank div to avoid pagination related issues.
-                appendBlankDiv = function(element, index, childElementNormalisesVal, pageHeight) {
-                    // Calculate the height element rendered on current page.
-                    var partOfElementRenderedOnFirstPage = childElementNormalisesVal - pageHeight;
-
-                    // Calculate the height element rendered on next page.
-                    var partOfElementRenderedOnSecPage = pageHeight - partOfElementRenderedOnFirstPage;
-
-                    // Pass the maximum among partOfElementRenderedOnSecPage and partOfElementRenderedOnFirstPage to blank div.
-                    var blankDivSize =  partOfElementRenderedOnSecPage > partOfElementRenderedOnFirstPage ?
-                            partOfElementRenderedOnSecPage : partOfElementRenderedOnFirstPage;
-
-                    // Update the global variable to set the page limit.
-                    $rootScope.pageLimit = blankDivSize;
-
-                    // Create blank div.
-                    var blankDiv = document.createElement('div');
-                    blankDiv.id = 'blankDiv' + index;
-                    blankDivIndex.push(index);
-                    document.getElementById(element.children()[1].children[index].id).appendChild(blankDiv);
-
-                    //Set the dynamic blank div size.
-                    document.getElementById('blankDiv' + index).setAttribute("style","height:" + blankDivSize + "px;" );
-                };
-
-                // Append content div.
-                appendContentDiv = function(id) {
-                    // Update the global variables to maintain the page limit.
-                    var element = jQuery(id);
-                    $rootScope.pageLimit = $rootScope.pageLimit + element.outerHeight(true);
-                };
-
                 $rootScope.generatePDF = function () {
-                    // If we change the page scale from mm to other scale then also update conversion factor(normalizeScaleConversion l168)
-                    var doc = new jsPDF('l', 'mm', 'a4');
-                    var elementHandler = {
-                        '#ignorePDF': function (element, renderer) {
-                            return true;
-                        }
-                    };
-                    var element = jQuery('#render_me');
+                    var doc = new jsPDF({unit:'px', format:'a4'});
+                    var formElement = jQuery('form[name="formioForm"]');
+                    var formTop = formElement.offset().top;
+                    var formWidth = formElement.width();
+                    var a4 = [595.28,  841.89];
+                    var a4Width = (a4[0]*1.33333);
+                    var a4Height = (a4[1]*1.33333);
+                    formElement.width(a4Width-80).css('max-width','none');
+
                     var imgWidth = doc.internal.pageSize.width - 20;
                     var pageHeight = doc.internal.pageSize.height;
-                    var numberOfChild = element.children()[1].length;
-                    var canChildElementGetRendrered;
-                    var normalizePageScaleConversion = pageHeight * normalizeScaleConversion;
-
-                    // To handle recursive downloading need to set the global scope variable to zero.
-                    blankDivIndex = [];
-                    $rootScope.pageLimit = 0;
-
+                    var formChildren = formElement.children();
+                    var numberOfChild = formChildren.length;
+                    var pageNum = 1;
                     for (var i=0; i< numberOfChild - 1; i++) {
-                        var childElement = jQuery(element.children()[1].children[i]);
-
-                        //Check whether element size is greater than page size or not.
-                        if (childElement.outerHeight(true) <  pageHeight ) {
-                            canChildElementGetRendrered = $rootScope.pageLimit + childElement.outerHeight(true);
-
-                            //Check whether child element can render on current page or not.
-                            if (canChildElementGetRendrered < normalizePageScaleConversion) {
-                                appendContentDiv(element.children()[1].children[i])
-                            } else {
-                                // Else Append blank div.
-                                var childElementNormalisesVal = canChildElementGetRendrered / normalizeScaleConversion;
-                                appendBlankDiv(element, i - 1, childElementNormalisesVal, pageHeight);
-                            }
-                        } else {
-                            //@TODO :- Need to handle the eleemnt which have height grater than page height.
-                            // Currently we are setting this type element as it is.
-
-                            var errorPageLimit = childElement.outerHeight(true);
-                            while (errorPageLimit > normalizePageScaleConversion) {
-                                errorPageLimit -= normalizePageScaleConversion
-                            }
-
-                            // To maintain the page structure with element greater than page size.
-                            $rootScope.pageLimit = errorPageLimit;
+                        var childElement = formChildren.eq(i);
+                        var childElementTop = childElement.offset().top - formTop;
+                        var childElementHeight = childElement.outerHeight(true);
+                        var pageSpace = (pageNum * a4Height) - childElementTop;
+                        if ((pageSpace > 0) && (childElementHeight > pageSpace)) {
+                            childElement.css('marginTop', (pageSpace + 10) + 'px');
+                            pageNum++;
                         }
                     }
 
-                    // Generate pdf logic.
-                    html2canvas(element, {
-                        onrendered: function(canvas) {
-                            var imgData = canvas.toDataURL('image/png');
-                            var imgHeight = canvas.height * imgWidth / canvas.width;
-                            var heightLeft = imgHeight;
-                            var height = 10;
-                            const width = 10;
-
-                            doc.addImage(imgData, 'PNG', width, height, imgWidth, imgHeight);
+                    html2canvas(formElement, {
+                        imageTimeout: 2000,
+                        removeContainer: true
+                    }).then(function(canvas){
+                        var img = canvas.toDataURL("image/png");
+                        var imgHeight = canvas.height * imgWidth / canvas.width;
+                        var heightLeft = imgHeight;
+                        var position = 10;
+                        doc.addImage(img, 'PNG', 10, position, imgWidth, imgHeight);
+                        heightLeft -= pageHeight;
+                        while (heightLeft >= 0) {
+                            position = heightLeft - imgHeight;
+                            doc.addPage();
+                            doc.addImage(img, 'PNG', 10, position, imgWidth, imgHeight);
                             heightLeft -= pageHeight;
-                            while (heightLeft >= 0) {
-                                height = (heightLeft + width) - imgHeight;
-                                doc.addPage();
-                                doc.addImage(imgData, 'PNG', width, height, imgWidth, imgHeight);
-                                heightLeft -= pageHeight;
-                            }
-                            doc.save( pdfName + '.pdf');
-
-                            // Need to remove appended blank div
-                            for (var index=0; index< blankDivIndex.length; index++) {
-                                jQuery('#blankDiv' + blankDivIndex[index]).remove();
-                            }
                         }
-                    })
+                        doc.save(pdfName + '.pdf');
+                        formElement.width(formWidth);
+                    });
                 };
             }]);
 </script>
