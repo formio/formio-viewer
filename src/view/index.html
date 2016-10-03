@@ -55,103 +55,122 @@
     <link rel="stylesheet" href="formio-full.min.css" />
 </head>
 <body ng-app="formioFormApp">
-    <script id="header" type="text/template">
-        <nav class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <a class="navbar-brand" ng-cloak>{{ form.title }}</a>
-                </div>
-                <div class="collapse navbar-collapse">
-                    <p class="navbar-text navbar-right"><a href="https://form.io" class="navbar-link">powered by &lt;form.io&gt;</a></p>
-                </div>
+<script id="header" type="text/template">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" ng-cloak>{{ form.title }}</a>
             </div>
-        </nav>
-    </script>
-    <script>
-        var bodyClass = '';
-        if (!query.header || parseInt(query.header, 10)) {
-            document.write(document.getElementById('header').innerHTML);
-            bodyClass += 'hasheader ';
+            <div class="collapse navbar-collapse">
+                <p class="navbar-text navbar-right"><a href="https://form.io" class="navbar-link">powered by &lt;form.io&gt;</a></p>
+            </div>
+        </div>
+    </nav>
+</script>
+<script>
+    var bodyClass = '';
+    if (!query.header || parseInt(query.header, 10)) {
+        document.write(document.getElementById('header').innerHTML);
+        bodyClass += 'hasheader ';
+    }
+    if (query.iframe && parseInt(query.iframe, 10)) {
+        bodyClass += 'iframe ';
+        if (!query.theme) {
+            bodyClass += 'notheme ';
         }
-        if (query.iframe && parseInt(query.iframe, 10)) {
-            bodyClass += 'iframe ';
-            if (!query.theme) {
-                bodyClass += 'notheme ';
-            }
-        }
-        if (bodyClass) {
-            document.body.className = bodyClass;
-        }
-    </script>
+    }
+    if (bodyClass) {
+        document.body.className = bodyClass;
+    }
+</script>
 
-    <!-- BROWSE HAPPY BEGINS HERE -->
-    <style>
-        .browsehappy {
-            display:block;
-            width:100%;
-            height:100px;
-            background-color:#f2dede;
-            margin: 0 0 10px;
-            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-            font-size: 22px;
-            line-height: 1.4;
-            color: #333;
-            padding-top: 15px;
-            vertical-align:middle;
-        }
-        .hasheader .browsehappy {
-            margin-top: 50px;
-        }
-        .browsehappy span {
-            vertical-align:middle;
-            margin:20px 20px 20px 20px;
-            background:url("https://cdn.rawgit.com/alrra/browser-logos/master/internet-explorer/internet-explorer_64x64.png") no-repeat;
-            height:64px;
-            width:64px;
-            display:inline-block;
-        }
-        .iframe.notheme {
-            background-color: transparent;
-        }
-        .iframe .main {
-            margin:0;
-            padding:0;
-            width: 100%;
-        }
-        .iframe .navbar .container {
-            margin:0;
-            width: 100%;
-        }
-        .navbar .container .navbar-right {
-            margin-right: 0;
-        }
-        .hasheader .main {
-            margin-top: 70px;
-        }
-    </style>
-    <!--[if IE 6]><p class="browsehappy"><img />You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]-->
-    <!--[if IE 7]><p class="browsehappy"><img src="https://cdn.rawgit.com/alrra/browser-logos/master/internet-explorer/internet-explorer_64x64.png" />You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]-->
-    <!--[if IE 8]><p class="browsehappy"><img src="https://cdn.rawgit.com/alrra/browser-logos/master/internet-explorer/internet-explorer_64x64.png" />You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]-->
-    <!--[if IE 9]><p class="browsehappy"><img src="https://cdn.rawgit.com/alrra/browser-logos/master/internet-explorer/internet-explorer_64x64.png" />You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]-->
-    <!-- BROWSE HAPPY ENDS HERE -->
+<!-- BROWSE HAPPY BEGINS HERE -->
+<style>
+    .browsehappy {
+        display:block;
+        width:100%;
+        height:100px;
+        background-color:#f2dede;
+        margin: 0 0 10px;
+        font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+        font-size: 22px;
+        line-height: 1.4;
+        color: #333;
+        padding-top: 15px;
+        vertical-align:middle;
+    }
+    .hasheader .browsehappy {
+        margin-top: 50px;
+    }
+    .browsehappy span {
+        vertical-align:middle;
+        margin:20px 20px 20px 20px;
+        background:url("https://cdn.rawgit.com/alrra/browser-logos/master/internet-explorer/internet-explorer_64x64.png") no-repeat;
+        height:64px;
+        width:64px;
+        display:inline-block;
+    }
+    .iframe.notheme {
+        background-color: transparent;
+    }
+    .iframe .main {
+        margin:0;
+        padding:0;
+        width: 100%;
+    }
+    .iframe .navbar .container {
+        margin:0;
+        width: 100%;
+    }
+    .navbar .container .navbar-right {
+        margin-right: 0;
+    }
+    .hasheader .main {
+        margin-top: 70px;
+    }
 
-    <!-- Add the form.io form. -->
-    <div class="container main">
-        <formio src="formioSrc"></formio>
+</style>
+<!--[if IE 6]><p class="browsehappy"><img />You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]-->
+<!--[if IE 7]><p class="browsehappy"><img src="https://cdn.rawgit.com/alrra/browser-logos/master/internet-explorer/internet-explorer_64x64.png" />You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]-->
+<!--[if IE 8]><p class="browsehappy"><img src="https://cdn.rawgit.com/alrra/browser-logos/master/internet-explorer/internet-explorer_64x64.png" />You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]-->
+<!--[if IE 9]><p class="browsehappy"><img src="https://cdn.rawgit.com/alrra/browser-logos/master/internet-explorer/internet-explorer_64x64.png" />You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]-->
+<!-- BROWSE HAPPY ENDS HERE -->
+
+<!-- Add the form.io form. -->
+<div class="container main">
+    <div>
+        <div ng-if="formValidate">
+            <div ng-if="toggleButton">
+                <button ng-click="generatePDF()" type="button" class="btn btn-primary">Download PDF</button>
+            </div>
+            <div><formio src="formioSrc" id="render_me"></formio></div>
+        </div>
+        <div ng-if="!formValidate"><formio src="login"></formio></div>
     </div>
-    <script src="formio-full.min.js"></script>
-    <script src="https://npmcdn.com/seamless@0.0.6/build/seamless.child.min.js"></script>
-    <script type="text/javascript">
-        var parentPage = jQuery.seamless.connect({
-            container: 'div.main'
-        });
-        angular.module('formioFormApp', ['formio'])
+</div>
+<script  src="formio-full.min.js"></script>
+<script src="https://npmcdn.com/seamless@0.0.6/build/seamless.child.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.2.61/jspdf.debug.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+
+<script type="text/javascript">
+    var parentPage = jQuery.seamless.connect({
+        container: 'div.main'
+    });
+    angular.module('formioFormApp', ['formio'])
             .run(['$rootScope', '$location', function($rootScope, $location) {
                 $rootScope.formioSrc = '';
                 var path = $location.path();
                 var query = $location.search();
                 var returnUrl = query.return;
                 var form = query.form;
+                var pdfName;
+                const normalizeScaleConversion = 3.779527559;
+
+                $rootScope.login = 'https://formio.form.io/user/login';
+                $rootScope.formValidate = true;
+                var blankDivIndex = [];
+
                 if (!path && !form) { return; }
                 if (!form && path) {
                     path = path.replace(/^\//, '');
@@ -167,9 +186,23 @@
                 $rootScope.$on('formLoad', function(err, form) {
                     $rootScope.form = form;
                 });
+                $rootScope.$on('submissionLoad', function(event, submission) {
+                    // Check for substring 'submission' to enable the download pdf button.
+                    var checkSubmissionURL = new RegExp("/submission/");
+                    pdfName = submission._id;
+                    $rootScope.toggleButton = checkSubmissionURL.test(form);
+                });
+
+                $rootScope.$on('formError', function(error) {
+                    // On form error navigate user to login screen.
+                    $rootScope.formValidate = false;
+                });
 
                 // Bind to the submission of the form.
                 $rootScope.$on('formSubmission', function(event, submission) {
+                    $rootScope.formValidate = true;
+                    // Disable the download pdf button for those submission which created from viewer application.
+                    $rootScope.toggleButton = false;
                     if (!submission) { return; }
                     parentPage.send({formSubmission: submission});
                     if (returnUrl) {
@@ -180,7 +213,114 @@
                         window.location.href = returnUrl;
                     }
                 });
+
+                // Append the blank div to avoid pagination related issues.
+                appendBlankDiv = function(element, index, childElementNormalisesVal, pageHeight) {
+                    // Calculate the height element rendered on current page.
+                    var partOfElementRenderedOnFirstPage = childElementNormalisesVal - pageHeight;
+
+                    // Calculate the height element rendered on next page.
+                    var partOfElementRenderedOnSecPage = pageHeight - partOfElementRenderedOnFirstPage;
+
+                    // Pass the maximum among partOfElementRenderedOnSecPage and partOfElementRenderedOnFirstPage to blank div.
+                    var blankDivSize =  partOfElementRenderedOnSecPage > partOfElementRenderedOnFirstPage ?
+                            partOfElementRenderedOnSecPage : partOfElementRenderedOnFirstPage;
+
+                    // Update the global variable to set the page limit.
+                    $rootScope.pageLimit = blankDivSize;
+
+                    // Create blank div.
+                    var blankDiv = document.createElement('div');
+                    blankDiv.id = 'blankDiv' + index;
+                    blankDivIndex.push(index);
+                    document.getElementById(element.children()[1].children[index].id).appendChild(blankDiv);
+
+                    //Set the dynamic blank div size.
+                    document.getElementById('blankDiv' + index).setAttribute("style","height:" + blankDivSize + "px;" );
+                };
+
+                // Append content div.
+                appendContentDiv = function(id) {
+                    // Update the global variables to maintain the page limit.
+                    var element = jQuery(id);
+                    $rootScope.pageLimit = $rootScope.pageLimit + element.outerHeight(true);
+                };
+
+                $rootScope.generatePDF = function () {
+                    // If we change the page scale from mm to other scale then also update conversion factor(normalizeScaleConversion l168)
+                    var doc = new jsPDF('l', 'mm', 'a4');
+                    var elementHandler = {
+                        '#ignorePDF': function (element, renderer) {
+                            return true;
+                        }
+                    };
+                    var element = jQuery('#render_me');
+                    var imgWidth = doc.internal.pageSize.width - 20;
+                    var pageHeight = doc.internal.pageSize.height;
+                    var numberOfChild = element.children()[1].length;
+                    var canChildElementGetRendrered;
+                    var normalizePageScaleConversion = pageHeight * normalizeScaleConversion;
+
+                    // To handle recursive downloading need to set the global scope variable to zero.
+                    blankDivIndex = [];
+                    $rootScope.pageLimit = 0;
+
+                    for (var i=0; i< numberOfChild - 1; i++) {
+                        var childElement = jQuery(element.children()[1].children[i]);
+
+                        //Check whether element size is greater than page size or not.
+                        if (childElement.outerHeight(true) <  pageHeight ) {
+                            canChildElementGetRendrered = $rootScope.pageLimit + childElement.outerHeight(true);
+
+                            //Check whether child element can render on current page or not.
+                            if (canChildElementGetRendrered < normalizePageScaleConversion) {
+                                appendContentDiv(element.children()[1].children[i])
+                            } else {
+                                // Else Append blank div.
+                                var childElementNormalisesVal = canChildElementGetRendrered / normalizeScaleConversion;
+                                appendBlankDiv(element, i - 1, childElementNormalisesVal, pageHeight);
+                            }
+                        } else {
+                            //@TODO :- Need to handle the eleemnt which have height grater than page height.
+                            // Currently we are setting this type element as it is.
+
+                            var errorPageLimit = childElement.outerHeight(true);
+                            while (errorPageLimit > normalizePageScaleConversion) {
+                                errorPageLimit -= normalizePageScaleConversion
+                            }
+
+                            // To maintain the page structure with element greater than page size.
+                            $rootScope.pageLimit = errorPageLimit;
+                        }
+                    }
+
+                    // Generate pdf logic.
+                    html2canvas(element, {
+                        onrendered: function(canvas) {
+                            var imgData = canvas.toDataURL('image/png');
+                            var imgHeight = canvas.height * imgWidth / canvas.width;
+                            var heightLeft = imgHeight;
+                            var height = 10;
+                            const width = 10;
+
+                            doc.addImage(imgData, 'PNG', width, height, imgWidth, imgHeight);
+                            heightLeft -= pageHeight;
+                            while (heightLeft >= 0) {
+                                height = (heightLeft + width) - imgHeight;
+                                doc.addPage();
+                                doc.addImage(imgData, 'PNG', width, height, imgWidth, imgHeight);
+                                heightLeft -= pageHeight;
+                            }
+                            doc.save( pdfName + '.pdf');
+
+                            // Need to remove appended blank div
+                            for (var index=0; index< blankDivIndex.length; index++) {
+                                jQuery('#blankDiv' + blankDivIndex[index]).remove();
+                            }
+                        }
+                    })
+                };
             }]);
-    </script>
+</script>
 </body>
 </html>
