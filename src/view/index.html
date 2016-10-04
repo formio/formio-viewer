@@ -202,7 +202,7 @@
                 var returnUrl = query.return;
                 var form = query.form;
                 var pdfName;
-                $rootScope.formValidate = !!Formio.getToken();
+                $rootScope.formValidate = true;
 
                 var project = '';
                 var formPath = '';
@@ -238,6 +238,7 @@
                     var checkSubmissionURL = new RegExp("/submission/");
                     pdfName = submission._id;
                     $rootScope.hasSubmission = checkSubmissionURL.test(form);
+                    $rootScope.formValidate = !!Formio.getToken();
                 });
 
                 $rootScope.$on('formError', function(event, error) {
@@ -253,7 +254,9 @@
                     // Disable the download pdf button for those submission which created from viewer application.
                     $rootScope.hasSubmission = false;
                     $rootScope.formError = '';
-                    $rootScope.formValidate = !!Formio.getToken();
+                    if (!$rootScope.formValidate) {
+                        $rootScope.formValidate = !!Formio.getToken();
+                    }
                     if (!submission) { return; }
                     parentPage.send({formSubmission: submission});
                     if (returnUrl) {
