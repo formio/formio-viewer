@@ -155,7 +155,7 @@
         <div class="alert alert-danger" ng-if="formError">{{ formError }}</div>
         <div ng-if="formValidate">
             <a ng-if="hasSubmission" type="button" ng-click="generatePDF()" style="float:right;cursor:pointer;margin-top:-32px"><img src="assets/download-pdf.png" style="height:30px" /></a>
-            <formio src="formioSrc" ng-class="{'formio-submission': hasSubmission}"></formio>
+            <formio src="formioSrc" submission="submission" ng-class="{'formio-submission': hasSubmission}"></formio>
         </div>
         <div ng-if="!formValidate" style="margin-top: 20px;">
             <div class="row">
@@ -190,10 +190,12 @@
             '$rootScope',
             '$location',
             'Formio',
+            '$controller',
             function(
                     $rootScope,
                     $location,
-                    Formio
+                    Formio,
+                    $controller
             ) {
                 $rootScope.formError = '';
                 $rootScope.formioSrc = '';
@@ -203,6 +205,7 @@
                 var form = query.form;
                 var pdfName;
                 $rootScope.formValidate = true;
+                $rootScope.submission = {data: {}};
 
                 var project = '';
                 var formPath = '';
@@ -232,6 +235,20 @@
                 // Bind when the form is loaded.
                 $rootScope.$on('formLoad', function(err, form) {
                     $rootScope.form = form;
+                    if (
+                        $rootScope.form.settings &&
+                        $rootScope.form.settings.controller
+                    ) {
+                        try {
+                            var controller = eval($rootScope.form.settings.controller);
+                            if (controller) {
+                                $controller(controller, {$scope: $rootScope});
+                            }
+                        }
+                        catch (err) {
+                            console.log(err.message);
+                        }
+                    }
                 });
                 $rootScope.$on('submissionLoad', function(event, submission) {
                     // Check for substring 'submission' to enable the download pdf button.
