@@ -20,12 +20,12 @@ _.each(['view'], function(type) {
             .pipe(plugins.useref())
             .pipe(plugins.if('*.js', plugins.uglify()))
             .pipe(plugins.if('*.css', plugins.minifyCss()))
-            .pipe(plugins.if('*.html', plugins.htmlmin({
+            /*.pipe(plugins.if('*.html', plugins.htmlmin({
                 collapseWhitespace: true,
                 minifyJS: true,
                 minifyCSS: true,
                 processScripts: ['text/template']
-            })))
+            })))*/
             .pipe(gulp.dest('dist/' + type));
     });
 
@@ -36,7 +36,7 @@ _.each(['view'], function(type) {
 
     // Copy the formio files.
     gulp.task('formio:' + type, function() {
-        return gulp.src('./bower_components/ng-formio/dist/formio-full.min.*').pipe(gulp.dest('dist/' + type));
+        return gulp.src('./bower_components/ng-formio/dist/formio-full**.*').pipe(gulp.dest('dist/' + type));
     });
 
     // Copy the fonts.
