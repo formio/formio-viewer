@@ -159,15 +159,29 @@
         </div>
         <div ng-if="!formValidate" style="margin-top: 20px;">
             <div class="row">
-                <div class="col-md-6 col-md-offset-3">
+                <div class="col-md-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h1 class="panel-title"><strong>Please login to view submission</strong></h1>
+                            <h1 class="panel-title"><strong>Please login view submission</strong></h1>
                         </div>
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-lg-12">
                                     <formio src="login"></formio>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h1 class="panel-title"><strong>Please register to view submission</strong></h1>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <formio src="register"></formio>
                                 </div>
                             </div>
                         </div>
@@ -227,6 +241,11 @@
                 // Ensure we have a login form.
                 if (!$rootScope.login) {
                     $rootScope.login = query.login || 'https://formio.form.io/user/login';
+                }
+
+                // Ensure we have a register form
+                if (!$rootScope.register) {
+                  $rootScope.register = query.register || 'https://formio.form.io/user/register';
                 }
 
                 // Set the form on the rootScope.
