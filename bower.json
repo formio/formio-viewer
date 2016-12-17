@@ -17,8 +17,8 @@
     "tests"
   ],
   "dependencies": {
-    "seamless": "^0.0.6",
-    "ng-formio": "^2.4.11"
+    "seamless": "v1.0.0-beta.2",
+    "ng-formio": "^2.5.2"
   },
   "overrides": {
     "bootstrap": {
