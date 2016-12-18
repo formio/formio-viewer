@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title></title>
     <meta name="viewport" content="width=device-width">
-    <script src="https://rawgit.com/dankogai/js-base64/master/base64.min.js"></script>
+    <script src="lib/base64.min.js"></script>
 
     <!-- Favicons -->
     <link rel="apple-touch-icon" sizes="57x57" href="assets/favicons/apple-touch-icon-57x57.png">
@@ -30,13 +30,13 @@
             query[item.split("=")[0]] = item.split("=")[1] && decodeURIComponent(item.split("=")[1]);
         });
         if (query.theme) {
-            var cssLink = '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/';
+            var cssLink = '<link rel="stylesheet" href="lib/bootswatch/';
             cssLink += query.theme;
             cssLink += '/bootstrap.min.css" />';
             document.write(cssLink);
         }
         else {
-            document.write('<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />');
+            document.write('<link rel="stylesheet" href="lib/bootstrap.min.css" />');
         }
 
         // Allow them to provide their own stylesheets.
@@ -52,7 +52,7 @@
             display: none !important;
         }
     </style>
-    <link rel="stylesheet" href="formio-full.min.css" />
+    <link rel="stylesheet" href="lib/formio-full.min.css" />
 </head>
 <body ng-app="formioFormApp">
 <script id="header" type="text/template">
@@ -115,6 +115,10 @@
         margin-top: 4px;
     }
 
+    .hasheader .main {
+        margin-bottom: 70px;
+    }
+
     .iframe.notheme {
         background-color: transparent;
     }
@@ -122,6 +126,9 @@
         margin:0;
         padding:0;
         width: 100%;
+    }
+    .iframe.hasheader .main {
+        margin-bottom: 70px;
     }
     .iframe .navbar .container {
         margin:0;
@@ -177,10 +184,10 @@
         </div>
     </div>
 </div>
-<script  src="formio-full.min.js"></script>
-<script src="//unpkg.com/seamless@beta/build/seamless.child.min.js"></script>
-<script src="//cdn.rawgit.com/MrRio/jsPDF/master/dist/jspdf.min.js"></script>
-<script src="//cdn.rawgit.com/niklasvh/html2canvas/0.5.0-alpha2/dist/html2canvas.min.js"></script>
+<script  src="lib/formio-full.min.js"></script>
+<script src="lib/seamless.child.min.js"></script>
+<script src="lib/jspdf.min.js"></script>
+<script src="lib/html2canvas.min.js"></script>
 <script type="text/javascript">
     var parentPage = window.seamless.connect({
         container: 'div.main'

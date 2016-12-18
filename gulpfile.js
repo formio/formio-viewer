@@ -1,15 +1,14 @@
 var gulp = require('gulp');
 var plugins = require('gulp-load-plugins')();
 var del = require('del');
-var vinylPaths = require('vinyl-paths');
 
 // Clean the dist folder.
-gulp.task('clean', function() {
-    return gulp.src('dist').pipe(vinylPaths(del));
+gulp.task('clean', function () {
+  return del(['dist/*']);
 });
 
 // Create the minified js and css files.
-gulp.task('minify', ['clean'], function() {
+gulp.task('minify', function() {
     return gulp.src('src/index.html')
         .pipe(plugins.useref())
         .pipe(plugins.if('*.js', plugins.uglify()))
@@ -25,21 +24,35 @@ gulp.task('minify', ['clean'], function() {
 
 // Copy the fonts.
 gulp.task('fonts', function() {
-    return gulp.src('./bower_components/bootstrap/fonts/*.*').pipe(gulp.dest('dist/fonts'));
+    return gulp.src('./node_modules/bootstrap/dist/fonts/*.*').pipe(gulp.dest('dist/fonts'));
 });
 
-// Copy the formio files.
-gulp.task('formio', function() {
-    return gulp.src('./bower_components/ng-formio/dist/formio-full**.*').pipe(gulp.dest('dist'));
+gulp.task('bootswatch', function() {
+  return gulp.src('./node_modules/bootswatch/**/*').pipe(gulp.dest('dist/lib/bootswatch'));
 });
 
-// Copy the fonts.
+// Create the lib folders.
+gulp.task('lib', ['bootswatch'], function() {
+    return gulp.src([
+      './node_modules/bootstrap/dist/css/bootstrap.min.css',
+      './node_modules/bootstrap/dist/css/bootstrap.min.css.map',
+      './node_modules/ng-formio/dist/formio-full**.*',
+      './node_modules/seamless/build/seamless.child.min.js',
+      './node_modules/jspdf/dist/jspdf.min.js',
+      './node_modules/html2canvas/dist/html2canvas.min.js',
+      './node_modules/js-base64/base64.min.js'
+    ]).pipe(gulp.dest('dist/lib'));
+});
+
+// Copy the assets.
 gulp.task('assets', function() {
     return gulp.src('assets/**/*').pipe(gulp.dest('dist/assets'));
 });
 
 // Define the build task.
-gulp.task('build', ['minify', 'fonts', 'formio', 'assets']);
+gulp.task('build', ['clean'], function() {
+  gulp.start(['minify', 'fonts', 'lib', 'assets']);
+});
 
 // Deployments.
 var s3 = require("gulp-s3");
