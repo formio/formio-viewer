@@ -229,19 +229,22 @@
                 if (!form && path) {
                     path = path.replace(/^\//, '');
                     var paths = path.split('/');
+                    var protocol = query.protocol || 'https';
+                    var host = query.host || 'form.io';
                     if (paths.length < 2) { return; }
                     project = paths.shift();
                     formPath = paths.join('/');
-                    form = 'https://' + project + '.form.io/' + formPath;
+                    var api = protocol + '://' + project + '.' + host;
+                    form = api + '/' + formPath;
                     if (!$rootScope.login) {
-                        $rootScope.login = 'https://' + project + '.form.io/';
+                        $rootScope.login = api + '/';
                         $rootScope.login += query.login ? query.login : 'user/login';
                     }
                 }
 
                 // Ensure we have a login form.
                 if (!$rootScope.login) {
-                    $rootScope.login = query.login || 'https://formio.form.io/user/login';
+                    $rootScope.login = query.login || (protocol + '://formio.' + host + '/user/login');
                 }
 
                 // Set the form on the rootScope.
@@ -270,7 +273,9 @@
                     var checkSubmissionURL = new RegExp("/submission/");
                     pdfName = submission._id;
                     $rootScope.hasSubmission = checkSubmissionURL.test(form);
-                    $rootScope.formValidate = !!Formio.getToken();
+                    if ($rootScope.hasSubmission) {
+                      $rootScope.formValidate = !!Formio.getToken();
+                    }
                 });
 
                 $rootScope.$on('formError', function(event, error) {
