@@ -9,7 +9,7 @@ gulp.task('clean', function () {
 
 // Create the minified js and css files.
 gulp.task('minify', function() {
-    return gulp.src('src/index.html')
+    return gulp.src(['src/index.html', 'src/embed.html'])
         .pipe(plugins.useref())
         .pipe(plugins.if('*.js', plugins.uglify()))
         .pipe(plugins.if('*.css', plugins.minifyCss()))
