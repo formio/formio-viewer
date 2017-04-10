@@ -56,6 +56,12 @@ gulp.task('build', ['clean'], function() {
 
 // Deployments.
 var s3 = require("gulp-s3");
-gulp.task('deploy', function () {
-    return gulp.src('./dist/**/*').pipe(s3(require('./aws.json')));
+gulp.task('deploy:test', function() {
+  return gulp.src('./dist/**/*').pipe(s3(require('./aws.json'), {
+    uploadPath: "/test/"
+  }));
+});
+
+gulp.task('deploy:prod', function () {
+  return gulp.src('./dist/**/*').pipe(s3(require('./aws.json')));
 });
