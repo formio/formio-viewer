@@ -13,8 +13,9 @@
     "bootswatch": "^3.3.7",
     "html2canvas": "^0.5.0-beta4",
     "js-base64": "^2.1.9",
-    "jspdf": "^1.3.2",
-    "ng-formio": "^2.15.6",
+    "json-logic-js": "^1.1.0",
+    "jspdf": "^1.3.3",
+    "ng-formio": "^2.17.1",
     "seamless": "^1.2.0"
   },
   "devDependencies": {

@@ -1,4 +1,4 @@
-/*! ng-formio v2.15.6 | https://unpkg.com/ng-formio@2.15.6/LICENSE.txt */
+/*! ng-formio v2.17.0 | https://unpkg.com/ng-formio@2.17.0/LICENSE.txt */
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.formio = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -1343,7 +1343,7 @@ return /******/ (function(modules) { // webpackBootstrap
 })();
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"angular":10,"moment":192}],3:[function(_dereq_,module,exports){
+},{"angular":10,"moment":193}],3:[function(_dereq_,module,exports){
 /**
  * @license AngularJS v1.6.4
  * (c) 2010-2017 Google, Inc. http://angularjs.org
@@ -48877,7 +48877,7 @@ Formio.events = new EventEmitter({
 module.exports = global.Formio = Formio;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./providers":27,"eventemitter2":25,"native-promise-only":193,"shallow-copy":196,"whatwg-fetch":199}],27:[function(_dereq_,module,exports){
+},{"./providers":27,"eventemitter2":25,"native-promise-only":194,"shallow-copy":198,"whatwg-fetch":201}],27:[function(_dereq_,module,exports){
 'use strict';
 
 module.exports = {
@@ -48956,7 +48956,7 @@ var dropbox = function dropbox(formio) {
 dropbox.title = 'Dropbox';
 module.exports = dropbox;
 
-},{"native-promise-only":193}],29:[function(_dereq_,module,exports){
+},{"native-promise-only":194}],29:[function(_dereq_,module,exports){
 'use strict';
 
 module.exports = {
@@ -49080,7 +49080,7 @@ var s3 = function s3(formio) {
 s3.title = 'S3';
 module.exports = s3;
 
-},{"native-promise-only":193}],31:[function(_dereq_,module,exports){
+},{"native-promise-only":194}],31:[function(_dereq_,module,exports){
 'use strict';
 
 var Promise = _dereq_("native-promise-only");
@@ -49159,7 +49159,7 @@ var url = function url(formio) {
 url.title = 'Url';
 module.exports = url;
 
-},{"native-promise-only":193}],32:[function(_dereq_,module,exports){
+},{"native-promise-only":194}],32:[function(_dereq_,module,exports){
 'use strict';
 
 var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -49170,7 +49170,16 @@ var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "sym
   return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
 };
 
+var _jsonLogicJs = _dereq_('json-logic-js');
+
+var _jsonLogicJs2 = _interopRequireDefault(_jsonLogicJs);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
 var _get = _dereq_('lodash/get');
+
 module.exports = {
   /**
    * Determine if a component is a layout component or not.
@@ -49321,6 +49330,11 @@ module.exports = {
       }
 
       return value.toString() === cond.eq.toString() === (cond.show.toString() === 'true');
+    } else if (component.hasOwnProperty('conditional') && component.conditional && component.conditional.json) {
+      return _jsonLogicJs2.default.apply(component.conditional.json, {
+        data: data,
+        row: row
+      });
     }
 
     // Default to show.
@@ -49381,7 +49395,7 @@ module.exports = {
   }
 };
 
-},{"lodash/get":170}],33:[function(_dereq_,module,exports){
+},{"json-logic-js":35,"lodash/get":171}],33:[function(_dereq_,module,exports){
 'use strict';
 
 module.exports = _dereq_('./build/utils');
@@ -59642,6 +59656,372 @@ return jQuery;
 } );
 
 },{}],35:[function(_dereq_,module,exports){
+/* globals define,module */
+/*
+Using a Universal Module Loader that should be browser, require, and AMD friendly
+http://ricostacruz.com/cheatsheets/umdjs.html
+*/
+;(function(root, factory) {
+  if (typeof define === "function" && define.amd) {
+    define(factory);
+  } else if (typeof exports === "object") {
+    module.exports = factory();
+  } else {
+    root.jsonLogic = factory();
+  }
+}(this, function() {
+  "use strict";
+  /* globals console:false */
+
+  if ( ! Array.isArray) {
+    Array.isArray = function(arg) {
+      return Object.prototype.toString.call(arg) === "[object Array]";
+    };
+  }
+
+  function arrayUnique(array) {
+    var a = [];
+    for (var i=0, l=array.length; i<l; i++) {
+      if (a.indexOf(array[i]) === -1) {
+        a.push(array[i]);
+      }
+    }
+    return a;
+  }
+
+  var jsonLogic = {};
+  var operations = {
+    "==": function(a, b) {
+      return a == b;
+    },
+    "===": function(a, b) {
+      return a === b;
+    },
+    "!=": function(a, b) {
+      return a != b;
+    },
+    "!==": function(a, b) {
+      return a !== b;
+    },
+    ">": function(a, b) {
+      return a > b;
+    },
+    ">=": function(a, b) {
+      return a >= b;
+    },
+    "<": function(a, b, c) {
+      return (c === undefined) ? a < b : (a < b) && (b < c);
+    },
+    "<=": function(a, b, c) {
+      return (c === undefined) ? a <= b : (a <= b) && (b <= c);
+    },
+    "!!": function(a) {
+      return jsonLogic.truthy(a);
+    },
+    "!": function(a) {
+      return !jsonLogic.truthy(a);
+    },
+    "%": function(a, b) {
+      return a % b;
+    },
+    "log": function(a) {
+      console.log(a); return a;
+    },
+    "in": function(a, b) {
+      if(typeof b.indexOf === "undefined") return false;
+      return (b.indexOf(a) !== -1);
+    },
+    "cat": function() {
+      return Array.prototype.join.call(arguments, "");
+    },
+    "+": function() {
+      return Array.prototype.reduce.call(arguments, function(a, b) {
+        return parseFloat(a, 10) + parseFloat(b, 10);
+      }, 0);
+    },
+    "*": function() {
+      return Array.prototype.reduce.call(arguments, function(a, b) {
+        return parseFloat(a, 10) * parseFloat(b, 10);
+      });
+    },
+    "-": function(a, b) {
+      if(b === undefined) {
+        return -a;
+      }else{
+        return a - b;
+      }
+    },
+    "/": function(a, b) { return a / b; },
+    "min": function() {
+      return Math.min.apply(this, arguments);
+    },
+    "max": function() {
+      return Math.max.apply(this, arguments);
+    },
+    "merge": function() {
+      return Array.prototype.reduce.call(arguments, function(a, b) {
+        return a.concat(b);
+      }, []);
+    },
+    "var": function(a, b) {
+      var not_found = (b === undefined) ? null : b;
+      var sub_props = String(a).split(".");
+      var data = this;
+      for(var i = 0; i < sub_props.length; i++) {
+        // Descending into data
+        data = data[sub_props[i]];
+        if(data === undefined) {
+          return not_found;
+        }
+      }
+      return data;
+    },
+    "missing": function() {
+      /*
+      Missing can receive many keys as many arguments, like {"missing:[1,2]}
+      Missing can also receive *one* argument that is an array of keys,
+      which typically happens if it's actually acting on the output of another command
+      (like 'if' or 'merge')
+      */
+
+      var missing = [];
+      var keys = Array.isArray(arguments[0]) ? arguments[0] : arguments;
+
+      for(var i = 0; i < keys.length; i++) {
+        var key = keys[i];
+        var value = jsonLogic.apply({"var": key}, this);
+        if(value === null || value === "") {
+          missing.push(key);
+        }
+      }
+
+      return missing;
+    },
+    "missing_some": function(need_count, options) {
+      // missing_some takes two arguments, how many (minimum) items must be present, and an array of keys (just like 'missing') to check for presence.
+      var are_missing = jsonLogic.apply({"missing": options}, this);
+
+      if(options.length - are_missing.length >= need_count) {
+        return [];
+      }else{
+        return are_missing;
+      }
+    },
+    "method": function(obj, method, args) {
+      return obj[method].apply(obj, args);
+    },
+
+  };
+
+  jsonLogic.is_logic = function(logic) {
+    return (
+      logic !== null && typeof logic === "object" && ! Array.isArray(logic)
+    );
+  };
+
+  /*
+  This helper will defer to the JsonLogic spec as a tie-breaker when different language interpreters define different behavior for the truthiness of primitives.  E.g., PHP considers empty arrays to be falsy, but Javascript considers them to be truthy. JsonLogic, as an ecosystem, needs one consistent answer.
+
+  Literal | JS    |  PHP  |  JsonLogic
+  --------+-------+-------+---------------
+  []      | true  | false | false
+  "0"     | true  | false | true
+  */
+  jsonLogic.truthy = function(value) {
+    if(Array.isArray(value) && value.length === 0) {
+      return false;
+    }
+    return !! value;
+  };
+
+
+  jsonLogic.get_operator = function(logic){
+    return Object.keys(logic)[0];
+  };
+
+  jsonLogic.get_values = function(logic){
+    return logic[ jsonLogic.get_operator(logic) ];
+  };
+
+  jsonLogic.apply = function(logic, data) {
+    // Does this array contain logic? Only one way to find out.
+    if(Array.isArray(logic)) {
+      return logic.map(function(l) {
+        return jsonLogic.apply(l, data);
+      });
+    }
+    // You've recursed to a primitive, stop!
+    if( ! jsonLogic.is_logic(logic) ) {
+      return logic;
+    }
+
+    data = data || {};
+
+    var op = jsonLogic.get_operator(logic);
+    var values = logic[op];
+    var i;
+    var current;
+
+    // easy syntax for unary operators, like {"var" : "x"} instead of strict {"var" : ["x"]}
+    if( ! Array.isArray(values)) {
+      values = [values];
+    }
+
+    // 'if', 'and', and 'or' violate the normal rule of depth-first calculating consequents, let each manage recursion as needed.
+    if(op === "if" || op == "?:") {
+      /* 'if' should be called with a odd number of parameters, 3 or greater
+      This works on the pattern:
+      if( 0 ){ 1 }else{ 2 };
+      if( 0 ){ 1 }else if( 2 ){ 3 }else{ 4 };
+      if( 0 ){ 1 }else if( 2 ){ 3 }else if( 4 ){ 5 }else{ 6 };
+
+      The implementation is:
+      For pairs of values (0,1 then 2,3 then 4,5 etc)
+      If the first evaluates truthy, evaluate and return the second
+      If the first evaluates falsy, jump to the next pair (e.g, 0,1 to 2,3)
+      given one parameter, evaluate and return it. (it's an Else and all the If/ElseIf were false)
+      given 0 parameters, return NULL (not great practice, but there was no Else)
+      */
+      for(i = 0; i < values.length - 1; i += 2) {
+        if( jsonLogic.truthy( jsonLogic.apply(values[i], data) ) ) {
+          return jsonLogic.apply(values[i+1], data);
+        }
+      }
+      if(values.length === i+1) return jsonLogic.apply(values[i], data);
+      return null;
+    }else if(op === "and") { // Return first falsy, or last
+      for(i=0; i < values.length; i+=1) {
+        current = jsonLogic.apply(values[i], data);
+        if( ! jsonLogic.truthy(current)) {
+          return current;
+        }
+      }
+      return current; // Last
+    }else if(op === "or") {// Return first truthy, or last
+      for(i=0; i < values.length; i+=1) {
+        current = jsonLogic.apply(values[i], data);
+        if( jsonLogic.truthy(current) ) {
+          return current;
+        }
+      }
+      return current; // Last
+    }
+
+
+    // Everyone else gets immediate depth-first recursion
+    values = values.map(function(val) {
+      return jsonLogic.apply(val, data);
+    });
+
+
+    // The operation is called with "data" bound to its "this" and "values" passed as arguments.
+    // Structured commands like % or > can name formal arguments while flexible commands (like missing or merge) can operate on the pseudo-array arguments
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments
+    if(typeof operations[op] === "function") {
+      return operations[op].apply(data, values);
+    }else if(op.indexOf(".") > 0) { // Contains a dot, and not in the 0th position
+      var sub_ops = String(op).split(".");
+      var operation = operations;
+      for(i = 0; i < sub_ops.length; i++) {
+        // Descending into operations
+        operation = operation[sub_ops[i]];
+        if(operation === undefined) {
+          throw new Error("Unrecognized operation " + op +
+          " (failed at " + sub_ops.slice(0, i+1).join(".") + ")");
+        }
+      }
+
+      return operation.apply(data, values);
+    }
+
+    throw new Error("Unrecognized operation " + op );
+  };
+
+  jsonLogic.uses_data = function(logic) {
+    var collection = [];
+
+    if( jsonLogic.is_logic(logic) ) {
+      var op = jsonLogic.get_operator(logic);
+      var values = logic[op];
+
+      if( ! Array.isArray(values)) {
+        values = [values];
+      }
+
+      if(op === "var") {
+        // This doesn't cover the case where the arg to var is itself a rule.
+        collection.push(values[0]);
+      }else{
+        // Recursion!
+        values.map(function(val) {
+          collection.push.apply(collection, jsonLogic.uses_data(val) );
+        });
+      }
+    }
+
+    return arrayUnique(collection);
+  };
+
+  jsonLogic.add_operation = function(name, code) {
+    operations[name] = code;
+  };
+
+
+  jsonLogic.rule_like = function(rule, pattern){
+		//console.log("Is ". JSON.stringify(rule) . " like " . JSON.stringify(pattern) . "?");
+	  if(pattern === rule){ return true; } //TODO : Deep object equivalency?
+	  if(pattern === "@"){ return true; } //Wildcard!
+	  if(pattern === "number"){ return (typeof rule === 'number'); }
+	  if(pattern === "string"){ return (typeof rule === 'string'); }
+	  if(pattern === "array"){
+      //!logic test might be superfluous in JavaScript
+      return Array.isArray(rule) && ! jsonLogic.is_logic(rule);
+    }
+
+	  if(jsonLogic.is_logic(pattern)){
+	    if(jsonLogic.is_logic(rule)){
+	      var pattern_op = jsonLogic.get_operator(pattern);
+        var rule_op = jsonLogic.get_operator(rule);
+
+	      if(pattern_op === "@" || pattern_op === rule_op){
+					//echo "\nOperators match, go deeper\n";
+	        return jsonLogic.rule_like(
+						jsonLogic.get_values(rule, false),
+						jsonLogic.get_values(pattern, false)
+					);
+	      }
+
+	    }
+	    return false; //pattern is logic, rule isn't, can't be eq
+	  }
+
+	  if(Array.isArray(pattern)){
+	    if(Array.isArray(rule)){
+	      if(pattern.length !== rule.length){ return false; }
+				/*
+					Note, array order MATTERS, because we're using this array test logic to consider arguments, where order can matter. (e.g., + is commutative, but '-' or 'if' or 'var' are NOT)
+				*/
+	      for(var i = 0 ; i < pattern.length ; i += 1){
+	        //If any fail, we fail
+	        if( ! jsonLogic.rule_like(rule[i], pattern[i])){ return false; }
+	      }
+	      return true; //If they *all* passed, we pass
+	    }else{
+	      return false; //Pattern is array, rule isn't
+	    }
+
+	  }
+
+		//Not logic, not array, not a === match for rule.
+		return false;
+	};
+
+
+
+  return jsonLogic;
+}));
+
+},{}],36:[function(_dereq_,module,exports){
 var getNative = _dereq_('./_getNative'),
     root = _dereq_('./_root');
 
@@ -59650,7 +60030,7 @@ var DataView = getNative(root, 'DataView');
 
 module.exports = DataView;
 
-},{"./_getNative":114,"./_root":155}],36:[function(_dereq_,module,exports){
+},{"./_getNative":115,"./_root":156}],37:[function(_dereq_,module,exports){
 var hashClear = _dereq_('./_hashClear'),
     hashDelete = _dereq_('./_hashDelete'),
     hashGet = _dereq_('./_hashGet'),
@@ -59684,7 +60064,7 @@ Hash.prototype.set = hashSet;
 
 module.exports = Hash;
 
-},{"./_hashClear":122,"./_hashDelete":123,"./_hashGet":124,"./_hashHas":125,"./_hashSet":126}],37:[function(_dereq_,module,exports){
+},{"./_hashClear":123,"./_hashDelete":124,"./_hashGet":125,"./_hashHas":126,"./_hashSet":127}],38:[function(_dereq_,module,exports){
 var listCacheClear = _dereq_('./_listCacheClear'),
     listCacheDelete = _dereq_('./_listCacheDelete'),
     listCacheGet = _dereq_('./_listCacheGet'),
@@ -59718,7 +60098,7 @@ ListCache.prototype.set = listCacheSet;
 
 module.exports = ListCache;
 
-},{"./_listCacheClear":136,"./_listCacheDelete":137,"./_listCacheGet":138,"./_listCacheHas":139,"./_listCacheSet":140}],38:[function(_dereq_,module,exports){
+},{"./_listCacheClear":137,"./_listCacheDelete":138,"./_listCacheGet":139,"./_listCacheHas":140,"./_listCacheSet":141}],39:[function(_dereq_,module,exports){
 var getNative = _dereq_('./_getNative'),
     root = _dereq_('./_root');
 
@@ -59727,7 +60107,7 @@ var Map = getNative(root, 'Map');
 
 module.exports = Map;
 
-},{"./_getNative":114,"./_root":155}],39:[function(_dereq_,module,exports){
+},{"./_getNative":115,"./_root":156}],40:[function(_dereq_,module,exports){
 var mapCacheClear = _dereq_('./_mapCacheClear'),
     mapCacheDelete = _dereq_('./_mapCacheDelete'),
     mapCacheGet = _dereq_('./_mapCacheGet'),
@@ -59761,7 +60141,7 @@ MapCache.prototype.set = mapCacheSet;
 
 module.exports = MapCache;
 
-},{"./_mapCacheClear":141,"./_mapCacheDelete":142,"./_mapCacheGet":143,"./_mapCacheHas":144,"./_mapCacheSet":145}],40:[function(_dereq_,module,exports){
+},{"./_mapCacheClear":142,"./_mapCacheDelete":143,"./_mapCacheGet":144,"./_mapCacheHas":145,"./_mapCacheSet":146}],41:[function(_dereq_,module,exports){
 var getNative = _dereq_('./_getNative'),
     root = _dereq_('./_root');
 
@@ -59770,7 +60150,7 @@ var Promise = getNative(root, 'Promise');
 
 module.exports = Promise;
 
-},{"./_getNative":114,"./_root":155}],41:[function(_dereq_,module,exports){
+},{"./_getNative":115,"./_root":156}],42:[function(_dereq_,module,exports){
 var getNative = _dereq_('./_getNative'),
     root = _dereq_('./_root');
 
@@ -59779,7 +60159,7 @@ var Set = getNative(root, 'Set');
 
 module.exports = Set;
 
-},{"./_getNative":114,"./_root":155}],42:[function(_dereq_,module,exports){
+},{"./_getNative":115,"./_root":156}],43:[function(_dereq_,module,exports){
 var MapCache = _dereq_('./_MapCache'),
     setCacheAdd = _dereq_('./_setCacheAdd'),
     setCacheHas = _dereq_('./_setCacheHas');
@@ -59808,7 +60188,7 @@ SetCache.prototype.has = setCacheHas;
 
 module.exports = SetCache;
 
-},{"./_MapCache":39,"./_setCacheAdd":156,"./_setCacheHas":157}],43:[function(_dereq_,module,exports){
+},{"./_MapCache":40,"./_setCacheAdd":157,"./_setCacheHas":158}],44:[function(_dereq_,module,exports){
 var ListCache = _dereq_('./_ListCache'),
     stackClear = _dereq_('./_stackClear'),
     stackDelete = _dereq_('./_stackDelete'),
@@ -59837,7 +60217,7 @@ Stack.prototype.set = stackSet;
 
 module.exports = Stack;
 
-},{"./_ListCache":37,"./_stackClear":159,"./_stackDelete":160,"./_stackGet":161,"./_stackHas":162,"./_stackSet":163}],44:[function(_dereq_,module,exports){
+},{"./_ListCache":38,"./_stackClear":160,"./_stackDelete":161,"./_stackGet":162,"./_stackHas":163,"./_stackSet":164}],45:[function(_dereq_,module,exports){
 var root = _dereq_('./_root');
 
 /** Built-in value references. */
@@ -59845,7 +60225,7 @@ var Symbol = root.Symbol;
 
 module.exports = Symbol;
 
-},{"./_root":155}],45:[function(_dereq_,module,exports){
+},{"./_root":156}],46:[function(_dereq_,module,exports){
 var root = _dereq_('./_root');
 
 /** Built-in value references. */
@@ -59853,7 +60233,7 @@ var Uint8Array = root.Uint8Array;
 
 module.exports = Uint8Array;
 
-},{"./_root":155}],46:[function(_dereq_,module,exports){
+},{"./_root":156}],47:[function(_dereq_,module,exports){
 var getNative = _dereq_('./_getNative'),
     root = _dereq_('./_root');
 
@@ -59862,7 +60242,7 @@ var WeakMap = getNative(root, 'WeakMap');
 
 module.exports = WeakMap;
 
-},{"./_getNative":114,"./_root":155}],47:[function(_dereq_,module,exports){
+},{"./_getNative":115,"./_root":156}],48:[function(_dereq_,module,exports){
 /**
  * Adds the key-value `pair` to `map`.
  *
@@ -59879,7 +60259,7 @@ function addMapEntry(map, pair) {
 
 module.exports = addMapEntry;
 
-},{}],48:[function(_dereq_,module,exports){
+},{}],49:[function(_dereq_,module,exports){
 /**
  * Adds `value` to `set`.
  *
@@ -59896,7 +60276,7 @@ function addSetEntry(set, value) {
 
 module.exports = addSetEntry;
 
-},{}],49:[function(_dereq_,module,exports){
+},{}],50:[function(_dereq_,module,exports){
 /**
  * A specialized version of `_.forEach` for arrays without support for
  * iteratee shorthands.
@@ -59920,7 +60300,7 @@ function arrayEach(array, iteratee) {
 
 module.exports = arrayEach;
 
-},{}],50:[function(_dereq_,module,exports){
+},{}],51:[function(_dereq_,module,exports){
 /**
  * A specialized version of `_.filter` for arrays without support for
  * iteratee shorthands.
@@ -59947,7 +60327,7 @@ function arrayFilter(array, predicate) {
 
 module.exports = arrayFilter;
 
-},{}],51:[function(_dereq_,module,exports){
+},{}],52:[function(_dereq_,module,exports){
 var baseTimes = _dereq_('./_baseTimes'),
     isArguments = _dereq_('./isArguments'),
     isArray = _dereq_('./isArray'),
@@ -59998,7 +60378,7 @@ function arrayLikeKeys(value, inherited) {
 
 module.exports = arrayLikeKeys;
 
-},{"./_baseTimes":85,"./_isIndex":130,"./isArguments":173,"./isArray":174,"./isBuffer":176,"./isTypedArray":183}],52:[function(_dereq_,module,exports){
+},{"./_baseTimes":86,"./_isIndex":131,"./isArguments":174,"./isArray":175,"./isBuffer":177,"./isTypedArray":184}],53:[function(_dereq_,module,exports){
 /**
  * A specialized version of `_.map` for arrays without support for iteratee
  * shorthands.
@@ -60021,7 +60401,7 @@ function arrayMap(array, iteratee) {
 
 module.exports = arrayMap;
 
-},{}],53:[function(_dereq_,module,exports){
+},{}],54:[function(_dereq_,module,exports){
 /**
  * Appends the elements of `values` to `array`.
  *
@@ -60043,7 +60423,7 @@ function arrayPush(array, values) {
 
 module.exports = arrayPush;
 
-},{}],54:[function(_dereq_,module,exports){
+},{}],55:[function(_dereq_,module,exports){
 /**
  * A specialized version of `_.reduce` for arrays without support for
  * iteratee shorthands.
@@ -60071,7 +60451,7 @@ function arrayReduce(array, iteratee, accumulator, initAccum) {
 
 module.exports = arrayReduce;
 
-},{}],55:[function(_dereq_,module,exports){
+},{}],56:[function(_dereq_,module,exports){
 /**
  * A specialized version of `_.some` for arrays without support for iteratee
  * shorthands.
@@ -60096,7 +60476,7 @@ function arraySome(array, predicate) {
 
 module.exports = arraySome;
 
-},{}],56:[function(_dereq_,module,exports){
+},{}],57:[function(_dereq_,module,exports){
 var baseAssignValue = _dereq_('./_baseAssignValue'),
     eq = _dereq_('./eq');
 
@@ -60126,7 +60506,7 @@ function assignValue(object, key, value) {
 
 module.exports = assignValue;
 
-},{"./_baseAssignValue":60,"./eq":168}],57:[function(_dereq_,module,exports){
+},{"./_baseAssignValue":61,"./eq":169}],58:[function(_dereq_,module,exports){
 var eq = _dereq_('./eq');
 
 /**
@@ -60149,7 +60529,7 @@ function assocIndexOf(array, key) {
 
 module.exports = assocIndexOf;
 
-},{"./eq":168}],58:[function(_dereq_,module,exports){
+},{"./eq":169}],59:[function(_dereq_,module,exports){
 var copyObject = _dereq_('./_copyObject'),
     keys = _dereq_('./keys');
 
@@ -60168,7 +60548,7 @@ function baseAssign(object, source) {
 
 module.exports = baseAssign;
 
-},{"./_copyObject":99,"./keys":184}],59:[function(_dereq_,module,exports){
+},{"./_copyObject":100,"./keys":185}],60:[function(_dereq_,module,exports){
 var copyObject = _dereq_('./_copyObject'),
     keysIn = _dereq_('./keysIn');
 
@@ -60187,7 +60567,7 @@ function baseAssignIn(object, source) {
 
 module.exports = baseAssignIn;
 
-},{"./_copyObject":99,"./keysIn":185}],60:[function(_dereq_,module,exports){
+},{"./_copyObject":100,"./keysIn":186}],61:[function(_dereq_,module,exports){
 var defineProperty = _dereq_('./_defineProperty');
 
 /**
@@ -60214,7 +60594,7 @@ function baseAssignValue(object, key, value) {
 
 module.exports = baseAssignValue;
 
-},{"./_defineProperty":105}],61:[function(_dereq_,module,exports){
+},{"./_defineProperty":106}],62:[function(_dereq_,module,exports){
 var Stack = _dereq_('./_Stack'),
     arrayEach = _dereq_('./_arrayEach'),
     assignValue = _dereq_('./_assignValue'),
@@ -60369,7 +60749,7 @@ function baseClone(value, bitmask, customizer, key, object, stack) {
 
 module.exports = baseClone;
 
-},{"./_Stack":43,"./_arrayEach":49,"./_assignValue":56,"./_baseAssign":58,"./_baseAssignIn":59,"./_cloneBuffer":91,"./_copyArray":98,"./_copySymbols":100,"./_copySymbolsIn":101,"./_getAllKeys":110,"./_getAllKeysIn":111,"./_getTag":119,"./_initCloneArray":127,"./_initCloneByTag":128,"./_initCloneObject":129,"./isArray":174,"./isBuffer":176,"./isObject":180,"./keys":184}],62:[function(_dereq_,module,exports){
+},{"./_Stack":44,"./_arrayEach":50,"./_assignValue":57,"./_baseAssign":59,"./_baseAssignIn":60,"./_cloneBuffer":92,"./_copyArray":99,"./_copySymbols":101,"./_copySymbolsIn":102,"./_getAllKeys":111,"./_getAllKeysIn":112,"./_getTag":120,"./_initCloneArray":128,"./_initCloneByTag":129,"./_initCloneObject":130,"./isArray":175,"./isBuffer":177,"./isObject":181,"./keys":185}],63:[function(_dereq_,module,exports){
 var isObject = _dereq_('./isObject');
 
 /** Built-in value references. */
@@ -60401,7 +60781,7 @@ var baseCreate = (function() {
 
 module.exports = baseCreate;
 
-},{"./isObject":180}],63:[function(_dereq_,module,exports){
+},{"./isObject":181}],64:[function(_dereq_,module,exports){
 var baseForOwn = _dereq_('./_baseForOwn'),
     createBaseEach = _dereq_('./_createBaseEach');
 
@@ -60417,7 +60797,7 @@ var baseEach = createBaseEach(baseForOwn);
 
 module.exports = baseEach;
 
-},{"./_baseForOwn":66,"./_createBaseEach":103}],64:[function(_dereq_,module,exports){
+},{"./_baseForOwn":67,"./_createBaseEach":104}],65:[function(_dereq_,module,exports){
 var baseEach = _dereq_('./_baseEach');
 
 /**
@@ -60440,7 +60820,7 @@ function baseFilter(collection, predicate) {
 
 module.exports = baseFilter;
 
-},{"./_baseEach":63}],65:[function(_dereq_,module,exports){
+},{"./_baseEach":64}],66:[function(_dereq_,module,exports){
 var createBaseFor = _dereq_('./_createBaseFor');
 
 /**
@@ -60458,7 +60838,7 @@ var baseFor = createBaseFor();
 
 module.exports = baseFor;
 
-},{"./_createBaseFor":104}],66:[function(_dereq_,module,exports){
+},{"./_createBaseFor":105}],67:[function(_dereq_,module,exports){
 var baseFor = _dereq_('./_baseFor'),
     keys = _dereq_('./keys');
 
@@ -60476,7 +60856,7 @@ function baseForOwn(object, iteratee) {
 
 module.exports = baseForOwn;
 
-},{"./_baseFor":65,"./keys":184}],67:[function(_dereq_,module,exports){
+},{"./_baseFor":66,"./keys":185}],68:[function(_dereq_,module,exports){
 var castPath = _dereq_('./_castPath'),
     toKey = _dereq_('./_toKey');
 
@@ -60502,7 +60882,7 @@ function baseGet(object, path) {
 
 module.exports = baseGet;
 
-},{"./_castPath":89,"./_toKey":165}],68:[function(_dereq_,module,exports){
+},{"./_castPath":90,"./_toKey":166}],69:[function(_dereq_,module,exports){
 var arrayPush = _dereq_('./_arrayPush'),
     isArray = _dereq_('./isArray');
 
@@ -60524,7 +60904,7 @@ function baseGetAllKeys(object, keysFunc, symbolsFunc) {
 
 module.exports = baseGetAllKeys;
 
-},{"./_arrayPush":53,"./isArray":174}],69:[function(_dereq_,module,exports){
+},{"./_arrayPush":54,"./isArray":175}],70:[function(_dereq_,module,exports){
 var Symbol = _dereq_('./_Symbol'),
     getRawTag = _dereq_('./_getRawTag'),
     objectToString = _dereq_('./_objectToString');
@@ -60554,7 +60934,7 @@ function baseGetTag(value) {
 
 module.exports = baseGetTag;
 
-},{"./_Symbol":44,"./_getRawTag":116,"./_objectToString":153}],70:[function(_dereq_,module,exports){
+},{"./_Symbol":45,"./_getRawTag":117,"./_objectToString":154}],71:[function(_dereq_,module,exports){
 /**
  * The base implementation of `_.hasIn` without support for deep paths.
  *
@@ -60569,7 +60949,7 @@ function baseHasIn(object, key) {
 
 module.exports = baseHasIn;
 
-},{}],71:[function(_dereq_,module,exports){
+},{}],72:[function(_dereq_,module,exports){
 var baseGetTag = _dereq_('./_baseGetTag'),
     isObjectLike = _dereq_('./isObjectLike');
 
@@ -60589,7 +60969,7 @@ function baseIsArguments(value) {
 
 module.exports = baseIsArguments;
 
-},{"./_baseGetTag":69,"./isObjectLike":181}],72:[function(_dereq_,module,exports){
+},{"./_baseGetTag":70,"./isObjectLike":182}],73:[function(_dereq_,module,exports){
 var baseIsEqualDeep = _dereq_('./_baseIsEqualDeep'),
     isObjectLike = _dereq_('./isObjectLike');
 
@@ -60619,7 +60999,7 @@ function baseIsEqual(value, other, bitmask, customizer, stack) {
 
 module.exports = baseIsEqual;
 
-},{"./_baseIsEqualDeep":73,"./isObjectLike":181}],73:[function(_dereq_,module,exports){
+},{"./_baseIsEqualDeep":74,"./isObjectLike":182}],74:[function(_dereq_,module,exports){
 var Stack = _dereq_('./_Stack'),
     equalArrays = _dereq_('./_equalArrays'),
     equalByTag = _dereq_('./_equalByTag'),
@@ -60704,7 +61084,7 @@ function baseIsEqualDeep(object, other, bitmask, customizer, equalFunc, stack) {
 
 module.exports = baseIsEqualDeep;
 
-},{"./_Stack":43,"./_equalArrays":106,"./_equalByTag":107,"./_equalObjects":108,"./_getTag":119,"./isArray":174,"./isBuffer":176,"./isTypedArray":183}],74:[function(_dereq_,module,exports){
+},{"./_Stack":44,"./_equalArrays":107,"./_equalByTag":108,"./_equalObjects":109,"./_getTag":120,"./isArray":175,"./isBuffer":177,"./isTypedArray":184}],75:[function(_dereq_,module,exports){
 var Stack = _dereq_('./_Stack'),
     baseIsEqual = _dereq_('./_baseIsEqual');
 
@@ -60768,7 +61148,7 @@ function baseIsMatch(object, source, matchData, customizer) {
 
 module.exports = baseIsMatch;
 
-},{"./_Stack":43,"./_baseIsEqual":72}],75:[function(_dereq_,module,exports){
+},{"./_Stack":44,"./_baseIsEqual":73}],76:[function(_dereq_,module,exports){
 var isFunction = _dereq_('./isFunction'),
     isMasked = _dereq_('./_isMasked'),
     isObject = _dereq_('./isObject'),
@@ -60817,7 +61197,7 @@ function baseIsNative(value) {
 
 module.exports = baseIsNative;
 
-},{"./_isMasked":133,"./_toSource":166,"./isFunction":178,"./isObject":180}],76:[function(_dereq_,module,exports){
+},{"./_isMasked":134,"./_toSource":167,"./isFunction":179,"./isObject":181}],77:[function(_dereq_,module,exports){
 var baseGetTag = _dereq_('./_baseGetTag'),
     isLength = _dereq_('./isLength'),
     isObjectLike = _dereq_('./isObjectLike');
@@ -60879,7 +61259,7 @@ function baseIsTypedArray(value) {
 
 module.exports = baseIsTypedArray;
 
-},{"./_baseGetTag":69,"./isLength":179,"./isObjectLike":181}],77:[function(_dereq_,module,exports){
+},{"./_baseGetTag":70,"./isLength":180,"./isObjectLike":182}],78:[function(_dereq_,module,exports){
 var baseMatches = _dereq_('./_baseMatches'),
     baseMatchesProperty = _dereq_('./_baseMatchesProperty'),
     identity = _dereq_('./identity'),
@@ -60912,7 +61292,7 @@ function baseIteratee(value) {
 
 module.exports = baseIteratee;
 
-},{"./_baseMatches":80,"./_baseMatchesProperty":81,"./identity":172,"./isArray":174,"./property":187}],78:[function(_dereq_,module,exports){
+},{"./_baseMatches":81,"./_baseMatchesProperty":82,"./identity":173,"./isArray":175,"./property":188}],79:[function(_dereq_,module,exports){
 var isPrototype = _dereq_('./_isPrototype'),
     nativeKeys = _dereq_('./_nativeKeys');
 
@@ -60944,7 +61324,7 @@ function baseKeys(object) {
 
 module.exports = baseKeys;
 
-},{"./_isPrototype":134,"./_nativeKeys":150}],79:[function(_dereq_,module,exports){
+},{"./_isPrototype":135,"./_nativeKeys":151}],80:[function(_dereq_,module,exports){
 var isObject = _dereq_('./isObject'),
     isPrototype = _dereq_('./_isPrototype'),
     nativeKeysIn = _dereq_('./_nativeKeysIn');
@@ -60979,7 +61359,7 @@ function baseKeysIn(object) {
 
 module.exports = baseKeysIn;
 
-},{"./_isPrototype":134,"./_nativeKeysIn":151,"./isObject":180}],80:[function(_dereq_,module,exports){
+},{"./_isPrototype":135,"./_nativeKeysIn":152,"./isObject":181}],81:[function(_dereq_,module,exports){
 var baseIsMatch = _dereq_('./_baseIsMatch'),
     getMatchData = _dereq_('./_getMatchData'),
     matchesStrictComparable = _dereq_('./_matchesStrictComparable');
@@ -61003,7 +61383,7 @@ function baseMatches(source) {
 
 module.exports = baseMatches;
 
-},{"./_baseIsMatch":74,"./_getMatchData":113,"./_matchesStrictComparable":147}],81:[function(_dereq_,module,exports){
+},{"./_baseIsMatch":75,"./_getMatchData":114,"./_matchesStrictComparable":148}],82:[function(_dereq_,module,exports){
 var baseIsEqual = _dereq_('./_baseIsEqual'),
     get = _dereq_('./get'),
     hasIn = _dereq_('./hasIn'),
@@ -61038,7 +61418,7 @@ function baseMatchesProperty(path, srcValue) {
 
 module.exports = baseMatchesProperty;
 
-},{"./_baseIsEqual":72,"./_isKey":131,"./_isStrictComparable":135,"./_matchesStrictComparable":147,"./_toKey":165,"./get":170,"./hasIn":171}],82:[function(_dereq_,module,exports){
+},{"./_baseIsEqual":73,"./_isKey":132,"./_isStrictComparable":136,"./_matchesStrictComparable":148,"./_toKey":166,"./get":171,"./hasIn":172}],83:[function(_dereq_,module,exports){
 /**
  * The base implementation of `_.property` without support for deep paths.
  *
@@ -61054,7 +61434,7 @@ function baseProperty(key) {
 
 module.exports = baseProperty;
 
-},{}],83:[function(_dereq_,module,exports){
+},{}],84:[function(_dereq_,module,exports){
 var baseGet = _dereq_('./_baseGet');
 
 /**
@@ -61072,7 +61452,7 @@ function basePropertyDeep(path) {
 
 module.exports = basePropertyDeep;
 
-},{"./_baseGet":67}],84:[function(_dereq_,module,exports){
+},{"./_baseGet":68}],85:[function(_dereq_,module,exports){
 var assignValue = _dereq_('./_assignValue'),
     castPath = _dereq_('./_castPath'),
     isIndex = _dereq_('./_isIndex'),
@@ -61121,7 +61501,7 @@ function baseSet(object, path, value, customizer) {
 
 module.exports = baseSet;
 
-},{"./_assignValue":56,"./_castPath":89,"./_isIndex":130,"./_toKey":165,"./isObject":180}],85:[function(_dereq_,module,exports){
+},{"./_assignValue":57,"./_castPath":90,"./_isIndex":131,"./_toKey":166,"./isObject":181}],86:[function(_dereq_,module,exports){
 /**
  * The base implementation of `_.times` without support for iteratee shorthands
  * or max array length checks.
@@ -61143,7 +61523,7 @@ function baseTimes(n, iteratee) {
 
 module.exports = baseTimes;
 
-},{}],86:[function(_dereq_,module,exports){
+},{}],87:[function(_dereq_,module,exports){
 var Symbol = _dereq_('./_Symbol'),
     arrayMap = _dereq_('./_arrayMap'),
     isArray = _dereq_('./isArray'),
@@ -61182,7 +61562,7 @@ function baseToString(value) {
 
 module.exports = baseToString;
 
-},{"./_Symbol":44,"./_arrayMap":52,"./isArray":174,"./isSymbol":182}],87:[function(_dereq_,module,exports){
+},{"./_Symbol":45,"./_arrayMap":53,"./isArray":175,"./isSymbol":183}],88:[function(_dereq_,module,exports){
 /**
  * The base implementation of `_.unary` without support for storing metadata.
  *
@@ -61198,7 +61578,7 @@ function baseUnary(func) {
 
 module.exports = baseUnary;
 
-},{}],88:[function(_dereq_,module,exports){
+},{}],89:[function(_dereq_,module,exports){
 /**
  * Checks if a `cache` value for `key` exists.
  *
@@ -61213,7 +61593,7 @@ function cacheHas(cache, key) {
 
 module.exports = cacheHas;
 
-},{}],89:[function(_dereq_,module,exports){
+},{}],90:[function(_dereq_,module,exports){
 var isArray = _dereq_('./isArray'),
     isKey = _dereq_('./_isKey'),
     stringToPath = _dereq_('./_stringToPath'),
@@ -61236,7 +61616,7 @@ function castPath(value, object) {
 
 module.exports = castPath;
 
-},{"./_isKey":131,"./_stringToPath":164,"./isArray":174,"./toString":191}],90:[function(_dereq_,module,exports){
+},{"./_isKey":132,"./_stringToPath":165,"./isArray":175,"./toString":192}],91:[function(_dereq_,module,exports){
 var Uint8Array = _dereq_('./_Uint8Array');
 
 /**
@@ -61254,7 +61634,7 @@ function cloneArrayBuffer(arrayBuffer) {
 
 module.exports = cloneArrayBuffer;
 
-},{"./_Uint8Array":45}],91:[function(_dereq_,module,exports){
+},{"./_Uint8Array":46}],92:[function(_dereq_,module,exports){
 var root = _dereq_('./_root');
 
 /** Detect free variable `exports`. */
@@ -61291,7 +61671,7 @@ function cloneBuffer(buffer, isDeep) {
 
 module.exports = cloneBuffer;
 
-},{"./_root":155}],92:[function(_dereq_,module,exports){
+},{"./_root":156}],93:[function(_dereq_,module,exports){
 var cloneArrayBuffer = _dereq_('./_cloneArrayBuffer');
 
 /**
@@ -61309,7 +61689,7 @@ function cloneDataView(dataView, isDeep) {
 
 module.exports = cloneDataView;
 
-},{"./_cloneArrayBuffer":90}],93:[function(_dereq_,module,exports){
+},{"./_cloneArrayBuffer":91}],94:[function(_dereq_,module,exports){
 var addMapEntry = _dereq_('./_addMapEntry'),
     arrayReduce = _dereq_('./_arrayReduce'),
     mapToArray = _dereq_('./_mapToArray');
@@ -61333,7 +61713,7 @@ function cloneMap(map, isDeep, cloneFunc) {
 
 module.exports = cloneMap;
 
-},{"./_addMapEntry":47,"./_arrayReduce":54,"./_mapToArray":146}],94:[function(_dereq_,module,exports){
+},{"./_addMapEntry":48,"./_arrayReduce":55,"./_mapToArray":147}],95:[function(_dereq_,module,exports){
 /** Used to match `RegExp` flags from their coerced string values. */
 var reFlags = /\w*$/;
 
@@ -61352,7 +61732,7 @@ function cloneRegExp(regexp) {
 
 module.exports = cloneRegExp;
 
-},{}],95:[function(_dereq_,module,exports){
+},{}],96:[function(_dereq_,module,exports){
 var addSetEntry = _dereq_('./_addSetEntry'),
     arrayReduce = _dereq_('./_arrayReduce'),
     setToArray = _dereq_('./_setToArray');
@@ -61376,7 +61756,7 @@ function cloneSet(set, isDeep, cloneFunc) {
 
 module.exports = cloneSet;
 
-},{"./_addSetEntry":48,"./_arrayReduce":54,"./_setToArray":158}],96:[function(_dereq_,module,exports){
+},{"./_addSetEntry":49,"./_arrayReduce":55,"./_setToArray":159}],97:[function(_dereq_,module,exports){
 var Symbol = _dereq_('./_Symbol');
 
 /** Used to convert symbols to primitives and strings. */
@@ -61396,7 +61776,7 @@ function cloneSymbol(symbol) {
 
 module.exports = cloneSymbol;
 
-},{"./_Symbol":44}],97:[function(_dereq_,module,exports){
+},{"./_Symbol":45}],98:[function(_dereq_,module,exports){
 var cloneArrayBuffer = _dereq_('./_cloneArrayBuffer');
 
 /**
@@ -61414,7 +61794,7 @@ function cloneTypedArray(typedArray, isDeep) {
 
 module.exports = cloneTypedArray;
 
-},{"./_cloneArrayBuffer":90}],98:[function(_dereq_,module,exports){
+},{"./_cloneArrayBuffer":91}],99:[function(_dereq_,module,exports){
 /**
  * Copies the values of `source` to `array`.
  *
@@ -61436,7 +61816,7 @@ function copyArray(source, array) {
 
 module.exports = copyArray;
 
-},{}],99:[function(_dereq_,module,exports){
+},{}],100:[function(_dereq_,module,exports){
 var assignValue = _dereq_('./_assignValue'),
     baseAssignValue = _dereq_('./_baseAssignValue');
 
@@ -61478,7 +61858,7 @@ function copyObject(source, props, object, customizer) {
 
 module.exports = copyObject;
 
-},{"./_assignValue":56,"./_baseAssignValue":60}],100:[function(_dereq_,module,exports){
+},{"./_assignValue":57,"./_baseAssignValue":61}],101:[function(_dereq_,module,exports){
 var copyObject = _dereq_('./_copyObject'),
     getSymbols = _dereq_('./_getSymbols');
 
@@ -61496,7 +61876,7 @@ function copySymbols(source, object) {
 
 module.exports = copySymbols;
 
-},{"./_copyObject":99,"./_getSymbols":117}],101:[function(_dereq_,module,exports){
+},{"./_copyObject":100,"./_getSymbols":118}],102:[function(_dereq_,module,exports){
 var copyObject = _dereq_('./_copyObject'),
     getSymbolsIn = _dereq_('./_getSymbolsIn');
 
@@ -61514,7 +61894,7 @@ function copySymbolsIn(source, object) {
 
 module.exports = copySymbolsIn;
 
-},{"./_copyObject":99,"./_getSymbolsIn":118}],102:[function(_dereq_,module,exports){
+},{"./_copyObject":100,"./_getSymbolsIn":119}],103:[function(_dereq_,module,exports){
 var root = _dereq_('./_root');
 
 /** Used to detect overreaching core-js shims. */
@@ -61522,7 +61902,7 @@ var coreJsData = root['__core-js_shared__'];
 
 module.exports = coreJsData;
 
-},{"./_root":155}],103:[function(_dereq_,module,exports){
+},{"./_root":156}],104:[function(_dereq_,module,exports){
 var isArrayLike = _dereq_('./isArrayLike');
 
 /**
@@ -61556,7 +61936,7 @@ function createBaseEach(eachFunc, fromRight) {
 
 module.exports = createBaseEach;
 
-},{"./isArrayLike":175}],104:[function(_dereq_,module,exports){
+},{"./isArrayLike":176}],105:[function(_dereq_,module,exports){
 /**
  * Creates a base function for methods like `_.forIn` and `_.forOwn`.
  *
@@ -61583,7 +61963,7 @@ function createBaseFor(fromRight) {
 
 module.exports = createBaseFor;
 
-},{}],105:[function(_dereq_,module,exports){
+},{}],106:[function(_dereq_,module,exports){
 var getNative = _dereq_('./_getNative');
 
 var defineProperty = (function() {
@@ -61596,7 +61976,7 @@ var defineProperty = (function() {
 
 module.exports = defineProperty;
 
-},{"./_getNative":114}],106:[function(_dereq_,module,exports){
+},{"./_getNative":115}],107:[function(_dereq_,module,exports){
 var SetCache = _dereq_('./_SetCache'),
     arraySome = _dereq_('./_arraySome'),
     cacheHas = _dereq_('./_cacheHas');
@@ -61681,7 +62061,7 @@ function equalArrays(array, other, bitmask, customizer, equalFunc, stack) {
 
 module.exports = equalArrays;
 
-},{"./_SetCache":42,"./_arraySome":55,"./_cacheHas":88}],107:[function(_dereq_,module,exports){
+},{"./_SetCache":43,"./_arraySome":56,"./_cacheHas":89}],108:[function(_dereq_,module,exports){
 var Symbol = _dereq_('./_Symbol'),
     Uint8Array = _dereq_('./_Uint8Array'),
     eq = _dereq_('./eq'),
@@ -61795,7 +62175,7 @@ function equalByTag(object, other, tag, bitmask, customizer, equalFunc, stack) {
 
 module.exports = equalByTag;
 
-},{"./_Symbol":44,"./_Uint8Array":45,"./_equalArrays":106,"./_mapToArray":146,"./_setToArray":158,"./eq":168}],108:[function(_dereq_,module,exports){
+},{"./_Symbol":45,"./_Uint8Array":46,"./_equalArrays":107,"./_mapToArray":147,"./_setToArray":159,"./eq":169}],109:[function(_dereq_,module,exports){
 var getAllKeys = _dereq_('./_getAllKeys');
 
 /** Used to compose bitmasks for value comparisons. */
@@ -61886,7 +62266,7 @@ function equalObjects(object, other, bitmask, customizer, equalFunc, stack) {
 
 module.exports = equalObjects;
 
-},{"./_getAllKeys":110}],109:[function(_dereq_,module,exports){
+},{"./_getAllKeys":111}],110:[function(_dereq_,module,exports){
 (function (global){
 /** Detect free variable `global` from Node.js. */
 var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
@@ -61894,7 +62274,7 @@ var freeGlobal = typeof global == 'object' && global && global.Object === Object
 module.exports = freeGlobal;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],110:[function(_dereq_,module,exports){
+},{}],111:[function(_dereq_,module,exports){
 var baseGetAllKeys = _dereq_('./_baseGetAllKeys'),
     getSymbols = _dereq_('./_getSymbols'),
     keys = _dereq_('./keys');
@@ -61912,7 +62292,7 @@ function getAllKeys(object) {
 
 module.exports = getAllKeys;
 
-},{"./_baseGetAllKeys":68,"./_getSymbols":117,"./keys":184}],111:[function(_dereq_,module,exports){
+},{"./_baseGetAllKeys":69,"./_getSymbols":118,"./keys":185}],112:[function(_dereq_,module,exports){
 var baseGetAllKeys = _dereq_('./_baseGetAllKeys'),
     getSymbolsIn = _dereq_('./_getSymbolsIn'),
     keysIn = _dereq_('./keysIn');
@@ -61931,7 +62311,7 @@ function getAllKeysIn(object) {
 
 module.exports = getAllKeysIn;
 
-},{"./_baseGetAllKeys":68,"./_getSymbolsIn":118,"./keysIn":185}],112:[function(_dereq_,module,exports){
+},{"./_baseGetAllKeys":69,"./_getSymbolsIn":119,"./keysIn":186}],113:[function(_dereq_,module,exports){
 var isKeyable = _dereq_('./_isKeyable');
 
 /**
@@ -61951,7 +62331,7 @@ function getMapData(map, key) {
 
 module.exports = getMapData;
 
-},{"./_isKeyable":132}],113:[function(_dereq_,module,exports){
+},{"./_isKeyable":133}],114:[function(_dereq_,module,exports){
 var isStrictComparable = _dereq_('./_isStrictComparable'),
     keys = _dereq_('./keys');
 
@@ -61977,7 +62357,7 @@ function getMatchData(object) {
 
 module.exports = getMatchData;
 
-},{"./_isStrictComparable":135,"./keys":184}],114:[function(_dereq_,module,exports){
+},{"./_isStrictComparable":136,"./keys":185}],115:[function(_dereq_,module,exports){
 var baseIsNative = _dereq_('./_baseIsNative'),
     getValue = _dereq_('./_getValue');
 
@@ -61996,7 +62376,7 @@ function getNative(object, key) {
 
 module.exports = getNative;
 
-},{"./_baseIsNative":75,"./_getValue":120}],115:[function(_dereq_,module,exports){
+},{"./_baseIsNative":76,"./_getValue":121}],116:[function(_dereq_,module,exports){
 var overArg = _dereq_('./_overArg');
 
 /** Built-in value references. */
@@ -62004,7 +62384,7 @@ var getPrototype = overArg(Object.getPrototypeOf, Object);
 
 module.exports = getPrototype;
 
-},{"./_overArg":154}],116:[function(_dereq_,module,exports){
+},{"./_overArg":155}],117:[function(_dereq_,module,exports){
 var Symbol = _dereq_('./_Symbol');
 
 /** Used for built-in method references. */
@@ -62052,7 +62432,7 @@ function getRawTag(value) {
 
 module.exports = getRawTag;
 
-},{"./_Symbol":44}],117:[function(_dereq_,module,exports){
+},{"./_Symbol":45}],118:[function(_dereq_,module,exports){
 var arrayFilter = _dereq_('./_arrayFilter'),
     stubArray = _dereq_('./stubArray');
 
@@ -62084,7 +62464,7 @@ var getSymbols = !nativeGetSymbols ? stubArray : function(object) {
 
 module.exports = getSymbols;
 
-},{"./_arrayFilter":50,"./stubArray":189}],118:[function(_dereq_,module,exports){
+},{"./_arrayFilter":51,"./stubArray":190}],119:[function(_dereq_,module,exports){
 var arrayPush = _dereq_('./_arrayPush'),
     getPrototype = _dereq_('./_getPrototype'),
     getSymbols = _dereq_('./_getSymbols'),
@@ -62111,7 +62491,7 @@ var getSymbolsIn = !nativeGetSymbols ? stubArray : function(object) {
 
 module.exports = getSymbolsIn;
 
-},{"./_arrayPush":53,"./_getPrototype":115,"./_getSymbols":117,"./stubArray":189}],119:[function(_dereq_,module,exports){
+},{"./_arrayPush":54,"./_getPrototype":116,"./_getSymbols":118,"./stubArray":190}],120:[function(_dereq_,module,exports){
 var DataView = _dereq_('./_DataView'),
     Map = _dereq_('./_Map'),
     Promise = _dereq_('./_Promise'),
@@ -62171,7 +62551,7 @@ if ((DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag) ||
 
 module.exports = getTag;
 
-},{"./_DataView":35,"./_Map":38,"./_Promise":40,"./_Set":41,"./_WeakMap":46,"./_baseGetTag":69,"./_toSource":166}],120:[function(_dereq_,module,exports){
+},{"./_DataView":36,"./_Map":39,"./_Promise":41,"./_Set":42,"./_WeakMap":47,"./_baseGetTag":70,"./_toSource":167}],121:[function(_dereq_,module,exports){
 /**
  * Gets the value at `key` of `object`.
  *
@@ -62186,7 +62566,7 @@ function getValue(object, key) {
 
 module.exports = getValue;
 
-},{}],121:[function(_dereq_,module,exports){
+},{}],122:[function(_dereq_,module,exports){
 var castPath = _dereq_('./_castPath'),
     isArguments = _dereq_('./isArguments'),
     isArray = _dereq_('./isArray'),
@@ -62227,7 +62607,7 @@ function hasPath(object, path, hasFunc) {
 
 module.exports = hasPath;
 
-},{"./_castPath":89,"./_isIndex":130,"./_toKey":165,"./isArguments":173,"./isArray":174,"./isLength":179}],122:[function(_dereq_,module,exports){
+},{"./_castPath":90,"./_isIndex":131,"./_toKey":166,"./isArguments":174,"./isArray":175,"./isLength":180}],123:[function(_dereq_,module,exports){
 var nativeCreate = _dereq_('./_nativeCreate');
 
 /**
@@ -62244,7 +62624,7 @@ function hashClear() {
 
 module.exports = hashClear;
 
-},{"./_nativeCreate":149}],123:[function(_dereq_,module,exports){
+},{"./_nativeCreate":150}],124:[function(_dereq_,module,exports){
 /**
  * Removes `key` and its value from the hash.
  *
@@ -62263,7 +62643,7 @@ function hashDelete(key) {
 
 module.exports = hashDelete;
 
-},{}],124:[function(_dereq_,module,exports){
+},{}],125:[function(_dereq_,module,exports){
 var nativeCreate = _dereq_('./_nativeCreate');
 
 /** Used to stand-in for `undefined` hash values. */
@@ -62295,7 +62675,7 @@ function hashGet(key) {
 
 module.exports = hashGet;
 
-},{"./_nativeCreate":149}],125:[function(_dereq_,module,exports){
+},{"./_nativeCreate":150}],126:[function(_dereq_,module,exports){
 var nativeCreate = _dereq_('./_nativeCreate');
 
 /** Used for built-in method references. */
@@ -62320,7 +62700,7 @@ function hashHas(key) {
 
 module.exports = hashHas;
 
-},{"./_nativeCreate":149}],126:[function(_dereq_,module,exports){
+},{"./_nativeCreate":150}],127:[function(_dereq_,module,exports){
 var nativeCreate = _dereq_('./_nativeCreate');
 
 /** Used to stand-in for `undefined` hash values. */
@@ -62345,7 +62725,7 @@ function hashSet(key, value) {
 
 module.exports = hashSet;
 
-},{"./_nativeCreate":149}],127:[function(_dereq_,module,exports){
+},{"./_nativeCreate":150}],128:[function(_dereq_,module,exports){
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
 
@@ -62373,7 +62753,7 @@ function initCloneArray(array) {
 
 module.exports = initCloneArray;
 
-},{}],128:[function(_dereq_,module,exports){
+},{}],129:[function(_dereq_,module,exports){
 var cloneArrayBuffer = _dereq_('./_cloneArrayBuffer'),
     cloneDataView = _dereq_('./_cloneDataView'),
     cloneMap = _dereq_('./_cloneMap'),
@@ -62455,7 +62835,7 @@ function initCloneByTag(object, tag, cloneFunc, isDeep) {
 
 module.exports = initCloneByTag;
 
-},{"./_cloneArrayBuffer":90,"./_cloneDataView":92,"./_cloneMap":93,"./_cloneRegExp":94,"./_cloneSet":95,"./_cloneSymbol":96,"./_cloneTypedArray":97}],129:[function(_dereq_,module,exports){
+},{"./_cloneArrayBuffer":91,"./_cloneDataView":93,"./_cloneMap":94,"./_cloneRegExp":95,"./_cloneSet":96,"./_cloneSymbol":97,"./_cloneTypedArray":98}],130:[function(_dereq_,module,exports){
 var baseCreate = _dereq_('./_baseCreate'),
     getPrototype = _dereq_('./_getPrototype'),
     isPrototype = _dereq_('./_isPrototype');
@@ -62475,7 +62855,7 @@ function initCloneObject(object) {
 
 module.exports = initCloneObject;
 
-},{"./_baseCreate":62,"./_getPrototype":115,"./_isPrototype":134}],130:[function(_dereq_,module,exports){
+},{"./_baseCreate":63,"./_getPrototype":116,"./_isPrototype":135}],131:[function(_dereq_,module,exports){
 /** Used as references for various `Number` constants. */
 var MAX_SAFE_INTEGER = 9007199254740991;
 
@@ -62499,7 +62879,7 @@ function isIndex(value, length) {
 
 module.exports = isIndex;
 
-},{}],131:[function(_dereq_,module,exports){
+},{}],132:[function(_dereq_,module,exports){
 var isArray = _dereq_('./isArray'),
     isSymbol = _dereq_('./isSymbol');
 
@@ -62530,7 +62910,7 @@ function isKey(value, object) {
 
 module.exports = isKey;
 
-},{"./isArray":174,"./isSymbol":182}],132:[function(_dereq_,module,exports){
+},{"./isArray":175,"./isSymbol":183}],133:[function(_dereq_,module,exports){
 /**
  * Checks if `value` is suitable for use as unique object key.
  *
@@ -62547,7 +62927,7 @@ function isKeyable(value) {
 
 module.exports = isKeyable;
 
-},{}],133:[function(_dereq_,module,exports){
+},{}],134:[function(_dereq_,module,exports){
 var coreJsData = _dereq_('./_coreJsData');
 
 /** Used to detect methods masquerading as native. */
@@ -62569,7 +62949,7 @@ function isMasked(func) {
 
 module.exports = isMasked;
 
-},{"./_coreJsData":102}],134:[function(_dereq_,module,exports){
+},{"./_coreJsData":103}],135:[function(_dereq_,module,exports){
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
 
@@ -62589,7 +62969,7 @@ function isPrototype(value) {
 
 module.exports = isPrototype;
 
-},{}],135:[function(_dereq_,module,exports){
+},{}],136:[function(_dereq_,module,exports){
 var isObject = _dereq_('./isObject');
 
 /**
@@ -62606,7 +62986,7 @@ function isStrictComparable(value) {
 
 module.exports = isStrictComparable;
 
-},{"./isObject":180}],136:[function(_dereq_,module,exports){
+},{"./isObject":181}],137:[function(_dereq_,module,exports){
 /**
  * Removes all key-value entries from the list cache.
  *
@@ -62621,7 +63001,7 @@ function listCacheClear() {
 
 module.exports = listCacheClear;
 
-},{}],137:[function(_dereq_,module,exports){
+},{}],138:[function(_dereq_,module,exports){
 var assocIndexOf = _dereq_('./_assocIndexOf');
 
 /** Used for built-in method references. */
@@ -62658,7 +63038,7 @@ function listCacheDelete(key) {
 
 module.exports = listCacheDelete;
 
-},{"./_assocIndexOf":57}],138:[function(_dereq_,module,exports){
+},{"./_assocIndexOf":58}],139:[function(_dereq_,module,exports){
 var assocIndexOf = _dereq_('./_assocIndexOf');
 
 /**
@@ -62679,7 +63059,7 @@ function listCacheGet(key) {
 
 module.exports = listCacheGet;
 
-},{"./_assocIndexOf":57}],139:[function(_dereq_,module,exports){
+},{"./_assocIndexOf":58}],140:[function(_dereq_,module,exports){
 var assocIndexOf = _dereq_('./_assocIndexOf');
 
 /**
@@ -62697,7 +63077,7 @@ function listCacheHas(key) {
 
 module.exports = listCacheHas;
 
-},{"./_assocIndexOf":57}],140:[function(_dereq_,module,exports){
+},{"./_assocIndexOf":58}],141:[function(_dereq_,module,exports){
 var assocIndexOf = _dereq_('./_assocIndexOf');
 
 /**
@@ -62725,7 +63105,7 @@ function listCacheSet(key, value) {
 
 module.exports = listCacheSet;
 
-},{"./_assocIndexOf":57}],141:[function(_dereq_,module,exports){
+},{"./_assocIndexOf":58}],142:[function(_dereq_,module,exports){
 var Hash = _dereq_('./_Hash'),
     ListCache = _dereq_('./_ListCache'),
     Map = _dereq_('./_Map');
@@ -62748,7 +63128,7 @@ function mapCacheClear() {
 
 module.exports = mapCacheClear;
 
-},{"./_Hash":36,"./_ListCache":37,"./_Map":38}],142:[function(_dereq_,module,exports){
+},{"./_Hash":37,"./_ListCache":38,"./_Map":39}],143:[function(_dereq_,module,exports){
 var getMapData = _dereq_('./_getMapData');
 
 /**
@@ -62768,7 +63148,7 @@ function mapCacheDelete(key) {
 
 module.exports = mapCacheDelete;
 
-},{"./_getMapData":112}],143:[function(_dereq_,module,exports){
+},{"./_getMapData":113}],144:[function(_dereq_,module,exports){
 var getMapData = _dereq_('./_getMapData');
 
 /**
@@ -62786,7 +63166,7 @@ function mapCacheGet(key) {
 
 module.exports = mapCacheGet;
 
-},{"./_getMapData":112}],144:[function(_dereq_,module,exports){
+},{"./_getMapData":113}],145:[function(_dereq_,module,exports){
 var getMapData = _dereq_('./_getMapData');
 
 /**
@@ -62804,7 +63184,7 @@ function mapCacheHas(key) {
 
 module.exports = mapCacheHas;
 
-},{"./_getMapData":112}],145:[function(_dereq_,module,exports){
+},{"./_getMapData":113}],146:[function(_dereq_,module,exports){
 var getMapData = _dereq_('./_getMapData');
 
 /**
@@ -62828,7 +63208,7 @@ function mapCacheSet(key, value) {
 
 module.exports = mapCacheSet;
 
-},{"./_getMapData":112}],146:[function(_dereq_,module,exports){
+},{"./_getMapData":113}],147:[function(_dereq_,module,exports){
 /**
  * Converts `map` to its key-value pairs.
  *
@@ -62848,7 +63228,7 @@ function mapToArray(map) {
 
 module.exports = mapToArray;
 
-},{}],147:[function(_dereq_,module,exports){
+},{}],148:[function(_dereq_,module,exports){
 /**
  * A specialized version of `matchesProperty` for source values suitable
  * for strict equality comparisons, i.e. `===`.
@@ -62870,7 +63250,7 @@ function matchesStrictComparable(key, srcValue) {
 
 module.exports = matchesStrictComparable;
 
-},{}],148:[function(_dereq_,module,exports){
+},{}],149:[function(_dereq_,module,exports){
 var memoize = _dereq_('./memoize');
 
 /** Used as the maximum memoize cache size. */
@@ -62898,7 +63278,7 @@ function memoizeCapped(func) {
 
 module.exports = memoizeCapped;
 
-},{"./memoize":186}],149:[function(_dereq_,module,exports){
+},{"./memoize":187}],150:[function(_dereq_,module,exports){
 var getNative = _dereq_('./_getNative');
 
 /* Built-in method references that are verified to be native. */
@@ -62906,7 +63286,7 @@ var nativeCreate = getNative(Object, 'create');
 
 module.exports = nativeCreate;
 
-},{"./_getNative":114}],150:[function(_dereq_,module,exports){
+},{"./_getNative":115}],151:[function(_dereq_,module,exports){
 var overArg = _dereq_('./_overArg');
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
@@ -62914,7 +63294,7 @@ var nativeKeys = overArg(Object.keys, Object);
 
 module.exports = nativeKeys;
 
-},{"./_overArg":154}],151:[function(_dereq_,module,exports){
+},{"./_overArg":155}],152:[function(_dereq_,module,exports){
 /**
  * This function is like
  * [`Object.keys`](http://ecma-international.org/ecma-262/7.0/#sec-object.keys)
@@ -62936,7 +63316,7 @@ function nativeKeysIn(object) {
 
 module.exports = nativeKeysIn;
 
-},{}],152:[function(_dereq_,module,exports){
+},{}],153:[function(_dereq_,module,exports){
 var freeGlobal = _dereq_('./_freeGlobal');
 
 /** Detect free variable `exports`. */
@@ -62960,7 +63340,7 @@ var nodeUtil = (function() {
 
 module.exports = nodeUtil;
 
-},{"./_freeGlobal":109}],153:[function(_dereq_,module,exports){
+},{"./_freeGlobal":110}],154:[function(_dereq_,module,exports){
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
 
@@ -62984,7 +63364,7 @@ function objectToString(value) {
 
 module.exports = objectToString;
 
-},{}],154:[function(_dereq_,module,exports){
+},{}],155:[function(_dereq_,module,exports){
 /**
  * Creates a unary function that invokes `func` with its argument transformed.
  *
@@ -63001,7 +63381,7 @@ function overArg(func, transform) {
 
 module.exports = overArg;
 
-},{}],155:[function(_dereq_,module,exports){
+},{}],156:[function(_dereq_,module,exports){
 var freeGlobal = _dereq_('./_freeGlobal');
 
 /** Detect free variable `self`. */
@@ -63012,7 +63392,7 @@ var root = freeGlobal || freeSelf || Function('return this')();
 
 module.exports = root;
 
-},{"./_freeGlobal":109}],156:[function(_dereq_,module,exports){
+},{"./_freeGlobal":110}],157:[function(_dereq_,module,exports){
 /** Used to stand-in for `undefined` hash values. */
 var HASH_UNDEFINED = '__lodash_hash_undefined__';
 
@@ -63033,7 +63413,7 @@ function setCacheAdd(value) {
 
 module.exports = setCacheAdd;
 
-},{}],157:[function(_dereq_,module,exports){
+},{}],158:[function(_dereq_,module,exports){
 /**
  * Checks if `value` is in the array cache.
  *
@@ -63049,7 +63429,7 @@ function setCacheHas(value) {
 
 module.exports = setCacheHas;
 
-},{}],158:[function(_dereq_,module,exports){
+},{}],159:[function(_dereq_,module,exports){
 /**
  * Converts `set` to an array of its values.
  *
@@ -63069,7 +63449,7 @@ function setToArray(set) {
 
 module.exports = setToArray;
 
-},{}],159:[function(_dereq_,module,exports){
+},{}],160:[function(_dereq_,module,exports){
 var ListCache = _dereq_('./_ListCache');
 
 /**
@@ -63086,7 +63466,7 @@ function stackClear() {
 
 module.exports = stackClear;
 
-},{"./_ListCache":37}],160:[function(_dereq_,module,exports){
+},{"./_ListCache":38}],161:[function(_dereq_,module,exports){
 /**
  * Removes `key` and its value from the stack.
  *
@@ -63106,7 +63486,7 @@ function stackDelete(key) {
 
 module.exports = stackDelete;
 
-},{}],161:[function(_dereq_,module,exports){
+},{}],162:[function(_dereq_,module,exports){
 /**
  * Gets the stack value for `key`.
  *
@@ -63122,7 +63502,7 @@ function stackGet(key) {
 
 module.exports = stackGet;
 
-},{}],162:[function(_dereq_,module,exports){
+},{}],163:[function(_dereq_,module,exports){
 /**
  * Checks if a stack value for `key` exists.
  *
@@ -63138,7 +63518,7 @@ function stackHas(key) {
 
 module.exports = stackHas;
 
-},{}],163:[function(_dereq_,module,exports){
+},{}],164:[function(_dereq_,module,exports){
 var ListCache = _dereq_('./_ListCache'),
     Map = _dereq_('./_Map'),
     MapCache = _dereq_('./_MapCache');
@@ -63174,7 +63554,7 @@ function stackSet(key, value) {
 
 module.exports = stackSet;
 
-},{"./_ListCache":37,"./_Map":38,"./_MapCache":39}],164:[function(_dereq_,module,exports){
+},{"./_ListCache":38,"./_Map":39,"./_MapCache":40}],165:[function(_dereq_,module,exports){
 var memoizeCapped = _dereq_('./_memoizeCapped');
 
 /** Used to match property names within property paths. */
@@ -63204,7 +63584,7 @@ var stringToPath = memoizeCapped(function(string) {
 
 module.exports = stringToPath;
 
-},{"./_memoizeCapped":148}],165:[function(_dereq_,module,exports){
+},{"./_memoizeCapped":149}],166:[function(_dereq_,module,exports){
 var isSymbol = _dereq_('./isSymbol');
 
 /** Used as references for various `Number` constants. */
@@ -63227,7 +63607,7 @@ function toKey(value) {
 
 module.exports = toKey;
 
-},{"./isSymbol":182}],166:[function(_dereq_,module,exports){
+},{"./isSymbol":183}],167:[function(_dereq_,module,exports){
 /** Used for built-in method references. */
 var funcProto = Function.prototype;
 
@@ -63255,7 +63635,7 @@ function toSource(func) {
 
 module.exports = toSource;
 
-},{}],167:[function(_dereq_,module,exports){
+},{}],168:[function(_dereq_,module,exports){
 var baseClone = _dereq_('./_baseClone');
 
 /** Used to compose bitmasks for cloning. */
@@ -63286,7 +63666,7 @@ function cloneDeep(value) {
 
 module.exports = cloneDeep;
 
-},{"./_baseClone":61}],168:[function(_dereq_,module,exports){
+},{"./_baseClone":62}],169:[function(_dereq_,module,exports){
 /**
  * Performs a
  * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
@@ -63325,7 +63705,7 @@ function eq(value, other) {
 
 module.exports = eq;
 
-},{}],169:[function(_dereq_,module,exports){
+},{}],170:[function(_dereq_,module,exports){
 var arrayFilter = _dereq_('./_arrayFilter'),
     baseFilter = _dereq_('./_baseFilter'),
     baseIteratee = _dereq_('./_baseIteratee'),
@@ -63375,7 +63755,7 @@ function filter(collection, predicate) {
 
 module.exports = filter;
 
-},{"./_arrayFilter":50,"./_baseFilter":64,"./_baseIteratee":77,"./isArray":174}],170:[function(_dereq_,module,exports){
+},{"./_arrayFilter":51,"./_baseFilter":65,"./_baseIteratee":78,"./isArray":175}],171:[function(_dereq_,module,exports){
 var baseGet = _dereq_('./_baseGet');
 
 /**
@@ -63410,7 +63790,7 @@ function get(object, path, defaultValue) {
 
 module.exports = get;
 
-},{"./_baseGet":67}],171:[function(_dereq_,module,exports){
+},{"./_baseGet":68}],172:[function(_dereq_,module,exports){
 var baseHasIn = _dereq_('./_baseHasIn'),
     hasPath = _dereq_('./_hasPath');
 
@@ -63446,7 +63826,7 @@ function hasIn(object, path) {
 
 module.exports = hasIn;
 
-},{"./_baseHasIn":70,"./_hasPath":121}],172:[function(_dereq_,module,exports){
+},{"./_baseHasIn":71,"./_hasPath":122}],173:[function(_dereq_,module,exports){
 /**
  * This method returns the first argument it receives.
  *
@@ -63469,7 +63849,7 @@ function identity(value) {
 
 module.exports = identity;
 
-},{}],173:[function(_dereq_,module,exports){
+},{}],174:[function(_dereq_,module,exports){
 var baseIsArguments = _dereq_('./_baseIsArguments'),
     isObjectLike = _dereq_('./isObjectLike');
 
@@ -63507,7 +63887,7 @@ var isArguments = baseIsArguments(function() { return arguments; }()) ? baseIsAr
 
 module.exports = isArguments;
 
-},{"./_baseIsArguments":71,"./isObjectLike":181}],174:[function(_dereq_,module,exports){
+},{"./_baseIsArguments":72,"./isObjectLike":182}],175:[function(_dereq_,module,exports){
 /**
  * Checks if `value` is classified as an `Array` object.
  *
@@ -63535,7 +63915,7 @@ var isArray = Array.isArray;
 
 module.exports = isArray;
 
-},{}],175:[function(_dereq_,module,exports){
+},{}],176:[function(_dereq_,module,exports){
 var isFunction = _dereq_('./isFunction'),
     isLength = _dereq_('./isLength');
 
@@ -63570,7 +63950,7 @@ function isArrayLike(value) {
 
 module.exports = isArrayLike;
 
-},{"./isFunction":178,"./isLength":179}],176:[function(_dereq_,module,exports){
+},{"./isFunction":179,"./isLength":180}],177:[function(_dereq_,module,exports){
 var root = _dereq_('./_root'),
     stubFalse = _dereq_('./stubFalse');
 
@@ -63610,7 +63990,7 @@ var isBuffer = nativeIsBuffer || stubFalse;
 
 module.exports = isBuffer;
 
-},{"./_root":155,"./stubFalse":190}],177:[function(_dereq_,module,exports){
+},{"./_root":156,"./stubFalse":191}],178:[function(_dereq_,module,exports){
 var baseIsEqual = _dereq_('./_baseIsEqual');
 
 /**
@@ -63647,7 +64027,7 @@ function isEqual(value, other) {
 
 module.exports = isEqual;
 
-},{"./_baseIsEqual":72}],178:[function(_dereq_,module,exports){
+},{"./_baseIsEqual":73}],179:[function(_dereq_,module,exports){
 var baseGetTag = _dereq_('./_baseGetTag'),
     isObject = _dereq_('./isObject');
 
@@ -63686,7 +64066,7 @@ function isFunction(value) {
 
 module.exports = isFunction;
 
-},{"./_baseGetTag":69,"./isObject":180}],179:[function(_dereq_,module,exports){
+},{"./_baseGetTag":70,"./isObject":181}],180:[function(_dereq_,module,exports){
 /** Used as references for various `Number` constants. */
 var MAX_SAFE_INTEGER = 9007199254740991;
 
@@ -63723,7 +64103,7 @@ function isLength(value) {
 
 module.exports = isLength;
 
-},{}],180:[function(_dereq_,module,exports){
+},{}],181:[function(_dereq_,module,exports){
 /**
  * Checks if `value` is the
  * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
@@ -63756,7 +64136,7 @@ function isObject(value) {
 
 module.exports = isObject;
 
-},{}],181:[function(_dereq_,module,exports){
+},{}],182:[function(_dereq_,module,exports){
 /**
  * Checks if `value` is object-like. A value is object-like if it's not `null`
  * and has a `typeof` result of "object".
@@ -63787,7 +64167,7 @@ function isObjectLike(value) {
 
 module.exports = isObjectLike;
 
-},{}],182:[function(_dereq_,module,exports){
+},{}],183:[function(_dereq_,module,exports){
 var baseGetTag = _dereq_('./_baseGetTag'),
     isObjectLike = _dereq_('./isObjectLike');
 
@@ -63818,7 +64198,7 @@ function isSymbol(value) {
 
 module.exports = isSymbol;
 
-},{"./_baseGetTag":69,"./isObjectLike":181}],183:[function(_dereq_,module,exports){
+},{"./_baseGetTag":70,"./isObjectLike":182}],184:[function(_dereq_,module,exports){
 var baseIsTypedArray = _dereq_('./_baseIsTypedArray'),
     baseUnary = _dereq_('./_baseUnary'),
     nodeUtil = _dereq_('./_nodeUtil');
@@ -63847,7 +64227,7 @@ var isTypedArray = nodeIsTypedArray ? baseUnary(nodeIsTypedArray) : baseIsTypedA
 
 module.exports = isTypedArray;
 
-},{"./_baseIsTypedArray":76,"./_baseUnary":87,"./_nodeUtil":152}],184:[function(_dereq_,module,exports){
+},{"./_baseIsTypedArray":77,"./_baseUnary":88,"./_nodeUtil":153}],185:[function(_dereq_,module,exports){
 var arrayLikeKeys = _dereq_('./_arrayLikeKeys'),
     baseKeys = _dereq_('./_baseKeys'),
     isArrayLike = _dereq_('./isArrayLike');
@@ -63886,7 +64266,7 @@ function keys(object) {
 
 module.exports = keys;
 
-},{"./_arrayLikeKeys":51,"./_baseKeys":78,"./isArrayLike":175}],185:[function(_dereq_,module,exports){
+},{"./_arrayLikeKeys":52,"./_baseKeys":79,"./isArrayLike":176}],186:[function(_dereq_,module,exports){
 var arrayLikeKeys = _dereq_('./_arrayLikeKeys'),
     baseKeysIn = _dereq_('./_baseKeysIn'),
     isArrayLike = _dereq_('./isArrayLike');
@@ -63920,7 +64300,7 @@ function keysIn(object) {
 
 module.exports = keysIn;
 
-},{"./_arrayLikeKeys":51,"./_baseKeysIn":79,"./isArrayLike":175}],186:[function(_dereq_,module,exports){
+},{"./_arrayLikeKeys":52,"./_baseKeysIn":80,"./isArrayLike":176}],187:[function(_dereq_,module,exports){
 var MapCache = _dereq_('./_MapCache');
 
 /** Error message constants. */
@@ -63995,7 +64375,7 @@ memoize.Cache = MapCache;
 
 module.exports = memoize;
 
-},{"./_MapCache":39}],187:[function(_dereq_,module,exports){
+},{"./_MapCache":40}],188:[function(_dereq_,module,exports){
 var baseProperty = _dereq_('./_baseProperty'),
     basePropertyDeep = _dereq_('./_basePropertyDeep'),
     isKey = _dereq_('./_isKey'),
@@ -64029,7 +64409,7 @@ function property(path) {
 
 module.exports = property;
 
-},{"./_baseProperty":82,"./_basePropertyDeep":83,"./_isKey":131,"./_toKey":165}],188:[function(_dereq_,module,exports){
+},{"./_baseProperty":83,"./_basePropertyDeep":84,"./_isKey":132,"./_toKey":166}],189:[function(_dereq_,module,exports){
 var baseSet = _dereq_('./_baseSet');
 
 /**
@@ -64066,7 +64446,7 @@ function set(object, path, value) {
 
 module.exports = set;
 
-},{"./_baseSet":84}],189:[function(_dereq_,module,exports){
+},{"./_baseSet":85}],190:[function(_dereq_,module,exports){
 /**
  * This method returns a new empty array.
  *
@@ -64091,7 +64471,7 @@ function stubArray() {
 
 module.exports = stubArray;
 
-},{}],190:[function(_dereq_,module,exports){
+},{}],191:[function(_dereq_,module,exports){
 /**
  * This method returns `false`.
  *
@@ -64111,7 +64491,7 @@ function stubFalse() {
 
 module.exports = stubFalse;
 
-},{}],191:[function(_dereq_,module,exports){
+},{}],192:[function(_dereq_,module,exports){
 var baseToString = _dereq_('./_baseToString');
 
 /**
@@ -64141,7 +64521,7 @@ function toString(value) {
 
 module.exports = toString;
 
-},{"./_baseToString":86}],192:[function(_dereq_,module,exports){
+},{"./_baseToString":87}],193:[function(_dereq_,module,exports){
 //! moment.js
 //! version : 2.18.1
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
@@ -68606,7 +68986,7 @@ return hooks;
 
 })));
 
-},{}],193:[function(_dereq_,module,exports){
+},{}],194:[function(_dereq_,module,exports){
 (function (global){
 /*! Native Promise Only
     v0.8.1 (c) Kyle Simpson
@@ -68983,7 +69363,924 @@ return hooks;
 });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],194:[function(_dereq_,module,exports){
+},{}],195:[function(_dereq_,module,exports){
+/*
+ * ngDialog - easy modals and popup windows
+ * http://github.com/likeastore/ngDialog
+ * (c) 2013-2015 MIT License, https://likeastore.com
+ */
+
+(function (root, factory) {
+    if (typeof module !== 'undefined' && module.exports) {
+        // CommonJS
+        if (typeof angular === 'undefined') {
+            factory(_dereq_('angular'));
+        } else {
+            factory(angular);
+        }
+        module.exports = 'ngDialog';
+    } else if (typeof define === 'function' && define.amd) {
+        // AMD
+        define(['angular'], factory);
+    } else {
+        // Global Variables
+        factory(root.angular);
+    }
+}(this, function (angular) {
+    'use strict';
+
+    var m = angular.module('ngDialog', []);
+
+    var $el = angular.element;
+    var isDef = angular.isDefined;
+    var style = (document.body || document.documentElement).style;
+    var animationEndSupport = isDef(style.animation) || isDef(style.WebkitAnimation) || isDef(style.MozAnimation) || isDef(style.MsAnimation) || isDef(style.OAnimation);
+    var animationEndEvent = 'animationend webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend';
+    var focusableElementSelector = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]';
+    var disabledAnimationClass = 'ngdialog-disabled-animation';
+    var forceElementsReload = { html: false, body: false };
+    var scopes = {};
+    var openIdStack = [];
+    var keydownIsBound = false;
+    var openOnePerName = false;
+
+
+    m.provider('ngDialog', function () {
+        var defaults = this.defaults = {
+            className: 'ngdialog-theme-default',
+            appendClassName: '',
+            disableAnimation: false,
+            plain: false,
+            showClose: true,
+            closeByDocument: true,
+            closeByEscape: true,
+            closeByNavigation: false,
+            appendTo: false,
+            preCloseCallback: false,
+            onOpenCallback: false,
+            overlay: true,
+            cache: true,
+            trapFocus: true,
+            preserveFocus: true,
+            ariaAuto: true,
+            ariaRole: null,
+            ariaLabelledById: null,
+            ariaLabelledBySelector: null,
+            ariaDescribedById: null,
+            ariaDescribedBySelector: null,
+            bodyClassName: 'ngdialog-open',
+            width: null,
+            height: null
+        };
+
+        this.setForceHtmlReload = function (_useIt) {
+            forceElementsReload.html = _useIt || false;
+        };
+
+        this.setForceBodyReload = function (_useIt) {
+            forceElementsReload.body = _useIt || false;
+        };
+
+        this.setDefaults = function (newDefaults) {
+            angular.extend(defaults, newDefaults);
+        };
+
+        this.setOpenOnePerName = function (isOpenOne) {
+            openOnePerName = isOpenOne || false;
+        };
+
+        var globalID = 0, dialogsCount = 0, closeByDocumentHandler, defers = {};
+
+        this.$get = ['$document', '$templateCache', '$compile', '$q', '$http', '$rootScope', '$timeout', '$window', '$controller', '$injector',
+            function ($document, $templateCache, $compile, $q, $http, $rootScope, $timeout, $window, $controller, $injector) {
+                var $elements = [];
+
+                var privateMethods = {
+                    onDocumentKeydown: function (event) {
+                        if (event.keyCode === 27) {
+                            publicMethods.close('$escape');
+                        }
+                    },
+
+                    activate: function($dialog) {
+                        var options = $dialog.data('$ngDialogOptions');
+
+                        if (options.trapFocus) {
+                            $dialog.on('keydown', privateMethods.onTrapFocusKeydown);
+
+                            // Catch rogue changes (eg. after unfocusing everything by clicking a non-focusable element)
+                            $elements.body.on('keydown', privateMethods.onTrapFocusKeydown);
+                        }
+                    },
+
+                    deactivate: function ($dialog) {
+                        $dialog.off('keydown', privateMethods.onTrapFocusKeydown);
+                        $elements.body.off('keydown', privateMethods.onTrapFocusKeydown);
+                    },
+
+                    deactivateAll: function (els) {
+                        angular.forEach(els,function(el) {
+                            var $dialog = angular.element(el);
+                            privateMethods.deactivate($dialog);
+                        });
+                    },
+
+                    setBodyPadding: function (width) {
+                        var originalBodyPadding = parseInt(($elements.body.css('padding-right') || 0), 10);
+                        $elements.body.css('padding-right', (originalBodyPadding + width) + 'px');
+                        $elements.body.data('ng-dialog-original-padding', originalBodyPadding);
+                        $rootScope.$broadcast('ngDialog.setPadding', width);
+                    },
+
+                    resetBodyPadding: function () {
+                        var originalBodyPadding = $elements.body.data('ng-dialog-original-padding');
+                        if (originalBodyPadding) {
+                            $elements.body.css('padding-right', originalBodyPadding + 'px');
+                        } else {
+                            $elements.body.css('padding-right', '');
+                        }
+                        $rootScope.$broadcast('ngDialog.setPadding', 0);
+                    },
+
+                    performCloseDialog: function ($dialog, value) {
+                        var options = $dialog.data('$ngDialogOptions');
+                        var id = $dialog.attr('id');
+                        var scope = scopes[id];
+                        privateMethods.deactivate($dialog);
+
+                        if (!scope) {
+                            // Already closed
+                            return;
+                        }
+
+                        if (typeof $window.Hammer !== 'undefined') {
+                            var hammerTime = scope.hammerTime;
+                            hammerTime.off('tap', closeByDocumentHandler);
+                            hammerTime.destroy && hammerTime.destroy();
+                            delete scope.hammerTime;
+                        } else {
+                            $dialog.unbind('click');
+                        }
+
+                        if (dialogsCount === 1) {
+                            $elements.body.unbind('keydown', privateMethods.onDocumentKeydown);
+                        }
+
+                        if (!$dialog.hasClass('ngdialog-closing')){
+                            dialogsCount -= 1;
+                        }
+
+                        var previousFocus = $dialog.data('$ngDialogPreviousFocus');
+                        if (previousFocus && previousFocus.focus) {
+                            previousFocus.focus();
+                        }
+
+                        $rootScope.$broadcast('ngDialog.closing', $dialog, value);
+                        dialogsCount = dialogsCount < 0 ? 0 : dialogsCount;
+                        if (animationEndSupport && !options.disableAnimation) {
+                            scope.$destroy();
+                            $dialog.unbind(animationEndEvent).bind(animationEndEvent, function () {
+                                privateMethods.closeDialogElement($dialog, value);
+                            }).addClass('ngdialog-closing');
+                        } else {
+                            scope.$destroy();
+                            privateMethods.closeDialogElement($dialog, value);
+                        }
+                        if (defers[id]) {
+                            defers[id].resolve({
+                                id: id,
+                                value: value,
+                                $dialog: $dialog,
+                                remainingDialogs: dialogsCount
+                            });
+                            delete defers[id];
+                        }
+                        if (scopes[id]) {
+                            delete scopes[id];
+                        }
+                        openIdStack.splice(openIdStack.indexOf(id), 1);
+                        if (!openIdStack.length) {
+                            $elements.body.unbind('keydown', privateMethods.onDocumentKeydown);
+                            keydownIsBound = false;
+                        }
+
+                        if (dialogsCount == 0)
+                        {
+                            closeByDocumentHandler = undefined;
+                        }
+                    },
+
+                    closeDialogElement: function($dialog, value) {
+                        var options = $dialog.data('$ngDialogOptions');
+                        $dialog.remove();
+                        if (dialogsCount === 0) {
+                            $elements.html.removeClass(options.bodyClassName);
+                            $elements.body.removeClass(options.bodyClassName);
+                            privateMethods.resetBodyPadding();
+                        }
+                        $rootScope.$broadcast('ngDialog.closed', $dialog, value);
+                    },
+
+                    closeDialog: function ($dialog, value) {
+                        var preCloseCallback = $dialog.data('$ngDialogPreCloseCallback');
+
+                        if (preCloseCallback && angular.isFunction(preCloseCallback)) {
+
+                            var preCloseCallbackResult = preCloseCallback.call($dialog, value);
+
+                            if (angular.isObject(preCloseCallbackResult)) {
+                                if (preCloseCallbackResult.closePromise) {
+                                    preCloseCallbackResult.closePromise.then(function () {
+                                        privateMethods.performCloseDialog($dialog, value);
+                                    }, function () {
+                                        return false;
+                                    });
+                                } else {
+                                    preCloseCallbackResult.then(function () {
+                                        privateMethods.performCloseDialog($dialog, value);
+                                    }, function () {
+                                        return false;
+                                    });
+                                }
+                            } else if (preCloseCallbackResult !== false) {
+                                privateMethods.performCloseDialog($dialog, value);
+                            } else {
+                                return false;
+                            }
+                        } else {
+                            privateMethods.performCloseDialog($dialog, value);
+                        }
+                    },
+
+                    onTrapFocusKeydown: function(ev) {
+                        var el = angular.element(ev.currentTarget);
+                        var $dialog;
+
+                        if (el.hasClass('ngdialog')) {
+                            $dialog = el;
+                        } else {
+                            $dialog = privateMethods.getActiveDialog();
+
+                            if ($dialog === null) {
+                                return;
+                            }
+                        }
+
+                        var isTab = (ev.keyCode === 9);
+                        var backward = (ev.shiftKey === true);
+
+                        if (isTab) {
+                            privateMethods.handleTab($dialog, ev, backward);
+                        }
+                    },
+
+                    handleTab: function($dialog, ev, backward) {
+                        var focusableElements = privateMethods.getFocusableElements($dialog);
+
+                        if (focusableElements.length === 0) {
+                            if (document.activeElement && document.activeElement.blur) {
+                                document.activeElement.blur();
+                            }
+                            return;
+                        }
+
+                        var currentFocus = document.activeElement;
+                        var focusIndex = Array.prototype.indexOf.call(focusableElements, currentFocus);
+
+                        var isFocusIndexUnknown = (focusIndex === -1);
+                        var isFirstElementFocused = (focusIndex === 0);
+                        var isLastElementFocused = (focusIndex === focusableElements.length - 1);
+
+                        var cancelEvent = false;
+
+                        if (backward) {
+                            if (isFocusIndexUnknown || isFirstElementFocused) {
+                                focusableElements[focusableElements.length - 1].focus();
+                                cancelEvent = true;
+                            }
+                        } else {
+                            if (isFocusIndexUnknown || isLastElementFocused) {
+                                focusableElements[0].focus();
+                                cancelEvent = true;
+                            }
+                        }
+
+                        if (cancelEvent) {
+                            ev.preventDefault();
+                            ev.stopPropagation();
+                        }
+                    },
+
+                    autoFocus: function($dialog) {
+                        var dialogEl = $dialog[0];
+
+                        // Browser's (Chrome 40, Forefix 37, IE 11) don't appear to honor autofocus on the dialog, but we should
+                        var autoFocusEl = dialogEl.querySelector('*[autofocus]');
+                        if (autoFocusEl !== null) {
+                            autoFocusEl.focus();
+
+                            if (document.activeElement === autoFocusEl) {
+                                return;
+                            }
+
+                            // Autofocus element might was display: none, so let's continue
+                        }
+
+                        var focusableElements = privateMethods.getFocusableElements($dialog);
+
+                        if (focusableElements.length > 0) {
+                            focusableElements[0].focus();
+                            return;
+                        }
+
+                        // We need to focus something for the screen readers to notice the dialog
+                        var contentElements = privateMethods.filterVisibleElements(dialogEl.querySelectorAll('h1,h2,h3,h4,h5,h6,p,span'));
+
+                        if (contentElements.length > 0) {
+                            var contentElement = contentElements[0];
+                            $el(contentElement).attr('tabindex', '-1').css('outline', '0');
+                            contentElement.focus();
+                        }
+                    },
+
+                    getFocusableElements: function ($dialog) {
+                        var dialogEl = $dialog[0];
+
+                        var rawElements = dialogEl.querySelectorAll(focusableElementSelector);
+
+                        // Ignore untabbable elements, ie. those with tabindex = -1
+                        var tabbableElements = privateMethods.filterTabbableElements(rawElements);
+
+                        return privateMethods.filterVisibleElements(tabbableElements);
+                    },
+
+                    filterTabbableElements: function (els) {
+                        var tabbableFocusableElements = [];
+
+                        for (var i = 0; i < els.length; i++) {
+                            var el = els[i];
+
+                            if ($el(el).attr('tabindex') !== '-1') {
+                                tabbableFocusableElements.push(el);
+                            }
+                        }
+
+                        return tabbableFocusableElements;
+                    },
+
+                    filterVisibleElements: function (els) {
+                        var visibleFocusableElements = [];
+
+                        for (var i = 0; i < els.length; i++) {
+                            var el = els[i];
+
+                            if (el.offsetWidth > 0 || el.offsetHeight > 0) {
+                                visibleFocusableElements.push(el);
+                            }
+                        }
+
+                        return visibleFocusableElements;
+                    },
+
+                    getActiveDialog: function () {
+                        var dialogs = document.querySelectorAll('.ngdialog');
+
+                        if (dialogs.length === 0) {
+                            return null;
+                        }
+
+                        // TODO: This might be incorrect if there are a mix of open dialogs with different 'appendTo' values
+                        return $el(dialogs[dialogs.length - 1]);
+                    },
+
+                    applyAriaAttributes: function ($dialog, options) {
+                        if (options.ariaAuto) {
+                            if (!options.ariaRole) {
+                                var detectedRole = (privateMethods.getFocusableElements($dialog).length > 0) ?
+                                    'dialog' :
+                                    'alertdialog';
+
+                                options.ariaRole = detectedRole;
+                            }
+
+                            if (!options.ariaLabelledBySelector) {
+                                options.ariaLabelledBySelector = 'h1,h2,h3,h4,h5,h6';
+                            }
+
+                            if (!options.ariaDescribedBySelector) {
+                                options.ariaDescribedBySelector = 'article,section,p';
+                            }
+                        }
+
+                        if (options.ariaRole) {
+                            $dialog.attr('role', options.ariaRole);
+                        }
+
+                        privateMethods.applyAriaAttribute(
+                            $dialog, 'aria-labelledby', options.ariaLabelledById, options.ariaLabelledBySelector);
+
+                        privateMethods.applyAriaAttribute(
+                            $dialog, 'aria-describedby', options.ariaDescribedById, options.ariaDescribedBySelector);
+                    },
+
+                    applyAriaAttribute: function($dialog, attr, id, selector) {
+                        if (id) {
+                            $dialog.attr(attr, id);
+                            return;
+                        }
+
+                        if (selector) {
+                            var dialogId = $dialog.attr('id');
+
+                            var firstMatch = $dialog[0].querySelector(selector);
+
+                            if (!firstMatch) {
+                                return;
+                            }
+
+                            var generatedId = dialogId + '-' + attr;
+
+                            $el(firstMatch).attr('id', generatedId);
+
+                            $dialog.attr(attr, generatedId);
+
+                            return generatedId;
+                        }
+                    },
+
+                    detectUIRouter: function() {
+                        //Detect if ui-router module is installed if not return false
+                        try {
+                            angular.module('ui.router');
+                            return true;
+                        } catch(err) {
+                            return false;
+                        }
+                    },
+
+                    getRouterLocationEventName: function() {
+                        if(privateMethods.detectUIRouter()) {
+                            return '$stateChangeStart';
+                        }
+                        return '$locationChangeStart';
+                    }
+                };
+
+                var publicMethods = {
+                    __PRIVATE__: privateMethods,
+
+                    /*
+                     * @param {Object} options:
+                     * - template {String} - id of ng-template, url for partial, plain string (if enabled)
+                     * - plain {Boolean} - enable plain string templates, default false
+                     * - scope {Object}
+                     * - controller {String}
+                     * - controllerAs {String}
+                     * - className {String} - dialog theme class
+                     * - appendClassName {String} - dialog theme class to be appended to defaults
+                     * - disableAnimation {Boolean} - set to true to disable animation
+                     * - showClose {Boolean} - show close button, default true
+                     * - closeByEscape {Boolean} - default true
+                     * - closeByDocument {Boolean} - default true
+                     * - preCloseCallback {String|Function} - user supplied function name/function called before closing dialog (if set)
+                     * - onOpenCallback {String|Function} - user supplied function name/function called after opening dialog (if set)
+                     * - bodyClassName {String} - class added to body at open dialog
+                     * @return {Object} dialog
+                     */
+                    open: function (opts) {
+                        var dialogID = null;
+                        opts = opts || {};
+                        if (openOnePerName && opts.name) {
+                            dialogID = opts.name.toLowerCase().replace(/\s/g, '-') + '-dialog';
+                            if (this.isOpen(dialogID)) {
+                                return;
+                            }
+                        }
+                        var options = angular.copy(defaults);
+                        var localID = ++globalID;
+                        dialogID = dialogID || 'ngdialog' + localID;
+                        openIdStack.push(dialogID);
+
+                        // Merge opts.data with predefined via setDefaults
+                        if (typeof options.data !== 'undefined') {
+                            if (typeof opts.data === 'undefined') {
+                                opts.data = {};
+                            }
+                            opts.data = angular.merge(angular.copy(options.data), opts.data);
+                        }
+
+                        angular.extend(options, opts);
+
+                        var defer;
+                        defers[dialogID] = defer = $q.defer();
+
+                        var scope;
+                        scopes[dialogID] = scope = angular.isObject(options.scope) ? options.scope.$new() : $rootScope.$new();
+
+                        var $dialog, $dialogParent, $dialogContent;
+
+                        var resolve = angular.extend({}, options.resolve);
+
+                        angular.forEach(resolve, function (value, key) {
+                            resolve[key] = angular.isString(value) ? $injector.get(value) : $injector.invoke(value, null, null, key);
+                        });
+
+                        $q.all({
+                            template: loadTemplate(options.template || options.templateUrl),
+                            locals: $q.all(resolve)
+                        }).then(function (setup) {
+                            var template = setup.template,
+                                locals = setup.locals;
+
+                            if (options.showClose) {
+                                template += '<button aria-label="Dismiss" class="ngdialog-close"></button>';
+                            }
+
+                            var hasOverlayClass = options.overlay ? '' : ' ngdialog-no-overlay';
+                            $dialog = $el('<div id="' + dialogID + '" class="ngdialog' + hasOverlayClass + '"></div>');
+                            $dialog.html((options.overlay ?
+                                '<div class="ngdialog-overlay"></div><div class="ngdialog-content" role="document">' + template + '</div>' :
+                                '<div class="ngdialog-content" role="document">' + template + '</div>'));
+
+                            $dialog.data('$ngDialogOptions', options);
+
+                            scope.ngDialogId = dialogID;
+
+                            if (options.data && angular.isString(options.data)) {
+                                var firstLetter = options.data.replace(/^\s*/, '')[0];
+                                scope.ngDialogData = (firstLetter === '{' || firstLetter === '[') ? angular.fromJson(options.data) : new String(options.data);
+                                scope.ngDialogData.ngDialogId = dialogID;
+                            } else if (options.data && angular.isObject(options.data)) {
+                                scope.ngDialogData = options.data;
+                                scope.ngDialogData.ngDialogId = dialogID;
+                            }
+
+                            if (options.className) {
+                                $dialog.addClass(options.className);
+                            }
+
+                            if (options.appendClassName) {
+                                $dialog.addClass(options.appendClassName);
+                            }
+
+                            if (options.width) {
+                                $dialogContent = $dialog[0].querySelector('.ngdialog-content');
+                                if (angular.isString(options.width)) {
+                                    $dialogContent.style.width = options.width;
+                                } else {
+                                    $dialogContent.style.width = options.width + 'px';
+                                }
+                            }
+
+                            if (options.height) {
+                                $dialogContent = $dialog[0].querySelector('.ngdialog-content');
+                                if (angular.isString(options.height)) {
+                                    $dialogContent.style.height = options.height;
+                                } else {
+                                    $dialogContent.style.height = options.height + 'px';
+                                }
+                            }
+
+                            if (options.disableAnimation) {
+                                $dialog.addClass(disabledAnimationClass);
+                            }
+
+                            if (options.appendTo && angular.isString(options.appendTo)) {
+                                $dialogParent = angular.element(document.querySelector(options.appendTo));
+                            } else {
+                                $dialogParent = $elements.body;
+                            }
+
+                            privateMethods.applyAriaAttributes($dialog, options);
+
+                            [
+                                { name: '$ngDialogPreCloseCallback', value: options.preCloseCallback },
+                                { name: '$ngDialogOnOpenCallback', value: options.onOpenCallback }
+                            ].forEach(function (option) {
+                                if (option.value) {
+                                    var callback;
+
+                                    if (angular.isFunction(option.value)) {
+                                        callback = option.value;
+                                    } else if (angular.isString(option.value)) {
+                                        if (scope) {
+                                            if (angular.isFunction(scope[option.value])) {
+                                                callback = scope[option.value];
+                                            } else if (scope.$parent && angular.isFunction(scope.$parent[option.value])) {
+                                                callback = scope.$parent[option.value];
+                                            } else if ($rootScope && angular.isFunction($rootScope[option.value])) {
+                                                callback = $rootScope[option.value];
+                                            }
+                                        }
+                                    }
+
+                                    if (callback) {
+                                        $dialog.data(option.name, callback);
+                                    }
+                                }
+                            });
+
+                            scope.closeThisDialog = function (value) {
+                                privateMethods.closeDialog($dialog, value);
+                            };
+
+                            if (options.controller && (angular.isString(options.controller) || angular.isArray(options.controller) || angular.isFunction(options.controller))) {
+
+                                var label;
+
+                                if (options.controllerAs && angular.isString(options.controllerAs)) {
+                                    label = options.controllerAs;
+                                }
+
+                                var controllerInstance = $controller(options.controller, angular.extend(
+                                    locals,
+                                    {
+                                        $scope: scope,
+                                        $element: $dialog
+                                    }),
+                                    true,
+                                    label
+                                );
+
+                                if(options.bindToController) {
+                                    angular.extend(controllerInstance.instance, {ngDialogId: scope.ngDialogId, ngDialogData: scope.ngDialogData, closeThisDialog: scope.closeThisDialog, confirm: scope.confirm});
+                                }
+
+                                if(typeof controllerInstance === 'function'){
+                                    $dialog.data('$ngDialogControllerController', controllerInstance());
+                                } else {
+                                    $dialog.data('$ngDialogControllerController', controllerInstance);
+                                }
+                            }
+
+                            $timeout(function () {
+                                var $activeDialogs = document.querySelectorAll('.ngdialog');
+                                privateMethods.deactivateAll($activeDialogs);
+
+                                $compile($dialog)(scope);
+                                var widthDiffs = $window.innerWidth - $elements.body.prop('clientWidth');
+                                $elements.html.addClass(options.bodyClassName);
+                                $elements.body.addClass(options.bodyClassName);
+                                var scrollBarWidth = widthDiffs - ($window.innerWidth - $elements.body.prop('clientWidth'));
+                                if (scrollBarWidth > 0) {
+                                    privateMethods.setBodyPadding(scrollBarWidth);
+                                }
+                                $dialogParent.append($dialog);
+
+                                privateMethods.activate($dialog);
+
+                                if (options.trapFocus) {
+                                    privateMethods.autoFocus($dialog);
+                                }
+
+                                if (options.name) {
+                                    $rootScope.$broadcast('ngDialog.opened', {dialog: $dialog, name: options.name});
+                                } else {
+                                    $rootScope.$broadcast('ngDialog.opened', $dialog);
+                                }
+                                var onOpenCallback = $dialog.data('$ngDialogOnOpenCallback');
+                                if (onOpenCallback && angular.isFunction(onOpenCallback)) {
+                                    onOpenCallback.call($dialog);
+                                }
+
+                            });
+
+                            if (!keydownIsBound) {
+                                $elements.body.bind('keydown', privateMethods.onDocumentKeydown);
+                                keydownIsBound = true;
+                            }
+
+                            if (options.closeByNavigation) {
+                                var eventName = privateMethods.getRouterLocationEventName();
+                                $rootScope.$on(eventName, function ($event) {
+                                    if (privateMethods.closeDialog($dialog) === false)
+                                        $event.preventDefault();
+                                });
+                            }
+
+                            if (options.preserveFocus) {
+                                $dialog.data('$ngDialogPreviousFocus', document.activeElement);
+                            }
+
+                            closeByDocumentHandler = function (event) {
+                                var isOverlay = options.closeByDocument ? $el(event.target).hasClass('ngdialog-overlay') : false;
+                                var isCloseBtn = $el(event.target).hasClass('ngdialog-close');
+
+                                if (isOverlay || isCloseBtn) {
+                                    publicMethods.close($dialog.attr('id'), isCloseBtn ? '$closeButton' : '$document');
+                                }
+                            };
+
+                            if (typeof $window.Hammer !== 'undefined') {
+                                var hammerTime = scope.hammerTime = $window.Hammer($dialog[0]);
+                                hammerTime.on('tap', closeByDocumentHandler);
+                            } else {
+                                $dialog.bind('click', closeByDocumentHandler);
+                            }
+
+                            dialogsCount += 1;
+
+                            return publicMethods;
+                        });
+
+                        return {
+                            id: dialogID,
+                            closePromise: defer.promise,
+                            close: function (value) {
+                                privateMethods.closeDialog($dialog, value);
+                            }
+                        };
+
+                        function loadTemplateUrl (tmpl, config) {
+                            var config = config || {};
+                            config.headers = config.headers || {};
+
+                            angular.extend(config.headers, {'Accept': 'text/html'});
+
+                            $rootScope.$broadcast('ngDialog.templateLoading', tmpl);
+                            return $http.get(tmpl, config).then(function(res) {
+                                $rootScope.$broadcast('ngDialog.templateLoaded', tmpl);
+                                return res.data || '';
+                            });
+                        }
+
+                        function loadTemplate (tmpl) {
+                            if (!tmpl) {
+                                return 'Empty template';
+                            }
+
+                            if (angular.isString(tmpl) && options.plain) {
+                                return tmpl;
+                            }
+
+                            if (typeof options.cache === 'boolean' && !options.cache) {
+                                return loadTemplateUrl(tmpl, {cache: false});
+                            }
+
+                            return loadTemplateUrl(tmpl, {cache: $templateCache});
+                        }
+                    },
+
+                    /*
+                     * @param {Object} options:
+                     * - template {String} - id of ng-template, url for partial, plain string (if enabled)
+                     * - plain {Boolean} - enable plain string templates, default false
+                     * - name {String}
+                     * - scope {Object}
+                     * - controller {String}
+                     * - controllerAs {String}
+                     * - className {String} - dialog theme class
+                     * - appendClassName {String} - dialog theme class to be appended to defaults
+                     * - showClose {Boolean} - show close button, default true
+                     * - closeByEscape {Boolean} - default false
+                     * - closeByDocument {Boolean} - default false
+                     * - preCloseCallback {String|Function} - user supplied function name/function called before closing dialog (if set); not called on confirm
+                     * - bodyClassName {String} - class added to body at open dialog
+                     *
+                     * @return {Object} dialog
+                     */
+                    openConfirm: function (opts) {
+                        var defer = $q.defer();
+                        var options = angular.copy(defaults);
+
+                        opts = opts || {};
+
+                        // Merge opts.data with predefined via setDefaults
+                        if (typeof options.data !== 'undefined') {
+                            if (typeof opts.data === 'undefined') {
+                                opts.data = {};
+                            }
+                            opts.data = angular.merge(angular.copy(options.data), opts.data);
+                        }
+
+                        angular.extend(options, opts);
+
+                        options.scope = angular.isObject(options.scope) ? options.scope.$new() : $rootScope.$new();
+                        options.scope.confirm = function (value) {
+                            defer.resolve(value);
+                            var $dialog = $el(document.getElementById(openResult.id));
+                            privateMethods.performCloseDialog($dialog, value);
+                        };
+
+                        var openResult = publicMethods.open(options);
+                        if (openResult) {
+                            openResult.closePromise.then(function (data) {
+                                if (data) {
+                                    return defer.reject(data.value);
+                                }
+                                return defer.reject();
+                            });
+                            return defer.promise;
+                        }
+                    },
+
+                    isOpen: function(id) {
+                        var $dialog = $el(document.getElementById(id));
+                        return $dialog.length > 0;
+                    },
+
+                    /*
+                     * @param {String} id
+                     * @return {Object} dialog
+                     */
+                    close: function (id, value) {
+                        var $dialog = $el(document.getElementById(id));
+
+                        if ($dialog.length) {
+                            privateMethods.closeDialog($dialog, value);
+                        } else {
+                            if (id === '$escape') {
+                                var topDialogId = openIdStack[openIdStack.length - 1];
+                                $dialog = $el(document.getElementById(topDialogId));
+                                if ($dialog.data('$ngDialogOptions').closeByEscape) {
+                                    privateMethods.closeDialog($dialog, '$escape');
+                                }
+                            } else {
+                                publicMethods.closeAll(value);
+                            }
+                        }
+
+                        return publicMethods;
+                    },
+
+                    closeAll: function (value) {
+                        var $all = document.querySelectorAll('.ngdialog');
+
+                        // Reverse order to ensure focus restoration works as expected
+                        for (var i = $all.length - 1; i >= 0; i--) {
+                            var dialog = $all[i];
+                            privateMethods.closeDialog($el(dialog), value);
+                        }
+                    },
+
+                    getOpenDialogs: function() {
+                        return openIdStack;
+                    },
+
+                    getDefaults: function () {
+                        return defaults;
+                    }
+                };
+
+                angular.forEach(
+                    ['html', 'body'],
+                    function(elementName) {
+                        $elements[elementName] = $document.find(elementName);
+                        if (forceElementsReload[elementName]) {
+                            var eventName = privateMethods.getRouterLocationEventName();
+                            $rootScope.$on(eventName, function () {
+                                $elements[elementName] = $document.find(elementName);
+                            });
+                        }
+                    }
+                );
+
+                return publicMethods;
+            }];
+    });
+
+    m.directive('ngDialog', ['ngDialog', function (ngDialog) {
+        return {
+            restrict: 'A',
+            scope: {
+                ngDialogScope: '='
+            },
+            link: function (scope, elem, attrs) {
+                elem.on('click', function (e) {
+                    e.preventDefault();
+
+                    var ngDialogScope = angular.isDefined(scope.ngDialogScope) ? scope.ngDialogScope : 'noScope';
+                    angular.isDefined(attrs.ngDialogClosePrevious) && ngDialog.close(attrs.ngDialogClosePrevious);
+
+                    var defaults = ngDialog.getDefaults();
+
+                    ngDialog.open({
+                        template: attrs.ngDialog,
+                        className: attrs.ngDialogClass || defaults.className,
+                        appendClassName: attrs.ngDialogAppendClass,
+                        controller: attrs.ngDialogController,
+                        controllerAs: attrs.ngDialogControllerAs,
+                        bindToController: attrs.ngDialogBindToController,
+                        disableAnimation: attrs.ngDialogDisableAnimation,
+                        scope: ngDialogScope,
+                        data: attrs.ngDialogData,
+                        showClose: attrs.ngDialogShowClose === 'false' ? false : (attrs.ngDialogShowClose === 'true' ? true : defaults.showClose),
+                        closeByDocument: attrs.ngDialogCloseByDocument === 'false' ? false : (attrs.ngDialogCloseByDocument === 'true' ? true : defaults.closeByDocument),
+                        closeByEscape: attrs.ngDialogCloseByEscape === 'false' ? false : (attrs.ngDialogCloseByEscape === 'true' ? true : defaults.closeByEscape),
+                        overlay: attrs.ngDialogOverlay === 'false' ? false : (attrs.ngDialogOverlay === 'true' ? true : defaults.overlay),
+                        preCloseCallback: attrs.ngDialogPreCloseCallback || defaults.preCloseCallback,
+                        onOpenCallback: attrs.ngDialogOnOpenCallback || defaults.onOpenCallback,
+                        bodyClassName: attrs.ngDialogBodyClass || defaults.bodyClassName
+                    });
+                });
+            }
+        };
+    }]);
+
+    return m;
+}));
+
+},{"angular":10}],196:[function(_dereq_,module,exports){
 /**!
  * AngularJS file upload directives and services. Supports: file upload/drop/paste, resume, cancel/abort,
  * progress, resize, thumbnail, preview, validation and CORS
@@ -71883,10 +73180,10 @@ ngFileUpload.service('UploadExif', ['UploadResize', '$q', function (UploadResize
 }]);
 
 
-},{}],195:[function(_dereq_,module,exports){
+},{}],197:[function(_dereq_,module,exports){
 _dereq_('./dist/ng-file-upload-all');
 module.exports = 'ngFileUpload';
-},{"./dist/ng-file-upload-all":194}],196:[function(_dereq_,module,exports){
+},{"./dist/ng-file-upload-all":196}],198:[function(_dereq_,module,exports){
 module.exports = function (obj) {
     if (!obj || typeof obj !== 'object') return obj;
     
@@ -71923,7 +73220,7 @@ var isArray = Array.isArray || function (xs) {
     return {}.toString.call(xs) === '[object Array]';
 };
 
-},{}],197:[function(_dereq_,module,exports){
+},{}],199:[function(_dereq_,module,exports){
 /*!
  * Signature Pad v1.6.0
  * https://github.com/szimek/signature_pad
@@ -72454,7 +73751,7 @@ return SignaturePad;
 
 })));
 
-},{}],198:[function(_dereq_,module,exports){
+},{}],200:[function(_dereq_,module,exports){
 /*!
  * ui-select
  * http://github.com/angular-ui/ui-select
@@ -74882,12 +76179,49 @@ $templateCache.put("selectize/match.tpl.html","<div ng-hide=\"$select.searchEnab
 $templateCache.put("selectize/no-choice.tpl.html","<div class=\"ui-select-no-choice selectize-dropdown\" ng-show=\"$select.items.length == 0\"><div class=\"selectize-dropdown-content\"><div data-selectable=\"\" ng-transclude=\"\"></div></div></div>");
 $templateCache.put("selectize/select-multiple.tpl.html","<div class=\"ui-select-container selectize-control multi plugin-remove_button\" ng-class=\"{\'open\': $select.open}\"><div class=\"selectize-input\" ng-class=\"{\'focus\': $select.open, \'disabled\': $select.disabled, \'selectize-focus\' : $select.focus}\" ng-click=\"$select.open && !$select.searchEnabled ? $select.toggle($event) : $select.activate()\"><div class=\"ui-select-match\"></div><input type=\"search\" autocomplete=\"off\" tabindex=\"-1\" class=\"ui-select-search\" ng-class=\"{\'ui-select-search-hidden\':!$select.searchEnabled}\" placeholder=\"{{$selectMultiple.getPlaceholder()}}\" ng-model=\"$select.search\" ng-disabled=\"$select.disabled\" aria-expanded=\"{{$select.open}}\" aria-label=\"{{ $select.baseTitle }}\" ondrop=\"return false;\"></div><div class=\"ui-select-choices\"></div><div class=\"ui-select-no-choice\"></div></div>");
 $templateCache.put("selectize/select.tpl.html","<div class=\"ui-select-container selectize-control single\" ng-class=\"{\'open\': $select.open}\"><div class=\"selectize-input\" ng-class=\"{\'focus\': $select.open, \'disabled\': $select.disabled, \'selectize-focus\' : $select.focus}\" ng-click=\"$select.open && !$select.searchEnabled ? $select.toggle($event) : $select.activate()\"><div class=\"ui-select-match\"></div><input type=\"search\" autocomplete=\"off\" tabindex=\"-1\" class=\"ui-select-search ui-select-toggle\" ng-class=\"{\'ui-select-search-hidden\':!$select.searchEnabled}\" ng-click=\"$select.toggle($event)\" placeholder=\"{{$select.placeholder}}\" ng-model=\"$select.search\" ng-hide=\"!$select.isEmpty() && !$select.open\" ng-disabled=\"$select.disabled\" aria-label=\"{{ $select.baseTitle }}\"></div><div class=\"ui-select-choices\"></div><div class=\"ui-select-no-choice\"></div></div>");}]);
-},{}],199:[function(_dereq_,module,exports){
+},{}],201:[function(_dereq_,module,exports){
 (function(self) {
   'use strict';
 
   if (self.fetch) {
     return
+  }
+
+  var support = {
+    searchParams: 'URLSearchParams' in self,
+    iterable: 'Symbol' in self && 'iterator' in Symbol,
+    blob: 'FileReader' in self && 'Blob' in self && (function() {
+      try {
+        new Blob()
+        return true
+      } catch(e) {
+        return false
+      }
+    })(),
+    formData: 'FormData' in self,
+    arrayBuffer: 'ArrayBuffer' in self
+  }
+
+  if (support.arrayBuffer) {
+    var viewClasses = [
+      '[object Int8Array]',
+      '[object Uint8Array]',
+      '[object Uint8ClampedArray]',
+      '[object Int16Array]',
+      '[object Uint16Array]',
+      '[object Int32Array]',
+      '[object Uint32Array]',
+      '[object Float32Array]',
+      '[object Float64Array]'
+    ]
+
+    var isDataView = function(obj) {
+      return obj && DataView.prototype.isPrototypeOf(obj)
+    }
+
+    var isArrayBufferView = ArrayBuffer.isView || function(obj) {
+      return obj && viewClasses.indexOf(Object.prototype.toString.call(obj)) > -1
+    }
   }
 
   function normalizeName(name) {
@@ -74907,6 +76241,24 @@ $templateCache.put("selectize/select.tpl.html","<div class=\"ui-select-container
     return value
   }
 
+  // Build a destructive iterator for the value list
+  function iteratorFor(items) {
+    var iterator = {
+      next: function() {
+        var value = items.shift()
+        return {done: value === undefined, value: value}
+      }
+    }
+
+    if (support.iterable) {
+      iterator[Symbol.iterator] = function() {
+        return iterator
+      }
+    }
+
+    return iterator
+  }
+
   function Headers(headers) {
     this.map = {}
 
@@ -74914,7 +76266,10 @@ $templateCache.put("selectize/select.tpl.html","<div class=\"ui-select-container
       headers.forEach(function(value, name) {
         this.append(name, value)
       }, this)
-
+    } else if (Array.isArray(headers)) {
+      headers.forEach(function(header) {
+        this.append(header[0], header[1])
+      }, this)
     } else if (headers) {
       Object.getOwnPropertyNames(headers).forEach(function(name) {
         this.append(name, headers[name])
@@ -74925,12 +76280,8 @@ $templateCache.put("selectize/select.tpl.html","<div class=\"ui-select-container
   Headers.prototype.append = function(name, value) {
     name = normalizeName(name)
     value = normalizeValue(value)
-    var list = this.map[name]
-    if (!list) {
-      list = []
-      this.map[name] = list
-    }
-    list.push(value)
+    var oldValue = this.map[name]
+    this.map[name] = oldValue ? oldValue+','+value : value
   }
 
   Headers.prototype['delete'] = function(name) {
@@ -74938,12 +76289,8 @@ $templateCache.put("selectize/select.tpl.html","<div class=\"ui-select-container
   }
 
   Headers.prototype.get = function(name) {
-    var values = this.map[normalizeName(name)]
-    return values ? values[0] : null
-  }
-
-  Headers.prototype.getAll = function(name) {
-    return this.map[normalizeName(name)] || []
+    name = normalizeName(name)
+    return this.has(name) ? this.map[name] : null
   }
 
   Headers.prototype.has = function(name) {
@@ -74951,15 +76298,37 @@ $templateCache.put("selectize/select.tpl.html","<div class=\"ui-select-container
   }
 
   Headers.prototype.set = function(name, value) {
-    this.map[normalizeName(name)] = [normalizeValue(value)]
+    this.map[normalizeName(name)] = normalizeValue(value)
   }
 
   Headers.prototype.forEach = function(callback, thisArg) {
-    Object.getOwnPropertyNames(this.map).forEach(function(name) {
-      this.map[name].forEach(function(value) {
-        callback.call(thisArg, value, name, this)
-      }, this)
-    }, this)
+    for (var name in this.map) {
+      if (this.map.hasOwnProperty(name)) {
+        callback.call(thisArg, this.map[name], name, this)
+      }
+    }
+  }
+
+  Headers.prototype.keys = function() {
+    var items = []
+    this.forEach(function(value, name) { items.push(name) })
+    return iteratorFor(items)
+  }
+
+  Headers.prototype.values = function() {
+    var items = []
+    this.forEach(function(value) { items.push(value) })
+    return iteratorFor(items)
+  }
+
+  Headers.prototype.entries = function() {
+    var items = []
+    this.forEach(function(value, name) { items.push([name, value]) })
+    return iteratorFor(items)
+  }
+
+  if (support.iterable) {
+    Headers.prototype[Symbol.iterator] = Headers.prototype.entries
   }
 
   function consumed(body) {
@@ -74982,46 +76351,59 @@ $templateCache.put("selectize/select.tpl.html","<div class=\"ui-select-container
 
   function readBlobAsArrayBuffer(blob) {
     var reader = new FileReader()
+    var promise = fileReaderReady(reader)
     reader.readAsArrayBuffer(blob)
-    return fileReaderReady(reader)
+    return promise
   }
 
   function readBlobAsText(blob) {
     var reader = new FileReader()
+    var promise = fileReaderReady(reader)
     reader.readAsText(blob)
-    return fileReaderReady(reader)
+    return promise
   }
 
-  var support = {
-    blob: 'FileReader' in self && 'Blob' in self && (function() {
-      try {
-        new Blob()
-        return true
-      } catch(e) {
-        return false
-      }
-    })(),
-    formData: 'FormData' in self,
-    arrayBuffer: 'ArrayBuffer' in self
+  function readArrayBufferAsText(buf) {
+    var view = new Uint8Array(buf)
+    var chars = new Array(view.length)
+
+    for (var i = 0; i < view.length; i++) {
+      chars[i] = String.fromCharCode(view[i])
+    }
+    return chars.join('')
+  }
+
+  function bufferClone(buf) {
+    if (buf.slice) {
+      return buf.slice(0)
+    } else {
+      var view = new Uint8Array(buf.byteLength)
+      view.set(new Uint8Array(buf))
+      return view.buffer
+    }
   }
 
   function Body() {
     this.bodyUsed = false
 
-
     this._initBody = function(body) {
       this._bodyInit = body
-      if (typeof body === 'string') {
+      if (!body) {
+        this._bodyText = ''
+      } else if (typeof body === 'string') {
         this._bodyText = body
       } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
         this._bodyBlob = body
       } else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
         this._bodyFormData = body
-      } else if (!body) {
-        this._bodyText = ''
-      } else if (support.arrayBuffer && ArrayBuffer.prototype.isPrototypeOf(body)) {
-        // Only support ArrayBuffers for POST method.
-        // Receiving ArrayBuffers happens via Blobs, instead.
+      } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
+        this._bodyText = body.toString()
+      } else if (support.arrayBuffer && support.blob && isDataView(body)) {
+        this._bodyArrayBuffer = bufferClone(body.buffer)
+        // IE 10-11 can't handle a DataView body.
+        this._bodyInit = new Blob([this._bodyArrayBuffer])
+      } else if (support.arrayBuffer && (ArrayBuffer.prototype.isPrototypeOf(body) || isArrayBufferView(body))) {
+        this._bodyArrayBuffer = bufferClone(body)
       } else {
         throw new Error('unsupported BodyInit type')
       }
@@ -75031,6 +76413,8 @@ $templateCache.put("selectize/select.tpl.html","<div class=\"ui-select-container
           this.headers.set('content-type', 'text/plain;charset=UTF-8')
         } else if (this._bodyBlob && this._bodyBlob.type) {
           this.headers.set('content-type', this._bodyBlob.type)
+        } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
+          this.headers.set('content-type', 'application/x-www-form-urlencoded;charset=UTF-8')
         }
       }
     }
@@ -75044,6 +76428,8 @@ $templateCache.put("selectize/select.tpl.html","<div class=\"ui-select-container
 
         if (this._bodyBlob) {
           return Promise.resolve(this._bodyBlob)
+        } else if (this._bodyArrayBuffer) {
+          return Promise.resolve(new Blob([this._bodyArrayBuffer]))
         } else if (this._bodyFormData) {
           throw new Error('could not read FormData body as blob')
         } else {
@@ -75052,27 +76438,28 @@ $templateCache.put("selectize/select.tpl.html","<div class=\"ui-select-container
       }
 
       this.arrayBuffer = function() {
-        return this.blob().then(readBlobAsArrayBuffer)
-      }
-
-      this.text = function() {
-        var rejected = consumed(this)
-        if (rejected) {
-          return rejected
-        }
-
-        if (this._bodyBlob) {
-          return readBlobAsText(this._bodyBlob)
-        } else if (this._bodyFormData) {
-          throw new Error('could not read FormData body as text')
+        if (this._bodyArrayBuffer) {
+          return consumed(this) || Promise.resolve(this._bodyArrayBuffer)
         } else {
-          return Promise.resolve(this._bodyText)
+          return this.blob().then(readBlobAsArrayBuffer)
         }
       }
-    } else {
-      this.text = function() {
-        var rejected = consumed(this)
-        return rejected ? rejected : Promise.resolve(this._bodyText)
+    }
+
+    this.text = function() {
+      var rejected = consumed(this)
+      if (rejected) {
+        return rejected
+      }
+
+      if (this._bodyBlob) {
+        return readBlobAsText(this._bodyBlob)
+      } else if (this._bodyArrayBuffer) {
+        return Promise.resolve(readArrayBufferAsText(this._bodyArrayBuffer))
+      } else if (this._bodyFormData) {
+        throw new Error('could not read FormData body as text')
+      } else {
+        return Promise.resolve(this._bodyText)
       }
     }
 
@@ -75100,7 +76487,8 @@ $templateCache.put("selectize/select.tpl.html","<div class=\"ui-select-container
   function Request(input, options) {
     options = options || {}
     var body = options.body
-    if (Request.prototype.isPrototypeOf(input)) {
+
+    if (input instanceof Request) {
       if (input.bodyUsed) {
         throw new TypeError('Already read')
       }
@@ -75111,12 +76499,12 @@ $templateCache.put("selectize/select.tpl.html","<div class=\"ui-select-container
       }
       this.method = input.method
       this.mode = input.mode
-      if (!body) {
+      if (!body && input._bodyInit != null) {
         body = input._bodyInit
         input.bodyUsed = true
       }
     } else {
-      this.url = input
+      this.url = String(input)
     }
 
     this.credentials = options.credentials || this.credentials || 'omit'
@@ -75134,7 +76522,7 @@ $templateCache.put("selectize/select.tpl.html","<div class=\"ui-select-container
   }
 
   Request.prototype.clone = function() {
-    return new Request(this)
+    return new Request(this, { body: this._bodyInit })
   }
 
   function decode(body) {
@@ -75150,16 +76538,17 @@ $templateCache.put("selectize/select.tpl.html","<div class=\"ui-select-container
     return form
   }
 
-  function headers(xhr) {
-    var head = new Headers()
-    var pairs = (xhr.getAllResponseHeaders() || '').trim().split('\n')
-    pairs.forEach(function(header) {
-      var split = header.trim().split(':')
-      var key = split.shift().trim()
-      var value = split.join(':').trim()
-      head.append(key, value)
+  function parseHeaders(rawHeaders) {
+    var headers = new Headers()
+    rawHeaders.split(/\r?\n/).forEach(function(line) {
+      var parts = line.split(':')
+      var key = parts.shift().trim()
+      if (key) {
+        var value = parts.join(':').trim()
+        headers.append(key, value)
+      }
     })
-    return head
+    return headers
   }
 
   Body.call(Request.prototype)
@@ -75170,10 +76559,10 @@ $templateCache.put("selectize/select.tpl.html","<div class=\"ui-select-container
     }
 
     this.type = 'default'
-    this.status = options.status
+    this.status = 'status' in options ? options.status : 200
     this.ok = this.status >= 200 && this.status < 300
-    this.statusText = options.statusText
-    this.headers = options.headers instanceof Headers ? options.headers : new Headers(options.headers)
+    this.statusText = 'statusText' in options ? options.statusText : 'OK'
+    this.headers = new Headers(options.headers)
     this.url = options.url || ''
     this._initBody(bodyInit)
   }
@@ -75211,40 +76600,16 @@ $templateCache.put("selectize/select.tpl.html","<div class=\"ui-select-container
 
   self.fetch = function(input, init) {
     return new Promise(function(resolve, reject) {
-      var request
-      if (Request.prototype.isPrototypeOf(input) && !init) {
-        request = input
-      } else {
-        request = new Request(input, init)
-      }
-
+      var request = new Request(input, init)
       var xhr = new XMLHttpRequest()
 
-      function responseURL() {
-        if ('responseURL' in xhr) {
-          return xhr.responseURL
-        }
-
-        // Avoid security warnings on getResponseHeader when not allowed by CORS
-        if (/^X-Request-URL:/m.test(xhr.getAllResponseHeaders())) {
-          return xhr.getResponseHeader('X-Request-URL')
-        }
-
-        return
-      }
-
       xhr.onload = function() {
-        var status = (xhr.status === 1223) ? 204 : xhr.status
-        if (status < 100 || status > 599) {
-          reject(new TypeError('Network request failed'))
-          return
-        }
         var options = {
-          status: status,
+          status: xhr.status,
           statusText: xhr.statusText,
-          headers: headers(xhr),
-          url: responseURL()
+          headers: parseHeaders(xhr.getAllResponseHeaders() || '')
         }
+        options.url = 'responseURL' in xhr ? xhr.responseURL : options.headers.get('X-Request-URL')
         var body = 'response' in xhr ? xhr.response : xhr.responseText
         resolve(new Response(body, options))
       }
@@ -75277,7 +76642,7 @@ $templateCache.put("selectize/select.tpl.html","<div class=\"ui-select-container
   self.fetch.polyfill = true
 })(typeof self !== 'undefined' ? self : this);
 
-},{}],200:[function(_dereq_,module,exports){
+},{}],202:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -75339,6 +76704,7 @@ module.exports = function(app) {
           clearOnHide: true,
           unique: false,
           persistent: true,
+          hidden: false,
           map: {
             region: '',
             key: ''
@@ -75365,7 +76731,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],201:[function(_dereq_,module,exports){
+},{}],203:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -75533,7 +76899,7 @@ module.exports = function(app) {
     '$templateCache',
     function($templateCache) {
       $templateCache.put('formio/components/button.html',
-        "<button type=\"{{ getButtonType() }}\"\n  id=\"{{ componentId }}\"\n  name=\"{{ componentId }}\"\n  ng-class=\"{'btn-block': component.block}\"\n  class=\"btn btn-{{ component.theme }} btn-{{ component.size }}\"\n  ng-disabled=\"readOnly || formioForm.submitting || (component.disableOnInvalid && formioForm.$invalid)\"\n  tabindex=\"{{ component.tabindex || 0 }}\"\n  ng-click=\"$emit('buttonClick', component, componentId)\">\n  <span ng-if=\"component.leftIcon\" class=\"{{ component.leftIcon }}\" aria-hidden=\"true\"></span>\n  <span ng-if=\"component.leftIcon && component.label\">&nbsp;</span>{{ component.label | formioTranslate:null:builder }}<span ng-if=\"component.rightIcon && component.label\">&nbsp;</span>\n  <span ng-if=\"component.rightIcon\" class=\"{{ component.rightIcon }}\" aria-hidden=\"true\"></span>\n   <i ng-if=\"component.action == 'submit' && formioForm.submitting\" class=\"glyphicon glyphicon-refresh glyphicon-spin\"></i>\n</button>\n"
+        "<button ng-attr-type=\"{{ getButtonType() }}\"\n  id=\"{{ componentId }}\"\n  name=\"{{ componentId }}\"\n  ng-class=\"{'btn-block': component.block}\"\n  class=\"btn btn-{{ component.theme }} btn-{{ component.size }}\"\n  ng-disabled=\"readOnly || formioForm.submitting || (component.disableOnInvalid && formioForm.$invalid)\"\n  tabindex=\"{{ component.tabindex || 0 }}\"\n  ng-click=\"$emit('buttonClick', component, componentId)\">\n  <span ng-if=\"component.leftIcon\" class=\"{{ component.leftIcon }}\" aria-hidden=\"true\"></span>\n  <span ng-if=\"component.leftIcon && component.label\">&nbsp;</span>{{ component.label | formioTranslate:null:builder }}<span ng-if=\"component.rightIcon && component.label\">&nbsp;</span>\n  <span ng-if=\"component.rightIcon\" class=\"{{ component.rightIcon }}\" aria-hidden=\"true\"></span>\n   <i ng-if=\"component.action == 'submit' && formioForm.submitting\" class=\"glyphicon glyphicon-refresh glyphicon-spin\"></i>\n</button>\n"
       );
 
       $templateCache.put('formio/componentsView/button.html',
@@ -75543,7 +76909,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],202:[function(_dereq_,module,exports){
+},{}],204:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -75573,20 +76939,22 @@ module.exports = function(app) {
             : defaultValue;
 
           // FA-850 - Ensure the checked value is always a boolean object when loaded, then unbind the watch.
-          $scope.$watch('data.' + $scope.component.key, function() {
-            if (!$scope.data || !$scope.component.key) return;
+          if ($scope.component.inputType === 'checkbox') {
+            $scope.$watch('data.' + $scope.component.key, function() {
+              if (!$scope.data || !$scope.component.key) return;
 
-            // If the component is required, and its current value is false, delete the entry.
-            if (
-              $scope.component.validate
-              && $scope.component.validate.required
-              && (boolean[$scope.data[$scope.component.key]] || false) === false
-            ) {
-              $timeout(function() {
-                delete $scope.data[$scope.component.key];
-              });
-            }
-          });
+              // If the component is required, and its current value is false, delete the entry.
+              if (
+                $scope.component.validate
+                && $scope.component.validate.required
+                && (boolean[$scope.data[$scope.component.key]] || false) === false
+              ) {
+                $timeout(function() {
+                  delete $scope.data[$scope.component.key];
+                });
+              }
+            });
+          }
         }],
         settings: {
           input: true,
@@ -75600,6 +76968,9 @@ module.exports = function(app) {
           defaultValue: false,
           protected: false,
           persistent: true,
+          hidden: false,
+          name: '',
+          value: '',
           clearOnHide: true,
           validate: {
             required: false
@@ -75612,14 +76983,16 @@ module.exports = function(app) {
     '$templateCache',
     function($templateCache) {
       $templateCache.put('formio/components/checkbox.html',
-        "<div class=\"checkbox\">\n  <label for=\"{{ componentId }}\" ng-class=\"{'field-required': isRequired(component)}\">\n    <input\n      type=\"{{ component.inputType }}\"\n      id=\"{{ componentId }}\"\n      tabindex=\"{{ component.tabindex || 0 }}\"\n      ng-disabled=\"readOnly\"\n      ng-model=\"data[component.key]\"\n      ng-required=\"isRequired(component)\"\n      custom-validator=\"component.validate.custom\"\n    >\n    <span ng-if=\"!(component.hideLabel && component.datagridLabel === false)\">{{ component.label | formioTranslate:null:builder }}</span>\n  </label>\n</div>\n<div ng-if=\"!!component.description\" class=\"help-block\">\n  <span>{{ component.description }}</span>\n</div>\n"
+        "<div class=\"checkbox\">\n  <label for=\"{{ componentId }}\" ng-class=\"{'field-required': isRequired(component)}\">\n    <input\n      ng-if=\"component.name\"\n      type=\"{{ component.inputType }}\"\n      id=\"{{ componentId }}\"\n      name=\"{{ component.name }}\"\n      value=\"{{ component.value }}\"\n      tabindex=\"{{ component.tabindex || 0 }}\"\n      ng-disabled=\"readOnly\"\n      ng-model=\"data[component.name]\"\n      ng-required=\"component.validate.required\"\n    >\n    <input\n      ng-if=\"!component.name\"\n      type=\"{{ component.inputType }}\"\n      id=\"{{ componentId }}\"\n      tabindex=\"{{ component.tabindex || 0 }}\"\n      ng-disabled=\"readOnly\"\n      ng-model=\"data[component.key]\"\n      ng-required=\"isRequired(component)\"\n      custom-validator=\"component.validate.custom\"\n    >\n    <span ng-if=\"!(component.hideLabel && component.datagridLabel === false)\">{{ component.label | formioTranslate:null:builder }}</span>\n  </label>\n</div>\n<div ng-if=\"!!component.description\" class=\"help-block\">\n  <span>{{ component.description }}</span>\n</div>\n"
       );
     }
   ]);
 };
 
-},{}],203:[function(_dereq_,module,exports){
+},{}],205:[function(_dereq_,module,exports){
 "use strict";
+
+var GridUtils = _dereq_('../factories/GridUtils')();
 
 module.exports = function(app) {
   app.config([
@@ -75631,10 +77004,43 @@ module.exports = function(app) {
         group: 'layout',
         settings: {
           input: false,
+          tableView: true,
           key: 'columns',
           columns: [{components: []}, {components: []}]
         },
-        viewTemplate: 'formio/componentsView/columns.html'
+        viewTemplate: 'formio/componentsView/columns.html',
+        tableView: function(data, component, $interpolate, componentInfo, tableChild) {
+          var view = '<table class="table table-striped table-bordered table-child">';
+          if (!tableChild) {
+            view += '<thead><tr>';
+          }
+
+          var maxRows = 0;
+          angular.forEach(component.columns, function(column, index) {
+            // Get the maximum number of rows based on the number of components.
+            maxRows = Math.max(maxRows, (column.components.length || 0));
+
+            if (!tableChild) {
+              // Add a header for each column.
+              view += '<th>Column ' + (index + 1) + ' (' + component.key + ')</th>';
+            }
+          });
+
+          if (!tableChild) {
+            view += '</tr></thead>';
+          }
+
+          view += '<tbody>';
+          for (var index = 0; index < maxRows; index++) {
+            view += '<tr>';
+            for (var col = 0; col < component.columns.length; col++) {
+              view += GridUtils.columnForComponent(data, component.columns[col].components[index] || undefined, $interpolate, componentInfo, true);
+            }
+            view += '</tr>';
+          }
+          view += '</tbody></table>';
+          return view;
+        }
       });
     }
   ]);
@@ -75652,7 +77058,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],204:[function(_dereq_,module,exports){
+},{"../factories/GridUtils":248}],206:[function(_dereq_,module,exports){
 "use strict";
 module.exports = function(app) {
   app.provider('formioComponents', function() {
@@ -75712,9 +77118,10 @@ module.exports = function(app) {
   }]);
 };
 
-},{}],205:[function(_dereq_,module,exports){
+},{}],207:[function(_dereq_,module,exports){
 "use strict";
 
+var GridUtils = _dereq_('../factories/GridUtils')();
 
 module.exports = function(app) {
   app.config([
@@ -75726,38 +77133,22 @@ module.exports = function(app) {
         viewTemplate: 'formio/componentsView/container.html',
         group: 'advanced',
         icon: 'fa fa-folder-open',
-        tableView: function(data, component, $interpolate, componentInfo) {
-          var view = '<table class="table table-striped table-bordered"><thead><tr>';
-          angular.forEach(component.components, function(component) {
-            view += '<th>' + component.label + '</th>';
-          });
-          view += '</tr></thead>';
-          view += '<tbody>';
-          view += '<tr>';
-          angular.forEach(component.components, function(component) {
-            var info = componentInfo.components.hasOwnProperty(component.type) ? componentInfo.components[component.type] : {};
-            if (info.tableView) {
-              view += '<td>' +
-                info.tableView(
-                  data && component.key && data.hasOwnProperty(component.key) ? data[component.key] : '',
-                  component,
-                  $interpolate,
-                  componentInfo
-                ) + '</td>';
-              return;
-            }
+        tableView: function(data, component, $interpolate, componentInfo, tableChild) {
+          var view = '<table class="table table-striped table-bordered table-child">';
 
-            view += '<td>';
-            if (component.prefix) {
-              view += component.prefix;
-            }
-            view += data && component.key && data.hasOwnProperty(component.key) ? data[component.key] : '';
-            if (component.suffix) {
-              view += ' ' + component.suffix;
-            }
-            view += '</td>';
+          if (!tableChild) {
+            view += '<thead><tr>';
+            view += '<th>' + (component.label || '') + ' (' + component.key + ')</th>';
+            view += '</tr></thead>';
+          }
+
+          view += '<tbody>';
+
+          // Render a value for each column item.
+          angular.forEach(component.components, function(component) {
+            view += '<tr>' + GridUtils.columnForComponent(data, component, $interpolate, componentInfo, true) + '</tr>';
           });
-          view += '</tr>';
+
           view += '</tbody></table>';
           return view;
         },
@@ -75793,7 +77184,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],206:[function(_dereq_,module,exports){
+},{"../factories/GridUtils":248}],208:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -75822,7 +77213,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],207:[function(_dereq_,module,exports){
+},{}],209:[function(_dereq_,module,exports){
 "use strict";
 
 
@@ -75905,6 +77296,7 @@ module.exports = function(app) {
           defaultValue: '',
           protected: false,
           persistent: true,
+          hidden: false,
           clearOnHide: true,
           validate: {
             required: false,
@@ -75932,7 +77324,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],208:[function(_dereq_,module,exports){
+},{}],210:[function(_dereq_,module,exports){
 "use strict";
 
 var GridUtils = _dereq_('../factories/GridUtils')();
@@ -75960,8 +77352,10 @@ module.exports = function(app) {
   ]);
 };
 
-},{"../factories/GridUtils":246}],209:[function(_dereq_,module,exports){
+},{"../factories/GridUtils":248}],211:[function(_dereq_,module,exports){
 "use strict";
+
+var formioUtils = _dereq_('formiojs/utils');
 
 module.exports = function(app) {
   app.config([
@@ -75971,19 +77365,31 @@ module.exports = function(app) {
         title: 'Data Grid',
         template: 'formio/components/datagrid.html',
         group: 'advanced',
-        tableView: function(data, component, $interpolate, componentInfo) {
-          var view = '<table class="table table-striped table-bordered"><thead><tr>';
-          angular.forEach(component.components, function(component) {
-            view += '<th>' + component.label + '</th>';
-          });
-          view += '</tr></thead>';
+        tableView: function(data, component, $interpolate, componentInfo, tableChild) {
+          var view = '<table class="table table-striped table-bordered table-child">';
+
+          if (!tableChild) {
+            view += '<thead><tr>';
+            angular.forEach(component.components, function(component) {
+              view += '<th>' + (component.label || '') + ' (' + component.key + ')</th>';
+            });
+            view += '</tr></thead>';
+          }
+
           view += '<tbody>';
           angular.forEach(data, function(row) {
             view += '<tr>';
-            angular.forEach(component.components, function(component) {
+            formioUtils.eachComponent(component.components, function(component) {
+              // Don't render disabled fields, or fields with undefined data.
+              if (!component.tableView || row[component.key] === undefined) {
+                return;
+              }
+
+              // If the component has a defined tableView, use that, otherwise try and use the raw data as a string.
               var info = componentInfo.components.hasOwnProperty(component.type) ? componentInfo.components[component.type] : {};
               if (info.tableView) {
-                view += '<td>' + info.tableView(row[component.key] || '', component, $interpolate, componentInfo) + '</td>';
+                // Reset the tableChild value for datagrids, so that components have headers.
+                view += '<td>' + info.tableView(row[component.key] || '', component, $interpolate, componentInfo, false) + '</td>';
               }
               else {
                 view += '<td>';
@@ -76011,6 +77417,7 @@ module.exports = function(app) {
           key: 'datagrid',
           protected: false,
           persistent: true,
+          hidden: false,
           clearOnHide: true
         }
       });
@@ -76078,7 +77485,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],210:[function(_dereq_,module,exports){
+},{"formiojs/utils":33}],212:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -76093,8 +77500,6 @@ module.exports = function(app) {
         },
         group: 'advanced',
         controller: ['$scope', '$timeout', function($scope, $timeout) {
-          if ($scope.builder) return;
-
           // Close calendar pop up when tabbing off button
           $scope.onKeyDown = function(event) {
             return event.keyCode === 9 ? false : $scope.calendarOpen;
@@ -76128,36 +77533,57 @@ module.exports = function(app) {
           };
 
           // Ensure the date value is always a date object when loaded, then unbind the watch.
-          var loadComplete = $scope.$watch('data.' + $scope.component.key, function() {
-            if (!$scope.data) {
-              return;
-            }
-            var valueSet = !!$scope.data[$scope.component.key];
+          $scope.$watch('data.' + $scope.component.key, function() {
             var newValue = dateValue();
             if (newValue) {
               $scope.data[$scope.component.key] = newValue;
             }
-            if (valueSet) {
-              loadComplete();
+          });
+
+          // Watch for changes to the meridian settings to synchronize the submissionGrid and component view.
+          $scope.$watch('component.timePicker.showMeridian', function(update) {
+            // Remove any meridian reference, because were not in 12 hr.
+            if (!$scope.component.enableTime || !update) {
+              $scope.component.format = $scope.component.format.replace(/ a/, '');
+              return;
+            }
+
+            // If we're missing the meridian string and were in 12 hr, add it.
+            if (update && $scope.component.format.indexOf(' a') === -1) {
+              $scope.component.format += ' a';
             }
           });
 
-          // If they have 12 hour time enabled, we need to ensure that we see the meridian in the format.
-          if (
-            $scope.component.enableTime &&
-            $scope.component.timePicker &&
-            $scope.component.timePicker.showMeridian &&
-            ($scope.component.format.indexOf('mm') !== -1) &&
-            ($scope.component.format.indexOf('a') === -1)
-          ) {
-            $scope.component.format += ' a';
+          if (!$scope.component.datePicker.maxDate) {
+            delete $scope.component.datePicker.maxDate;
+          }
+          else {
+            var maxDate = new Date($scope.component.datePicker.maxDate);
+            $scope.component.datePicker.maxDate = new Date(
+              maxDate.getUTCFullYear(),
+              maxDate.getUTCMonth(),
+              maxDate.getUTCDate(),
+              23,
+              59,
+              59,
+              999
+            );
           }
 
-          if (!$scope.component.maxDate) {
-            delete $scope.component.maxDate;
+          if (!$scope.component.datePicker.minDate) {
+            delete $scope.component.datePicker.minDate;
           }
-          if (!$scope.component.minDate) {
-            delete $scope.component.minDate;
+          else {
+            var minDate = new Date($scope.component.datePicker.minDate);
+            $scope.component.datePicker.minDate = new Date(
+              minDate.getUTCFullYear(),
+              minDate.getUTCMonth(),
+              minDate.getUTCDate(),
+              0,
+              0,
+              0,
+              0
+            );
           }
 
           $scope.autoOpen = true;
@@ -76178,8 +77604,6 @@ module.exports = function(app) {
           enableDate: true,
           enableTime: true,
           defaultDate: '',
-          minDate: null,
-          maxDate: null,
           datepickerMode: 'day',
           datePicker: {
             showWeeks: true,
@@ -76187,7 +77611,10 @@ module.exports = function(app) {
             initDate: '',
             minMode: 'day',
             maxMode: 'year',
-            yearRange: '20'
+            yearRows: 4,
+            yearColumns: 5,
+            minDate: null,
+            maxDate: null
           },
           timePicker: {
             hourStep: 1,
@@ -76199,6 +77626,7 @@ module.exports = function(app) {
           },
           protected: false,
           persistent: true,
+          hidden: false,
           clearOnHide: true,
           validate: {
             required: false,
@@ -76213,13 +77641,13 @@ module.exports = function(app) {
     'FormioUtils',
     function($templateCache, FormioUtils) {
       $templateCache.put('formio/components/datetime.html', FormioUtils.fieldWrap(
-        "<div class=\"input-group\">\n  <input\n    type=\"text\"\n    class=\"form-control\"\n    name=\"{{ componentId }}\"\n    id=\"{{ componentId }}\"\n    ng-focus=\"calendarOpen = autoOpen\"\n    ng-click=\"calendarOpen = true\"\n    ng-init=\"calendarOpen = false\"\n    ng-disabled=\"readOnly\"\n    ng-required=\"isRequired(component)\"\n    is-open=\"calendarOpen\"\n    datetime-picker=\"{{ component.format }}\"\n    min-date=\"component.minDate\"\n    max-date=\"component.maxDate\"\n    datepicker-mode=\"component.datepickerMode\"\n    when-closed=\"onClosed()\"\n    custom-validator=\"component.validate.custom\"\n    enable-date=\"component.enableDate\"\n    enable-time=\"component.enableTime\"\n    ng-model=\"data[component.key]\"\n    tabindex=\"{{ component.tabindex || 0 }}\"\n    ng-attr-placeholder=\"{{ component.placeholder | formioTranslate:null:builder }}\"\n    datepicker-options=\"component.datePicker\"\n    timepicker-options=\"component.timePicker\"\n  />\n  <span class=\"input-group-btn\">\n    <button type=\"button\" ng-disabled=\"readOnly\" class=\"btn btn-default\" ng-click=\"calendarOpen = true\" ng-keydown=\"calendarOpen = onKeyDown($event)\">\n      <i ng-if=\"component.enableDate\" class=\"glyphicon glyphicon-calendar\"></i>\n      <i ng-if=\"!component.enableDate\" class=\"glyphicon glyphicon-time\"></i>\n    </button>\n  </span>\n</div>\n"
+        "<div class=\"input-group\">\n  <input\n    type=\"text\"\n    class=\"form-control\"\n    name=\"{{ componentId }}\"\n    id=\"{{ componentId }}\"\n    ng-focus=\"calendarOpen = autoOpen\"\n    ng-click=\"calendarOpen = true\"\n    ng-init=\"calendarOpen = false\"\n    ng-disabled=\"readOnly\"\n    ng-required=\"isRequired(component)\"\n    is-open=\"calendarOpen\"\n    datetime-picker=\"{{ component.format }}\"\n    datepicker-mode=\"component.datepickerMode\"\n    when-closed=\"onClosed()\"\n    custom-validator=\"component.validate.custom\"\n    enable-date=\"component.enableDate\"\n    enable-time=\"component.enableTime\"\n    ng-model=\"data[component.key]\"\n    tabindex=\"{{ component.tabindex || 0 }}\"\n    ng-attr-placeholder=\"{{ component.placeholder | formioTranslate:null:builder }}\"\n    datepicker-options=\"component.datePicker\"\n    timepicker-options=\"component.timePicker\"\n  />\n  <span class=\"input-group-btn\">\n    <button type=\"button\" ng-disabled=\"readOnly\" class=\"btn btn-default\" ng-click=\"calendarOpen = true\" ng-keydown=\"calendarOpen = onKeyDown($event)\">\n      <i ng-if=\"component.enableDate\" class=\"glyphicon glyphicon-calendar\"></i>\n      <i ng-if=\"!component.enableDate\" class=\"glyphicon glyphicon-time\"></i>\n    </button>\n  </span>\n</div>\n"
       ));
     }
   ]);
 };
 
-},{}],211:[function(_dereq_,module,exports){
+},{}],213:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -76397,6 +77825,7 @@ module.exports = function(app) {
           dayFirst: false,
           protected: false,
           persistent: true,
+          hidden: false,
           clearOnHide: true,
           validate: {
             custom: ''
@@ -76419,7 +77848,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],212:[function(_dereq_,module,exports){
+},{}],214:[function(_dereq_,module,exports){
 "use strict";
 module.exports = function(app) {
   app.config([
@@ -76442,6 +77871,7 @@ module.exports = function(app) {
           protected: false,
           unique: false,
           persistent: true,
+          hidden: false,
           clearOnHide: true,
           kickbox: {
             enabled: false
@@ -76452,8 +77882,10 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],213:[function(_dereq_,module,exports){
+},{}],215:[function(_dereq_,module,exports){
 "use strict";
+
+var GridUtils = _dereq_('../factories/GridUtils')();
 
 module.exports = function(app) {
   app.config([
@@ -76470,7 +77902,23 @@ module.exports = function(app) {
           legend: '',
           components: []
         },
-        viewTemplate: 'formio/componentsView/fieldset.html'
+        viewTemplate: 'formio/componentsView/fieldset.html',
+        tableView: function(data, component, $interpolate, componentInfo, tableChild) {
+          var view = '<table class="table table-striped table-bordered table-child">';
+
+          if (!tableChild) {
+            view += '<thead><tr>';
+            view += '<th>Field Set (' + component.key + ')</th>';
+            view += '</tr></thead>';
+          }
+          view += '<tbody>';
+          angular.forEach(component.components, function(component) {
+            view += '<tr>' + GridUtils.columnForComponent(data, component, $interpolate, componentInfo, true) + '</tr>';
+          });
+
+          view += '</tbody></table>';
+          return view;
+        }
       });
     }
   ]);
@@ -76488,7 +77936,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],214:[function(_dereq_,module,exports){
+},{"../factories/GridUtils":248}],216:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -76511,6 +77959,7 @@ module.exports = function(app) {
           defaultValue: '',
           protected: false,
           persistent: true,
+          hidden: false,
           clearOnHide: true
         },
         viewTemplate: 'formio/componentsView/file.html'
@@ -76751,7 +78200,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],215:[function(_dereq_,module,exports){
+},{}],217:[function(_dereq_,module,exports){
 "use strict";
 
 var GridUtils = _dereq_('../factories/GridUtils')();
@@ -76787,7 +78236,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{"../factories/GridUtils":246}],216:[function(_dereq_,module,exports){
+},{"../factories/GridUtils":248}],218:[function(_dereq_,module,exports){
 "use strict";
 
 
@@ -76879,7 +78328,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],217:[function(_dereq_,module,exports){
+},{}],219:[function(_dereq_,module,exports){
 "use strict";
 var app = angular.module('formio');
 
@@ -76921,7 +78370,7 @@ _dereq_('./panel')(app);
 _dereq_('./table')(app);
 _dereq_('./well')(app);
 
-},{"./address":200,"./button":201,"./checkbox":202,"./columns":203,"./components":204,"./container":205,"./content":206,"./currency":207,"./custom":208,"./datagrid":209,"./datetime":210,"./day":211,"./email":212,"./fieldset":213,"./file":214,"./hidden":215,"./htmlelement":216,"./number":218,"./page":219,"./panel":220,"./password":221,"./phonenumber":222,"./radio":223,"./resource":224,"./select":225,"./selectboxes":226,"./signature":227,"./survey":228,"./table":229,"./textarea":230,"./textfield":231,"./well":232}],218:[function(_dereq_,module,exports){
+},{"./address":202,"./button":203,"./checkbox":204,"./columns":205,"./components":206,"./container":207,"./content":208,"./currency":209,"./custom":210,"./datagrid":211,"./datetime":212,"./day":213,"./email":214,"./fieldset":215,"./file":216,"./hidden":217,"./htmlelement":218,"./number":220,"./page":221,"./panel":222,"./password":223,"./phonenumber":224,"./radio":225,"./resource":226,"./select":227,"./selectboxes":228,"./signature":229,"./survey":230,"./table":231,"./textarea":232,"./textfield":233,"./well":234}],220:[function(_dereq_,module,exports){
 "use strict";
 
 
@@ -76947,6 +78396,7 @@ module.exports = function(app) {
           defaultValue: '',
           protected: false,
           persistent: true,
+          hidden: false,
           clearOnHide: true,
           validate: {
             required: false,
@@ -76985,7 +78435,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],219:[function(_dereq_,module,exports){
+},{}],221:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -77012,7 +78462,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],220:[function(_dereq_,module,exports){
+},{}],222:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -77048,7 +78498,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],221:[function(_dereq_,module,exports){
+},{}],223:[function(_dereq_,module,exports){
 "use strict";
 module.exports = function(app) {
   app.config([
@@ -77071,6 +78521,7 @@ module.exports = function(app) {
           suffix: '',
           protected: true,
           persistent: true,
+          hidden: false,
           clearOnHide: true
         }
       });
@@ -77078,7 +78529,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],222:[function(_dereq_,module,exports){
+},{}],224:[function(_dereq_,module,exports){
 "use strict";
 module.exports = function(app) {
   app.config([
@@ -77101,6 +78552,7 @@ module.exports = function(app) {
           protected: false,
           unique: false,
           persistent: true,
+          hidden: false,
           defaultValue: '',
           clearOnHide: true,
           validate: {
@@ -77112,7 +78564,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],223:[function(_dereq_,module,exports){
+},{}],225:[function(_dereq_,module,exports){
 "use strict";
 
 
@@ -77141,6 +78593,7 @@ module.exports = function(app) {
           defaultValue: '',
           protected: false,
           persistent: true,
+          hidden: false,
           clearOnHide: true,
           validate: {
             required: false,
@@ -77162,7 +78615,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],224:[function(_dereq_,module,exports){
+},{}],226:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -77181,7 +78634,7 @@ module.exports = function(app) {
         template: function($scope) {
           return $scope.component.multiple ? 'formio/components/resource-multiple.html' : 'formio/components/resource.html';
         },
-        controller: ['$scope', 'Formio', function($scope, Formio) {
+        controller: ['$scope', 'Formio', 'ngDialog', function($scope, Formio, ngDialog) {
           if ($scope.builder) return;
           var settings = $scope.component;
           var params = settings.params || {};
@@ -77246,6 +78699,65 @@ module.exports = function(app) {
             };
 
             $scope.refreshSubmissions();
+
+            // Add a new resource.
+            $scope.newResource = function() {
+              var template  = '<br>' +
+                              '<div class="row">' +
+                                '<div class="col-sm-12">' +
+                                  '<div class="panel panel-default">' +
+                                    '<div class="panel-heading">' +
+                                      '<h3 class="panel-title">{{ component.addResourceLabel || "Add Resource" | formioTranslate}}</h3>' +
+                                    '</div>' +
+                                    '<div class="panel-body">' +
+                                      '<formio src="formUrl"></formio>' +
+                                    '</div>' +
+                                  '</div>' +
+                                '</div>' +
+                              '</div>';
+
+              ngDialog.open({
+                template: template,
+                plain: true,
+                scope: $scope,
+                controller: ['$scope', function($scope) {
+                  $scope.formUrl = $scope.formio.formsUrl + '/' + $scope.component.resource;
+
+                  // Bind when the form is loaded.
+                  $scope.$on('formLoad', function(event) {
+                    event.stopPropagation(); // Don't confuse app
+                  });
+
+                  // Bind when the form is submitted.
+                  $scope.$on('formSubmission', function(event, submission) {
+                    var component = $scope.component;
+                    var data      = $scope.data;
+
+                    if (component.multiple) {
+                      data[component.key].push(submission);
+                    }
+                    else {
+                      data[component.key] = submission;
+                    }
+
+                    $scope.refreshSubmissions();
+                    $scope.closeThisDialog(submission);
+                  });
+                }]
+              }).closePromise.then(function(/*e*/) {
+              //var cancelled = e.value === false || e.value === '$closeButton' || e.value === '$document';
+              });
+            };
+
+            // Close all open dialogs on state change (using UI-Router).
+            $scope.$on('$stateChangeStart', function() {
+              ngDialog.closeAll(false);
+            });
+
+            // Close all open dialogs on route change (using ngRoute).
+            $scope.$on('$routeChangeStart', function() {
+              ngDialog.closeAll(false);
+            });
           }
         }],
         group: 'advanced',
@@ -77264,6 +78776,7 @@ module.exports = function(app) {
           multiple: false,
           protected: false,
           persistent: true,
+          hidden: false,
           clearOnHide: true,
           validate: {
             required: false
@@ -77278,18 +78791,18 @@ module.exports = function(app) {
     '$templateCache',
     function($templateCache) {
       $templateCache.put('formio/components/resource.html',
-        "<label ng-if=\"component.label && !component.hideLabel\" for=\"{{ componentId }}\" class=\"control-label\" ng-class=\"{'field-required': isRequired(component)}\">{{ component.label | formioTranslate:null:builder }}</label>\n<span ng-if=\"!component.label && isRequired(component)\" class=\"glyphicon glyphicon-asterisk form-control-feedback field-required-inline\" aria-hidden=\"true\"></span>\n<ui-select ui-select-required safe-multiple-to-single ui-select-open-on-focus ng-model=\"data[component.key]\" ng-disabled=\"readOnly\" ng-required=\"isRequired(component)\" id=\"{{ componentId }}\" name=\"{{ componentId }}\" theme=\"bootstrap\" tabindex=\"{{ component.tabindex || 0 }}\">\n  <ui-select-match class=\"ui-select-match\" placeholder=\"{{ component.placeholder | formioTranslate:null:builder }}\">\n    <formio-select-item template=\"component.template\" item=\"$item || $select.selected\" select=\"$select\"></formio-select-item>\n  </ui-select-match>\n  <ui-select-choices class=\"ui-select-choices\" repeat=\"item in selectItems | filter: $select.search\" refresh=\"refreshSubmissions($select.search)\" refresh-delay=\"250\">\n    <formio-select-item template=\"component.template\" item=\"item\" select=\"$select\"></formio-select-item>\n    <button ng-if=\"hasNextPage && ($index == $select.items.length-1)\" class=\"btn btn-success btn-block\" ng-click=\"loadMoreItems($select, $event)\" ng-disabled=\"resourceLoading\">Load more...</button>\n  </ui-select-choices>\n</ui-select>\n<formio-errors ng-if=\"::!builder\"></formio-errors>\n"
+        "<div ng-if=\"!component.addResource\">\n  <label ng-if=\"component.label && !component.hideLabel\" for=\"{{ componentId }}\" class=\"control-label\" ng-class=\"{'field-required': isRequired(component)}\">{{ component.label | formioTranslate:null:builder }}</label>\n  <span ng-if=\"!component.label && isRequired(component)\" class=\"glyphicon glyphicon-asterisk form-control-feedback field-required-inline\" aria-hidden=\"true\"></span>\n  <ui-select ui-select-required safe-multiple-to-single ui-select-open-on-focus ng-model=\"data[component.key]\" ng-disabled=\"readOnly\" ng-required=\"isRequired(component)\" id=\"{{ componentId }}\" name=\"{{ componentId }}\" theme=\"bootstrap\" tabindex=\"{{ component.tabindex || 0 }}\">\n    <ui-select-match class=\"ui-select-match\" placeholder=\"{{ component.placeholder | formioTranslate:null:builder }}\">\n      <formio-select-item template=\"component.template\" item=\"$item || $select.selected\" select=\"$select\"></formio-select-item>\n    </ui-select-match>\n    <ui-select-choices class=\"ui-select-choices\" repeat=\"item in selectItems | filter: $select.search\" refresh=\"refreshSubmissions($select.search)\" refresh-delay=\"250\">\n      <formio-select-item template=\"component.template\" item=\"item\" select=\"$select\"></formio-select-item>\n      <button ng-if=\"hasNextPage && ($index == $select.items.length-1)\" class=\"btn btn-success btn-block\" ng-click=\"loadMoreItems($select, $event)\" ng-disabled=\"resourceLoading\">Load more...</button>\n    </ui-select-choices>\n  </ui-select>\n  <formio-errors ng-if=\"::!builder\"></formio-errors>\n</div>\n<div ng-if=\"component.addResource\">\n  <table class=\"table table-bordered\">\n    <label ng-if=\"component.label && !component.hideLabel\" for=\"{{ componentId }}\" class=\"control-label\" ng-class=\"{'field-required': isRequired(component)}\">{{ component.label | formioTranslate:null:builder }}</label>\n    <span ng-if=\"!component.label && isRequired(component)\" class=\"glyphicon glyphicon-asterisk form-control-feedback field-required-inline\" aria-hidden=\"true\"></span>\n    <tr>\n      <td>\n        <ui-select ui-select-required safe-multiple-to-single ui-select-open-on-focus ng-model=\"data[component.key]\" ng-disabled=\"readOnly\" ng-required=\"isRequired(component)\" id=\"{{ componentId }}\" name=\"{{ componentId }}\" theme=\"bootstrap\" tabindex=\"{{ component.tabindex || 0 }}\">\n          <ui-select-match class=\"ui-select-match\" placeholder=\"{{ component.placeholder | formioTranslate:null:builder }}\">\n            <formio-select-item template=\"component.template\" item=\"$item || $select.selected\" select=\"$select\"></formio-select-item>\n          </ui-select-match>\n          <ui-select-choices class=\"ui-select-choices\" repeat=\"item in selectItems | filter: $select.search\" refresh=\"refreshSubmissions($select.search)\" refresh-delay=\"250\">\n            <formio-select-item template=\"component.template\" item=\"item\" select=\"$select\"></formio-select-item>\n            <button ng-if=\"hasNextPage && ($index == $select.items.length-1)\" class=\"btn btn-success btn-block\" ng-click=\"loadMoreItems($select, $event)\" ng-disabled=\"resourceLoading\">Load more...</button>\n          </ui-select-choices>\n        </ui-select>\n        <formio-errors ng-if=\"::!builder\"></formio-errors>\n      </td>\n    </tr>\n    <tr>\n      <td>\n        <a ng-click=\"newResource()\" class=\"btn btn-primary\">\n          <span class=\"glyphicon glyphicon-plus\" aria-hidden=\"true\"></span> {{ component.addResourceLabel || \"Add Resource\" | formioTranslate:null:builder}}\n        </a>\n      </td>\n    </tr>\n  </table>\n</div>\n"
       );
 
       // Change the ui-select to ui-select multiple.
       $templateCache.put('formio/components/resource-multiple.html',
-        $templateCache.get('formio/components/resource.html').replace('<ui-select', '<ui-select multiple')
+        $templateCache.get('formio/components/resource.html').replace(/<ui-select\s/g, '<ui-select multiple ')
       );
     }
   ]);
 };
 
-},{}],225:[function(_dereq_,module,exports){
+},{}],227:[function(_dereq_,module,exports){
 "use strict";
 /*eslint max-depth: ["error", 6]*/
 
@@ -77567,6 +79080,7 @@ module.exports = function(app) {
               });
             }
 
+            var lastInput;
             switch (settings.dataSrc) {
               case 'values':
                 $scope.selectItems = settings.data.values;
@@ -77630,7 +79144,6 @@ module.exports = function(app) {
                   skip: 0
                 };
 
-                var lastInput;
                 $scope.refreshItems = function(input, url, append) {
                   // If they typed in a search, reset skip.
                   if (lastInput !== input) {
@@ -77717,10 +79230,11 @@ module.exports = function(app) {
                 if (url) {
                   $scope.hasNextPage = true;
                   $scope.refreshItems = function(input, newUrl, append) {
-                    if (!input) {
+                    if (input === lastInput) {
                       return;
                     }
 
+                    lastInput = input;
                     newUrl = newUrl || url;
                     newUrl = $interpolate(newUrl)({
                       data: $scope.data,
@@ -77832,6 +79346,7 @@ module.exports = function(app) {
           protected: false,
           unique: false,
           persistent: true,
+          hidden: false,
           clearOnHide: true,
           validate: {
             required: false
@@ -77855,7 +79370,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{"lodash/cloneDeep":167,"lodash/get":170,"lodash/isEqual":177,"lodash/set":188}],226:[function(_dereq_,module,exports){
+},{"lodash/cloneDeep":168,"lodash/get":171,"lodash/isEqual":178,"lodash/set":189}],228:[function(_dereq_,module,exports){
 "use strict";
 
 
@@ -77940,6 +79455,7 @@ module.exports = function(app) {
           inline: false,
           protected: false,
           persistent: true,
+          hidden: false,
           clearOnHide: true,
           validate: {
             required: false
@@ -77962,7 +79478,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],227:[function(_dereq_,module,exports){
+},{}],229:[function(_dereq_,module,exports){
 "use strict";
 
 var SignaturePad = _dereq_('signature_pad');
@@ -77992,6 +79508,7 @@ module.exports = function(app) {
           maxWidth: '2.5',
           protected: false,
           persistent: true,
+          hidden: false,
           clearOnHide: true,
           validate: {
             required: false
@@ -78092,7 +79609,7 @@ module.exports = function(app) {
     function($templateCache,
               FormioUtils) {
       $templateCache.put('formio/components/signature.html', FormioUtils.fieldWrap(
-        "<div ng-if=\"readOnly\">\n  <div ng-if=\"data[component.key] === 'YES'\">\n    [ Signature is hidden ]\n  </div>\n  <div ng-if=\"data[component.key] !== 'YES'\">\n    <img class=\"signature\" ng-attr-src=\"{{data[component.key]}}\" src=\"\" />\n  </div>\n</div>\n<div ng-if=\"!readOnly\" style=\"width: {{ component.width }}; height: {{ component.height }};\">\n  <a class=\"btn btn-xs btn-default\" style=\"position:absolute; left: 0; top: 0; z-index: 1000\" ng-click=\"component.clearSignature()\">\n    <span class=\"glyphicon glyphicon-refresh\"></span>\n  </a>\n  <canvas signature component=\"component\" name=\"{{ componentId }}\" ng-model=\"data[component.key]\" ng-required=\"isRequired(component)\"></canvas>\n  <div class=\"formio-signature-footer\" style=\"text-align: center;color:#C3C3C3;\" ng-class=\"{'field-required': isRequired(component)}\">{{ component.footer | formioTranslate:null:builder }}</div>\n</div>\n"
+        "<div ng-if=\"readOnly\">\n  <div ng-if=\"data[component.key] === 'YES'\">\n    [ Signature is hidden ]\n  </div>\n  <div ng-if=\"data[component.key] !== 'YES'\">\n    <img class=\"signature\" ng-attr-src=\"{{data[component.key]}}\" src=\"\" />\n  </div>\n</div>\n<div ng-if=\"!readOnly\" style=\"width: {{ component.width }}; height: 100%\">\n  <a class=\"btn btn-xs btn-default\" style=\"position:absolute; left: 0; top: 0; z-index: 1000\" ng-click=\"component.clearSignature()\">\n    <span class=\"glyphicon glyphicon-refresh\"></span>\n  </a>\n  <canvas signature component=\"component\" name=\"{{ componentId }}\" ng-model=\"data[component.key]\" ng-required=\"isRequired(component)\"></canvas>\n  <div class=\"formio-signature-footer\" style=\"text-align: center;color:#C3C3C3;\" ng-class=\"{'field-required': isRequired(component)}\">{{ component.footer | formioTranslate:null:builder }}</div>\n</div>\n"
       ));
 
       $templateCache.put('formio/componentsView/signature.html', FormioUtils.fieldWrap(
@@ -78102,7 +79619,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{"signature_pad":197}],228:[function(_dereq_,module,exports){
+},{"signature_pad":199}],230:[function(_dereq_,module,exports){
 "use strict";
 
 
@@ -78129,24 +79646,6 @@ module.exports = function(app) {
           view += '</tbody></table>';
           return view;
         },
-        controller: ['$scope', '$timeout', function($scope, $timeout) {
-          // FOR-71
-          if ($scope.builder) return;
-          // @todo: Figure out why the survey values are not defaulting correctly.
-          var reset = false;
-          $scope.$watch('data.' + $scope.component.key, function(value) {
-            if (value && !reset) {
-              reset = true;
-              $scope.data[$scope.component.key] = {};
-              $timeout((function(value) {
-                return function() {
-                  $scope.data[$scope.component.key] = value;
-                  $timeout($scope.$apply.bind($scope));
-                };
-              })(value));
-            }
-          });
-        }],
         settings: {
           input: true,
           tableView: true,
@@ -78157,6 +79656,7 @@ module.exports = function(app) {
           defaultValue: '',
           protected: false,
           persistent: true,
+          hidden: false,
           clearOnHide: true,
           validate: {
             required: false,
@@ -78172,14 +79672,16 @@ module.exports = function(app) {
     'FormioUtils',
     function($templateCache, FormioUtils) {
       $templateCache.put('formio/components/survey.html', FormioUtils.fieldWrap(
-        "<table class=\"table table-striped table-bordered\">\n  <thead>\n    <tr>\n      <td></td>\n      <th ng-repeat=\"v in component.values track by $index\" style=\"text-align: center;\">{{ v.label }}</th>\n    </tr>\n  </thead>\n  <tr ng-repeat=\"question in component.questions\">\n    <td>{{ question.label }}</td>\n    <td ng-repeat=\"v in component.values\" style=\"text-align: center;\">\n      <input\n        type=\"radio\"\n        id=\"{{ componentId }}-{{ question.value }}-{{ v.value }}\" name=\"{{ componentId }}-{{ question.value }}\"\n        tabindex=\"{{ component.tabindex || 0 }}\"\n        value=\"{{ v.value }}\"\n        ng-model=\"data[component.key][question.value]\"\n        ng-required=\"isRequired(component)\"\n        ng-disabled=\"readOnly\"\n        custom-validator=\"component.validate.custom\"\n      >\n    </td>\n  </tr>\n</table>\n"
+        "<table class=\"table table-striped table-bordered\">\n  <thead>\n    <tr>\n      <td></td>\n      <th ng-repeat=\"v in component.values track by $index\" style=\"text-align: center;\">{{ v.label }}</th>\n    </tr>\n  </thead>\n  <tr ng-repeat=\"question in component.questions\">\n    <td>{{ question.label }}</td>\n    <td ng-repeat=\"v in component.values track by $index\" style=\"text-align: center;\">\n      <input\n        type=\"radio\"\n        id=\"{{ componentId }}-{{ question.value }}-{{ v.value }}\" name=\"{{ componentId }}-{{ question.value }}\"\n        tabindex=\"{{ component.tabindex || 0 }}\"\n        ng-value=\"v.value\"\n        ng-model=\"data[component.key][question.value]\"\n        ng-required=\"isRequired(component)\"\n        ng-disabled=\"readOnly\"\n        custom-validator=\"component.validate.custom\"\n      >\n    </td>\n  </tr>\n</table>\n"
       ));
     }
   ]);
 };
 
-},{}],229:[function(_dereq_,module,exports){
+},{}],231:[function(_dereq_,module,exports){
 "use strict";
+
+var GridUtils = _dereq_('../factories/GridUtils')();
 
 module.exports = function(app) {
   app.config([
@@ -78200,7 +79702,39 @@ module.exports = function(app) {
           striped: false,
           bordered: false,
           hover: false,
-          condensed: false
+          condensed: false,
+          tableView: true
+        },
+        tableView: function(data, component, $interpolate, componentInfo, tableChild) {
+          var view = '<table class="table table-striped table-bordered table-child">';
+
+          if (!tableChild) {
+            view += '<thead>';
+            view += '<tr><th>Table (' + component.key + ')</th></tr>';
+            view += '</thead>';
+          }
+
+          view += '<tbody>';
+
+          for (var row = 0; row < this.settings.numRows; row++) {
+            view += '<tr>';
+            for (var col = 0; col < this.settings.numCols; col++) {
+              view += '<td>';
+              // Each column is its own table.
+              view += '<table class="table table-striped table-bordered table-child">';
+              view += '<tbody>';
+              angular.forEach(component.rows[row][col].components, function(component) {
+                view += '<tr>' + GridUtils.columnForComponent(data, component, $interpolate, componentInfo) + '</tr>';
+              });
+
+              view += '</tbody></table>';
+              view += '</td>';
+            }
+            view += '</tr>';
+          }
+
+          view += '</tbody></table>';
+          return view;
         }
       });
     }
@@ -78223,7 +79757,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],230:[function(_dereq_,module,exports){
+},{"../factories/GridUtils":248}],232:[function(_dereq_,module,exports){
 "use strict";
 
 module.exports = function(app) {
@@ -78278,6 +79812,7 @@ module.exports = function(app) {
           defaultValue: '',
           protected: false,
           persistent: true,
+          hidden: false,
           wysiwyg: false,
           clearOnHide: true,
           validate: {
@@ -78306,7 +79841,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],231:[function(_dereq_,module,exports){
+},{}],233:[function(_dereq_,module,exports){
 "use strict";
 
 
@@ -78333,6 +79868,7 @@ module.exports = function(app) {
           protected: false,
           unique: false,
           persistent: true,
+          hidden: false,
           clearOnHide: true,
           validate: {
             required: false,
@@ -78366,8 +79902,10 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],232:[function(_dereq_,module,exports){
+},{}],234:[function(_dereq_,module,exports){
 "use strict";
+
+var GridUtils = _dereq_('../factories/GridUtils')();
 
 module.exports = function(app) {
   app.config([
@@ -78380,9 +79918,26 @@ module.exports = function(app) {
         settings: {
           key: 'well',
           input: false,
-          components: []
+          components: [],
+          tableView: true
         },
-        viewTemplate: 'formio/componentsView/well.html'
+        viewTemplate: 'formio/componentsView/well.html',
+        tableView: function(data, component, $interpolate, componentInfo, tableChild) {
+          var view = '<table class="table table-striped table-bordered table-child">';
+
+          if (!tableChild) {
+            view += '<thead><tr>';
+            view += '<th>Well (' + component.key + ')</th>';
+            view += '</tr></thead>';
+          }
+          view += '<tbody>';
+          angular.forEach(component.components, function(component) {
+            view += '<tr>' + GridUtils.columnForComponent(data, component, $interpolate, componentInfo, true) + '</tr>';
+          });
+
+          view += '</tbody></table>';
+          return view;
+        }
       });
     }
   ]);
@@ -78399,7 +79954,7 @@ module.exports = function(app) {
   ]);
 };
 
-},{}],233:[function(_dereq_,module,exports){
+},{"../factories/GridUtils":248}],235:[function(_dereq_,module,exports){
 "use strict";
 module.exports = function() {
   return {
@@ -78477,7 +80032,7 @@ module.exports = function() {
   };
 };
 
-},{}],234:[function(_dereq_,module,exports){
+},{}],236:[function(_dereq_,module,exports){
 "use strict";
 module.exports = function() {
   return {
@@ -78503,19 +80058,74 @@ module.exports = function() {
       'FormioScope',
       'Formio',
       'FormioUtils',
+      '$q',
       function(
         $scope,
         $http,
         $element,
         FormioScope,
         Formio,
-        FormioUtils
+        FormioUtils,
+        $q
       ) {
+        var iframeReady = $q.defer();
         $scope._src = $scope.src || '';
         $scope.formioAlerts = [];
+        $scope.iframeReady = false;
         // Shows the given alerts (single or array), and dismisses old alerts
         this.showAlerts = $scope.showAlerts = function(alerts) {
+          /* eslint-disable no-empty */
+          try {
+            alerts.message = (JSON.parse(alerts.message)).data;
+          }
+          catch (e) {}
+          /* eslint-enable no-empty */
+
           $scope.formioAlerts = [].concat(alerts);
+        };
+
+        $scope.getIframeSrc = function(pdf) {
+          var iframeSrc = pdf.src + '.html';
+          var params = [];
+          if ($scope.form.builder) {
+            params.push('builder=1');
+          }
+          if ($scope.readOnly) {
+            params.push('readonly=1');
+          }
+          if (params.length) {
+            iframeSrc += '?' + params.join('&');
+          }
+          return iframeSrc;
+        };
+
+        $scope.downloadUrl = '';
+
+        $scope.getPDFDownload = function(pdf) {
+          if (!$scope.formio) {
+            return;
+          }
+          var download = '';
+          if ($scope.formio && $scope.formio.submissionUrl) {
+            download = $scope.formio.submissionUrl;
+          }
+          else if ($scope.submission._id) {
+            download = Formio.baseUrl + '/project/' + $scope.form.project + '/';
+            download += '/form/' + $scope.form._id;
+            download += '/submission/' + $scope.submission._id;
+          }
+          if (!download) {
+            return;
+          }
+
+          download += '/download/' + pdf.id;
+          var allowedPath = download.replace(Formio.baseUrl, '');
+          allowedPath = allowedPath.replace(Formio.getProjectUrl(), '');
+          return $scope.formio.getTempToken(3600, 'GET:' + allowedPath).then(function(tempToken) {
+            download += '?token=' + tempToken.key;
+            $scope.downloadUrl = download;
+            return download;
+          });
         };
 
         // Add the live form parameter to the url.
@@ -78524,9 +80134,60 @@ module.exports = function() {
           $scope._src += 'live=1';
         }
 
-        var cancelFormLoadEvent = $scope.$on('formLoad', function() {
-          cancelFormLoadEvent();
+        var sendIframeMessage = function(message) {
+          iframeReady.promise.then(function(iframe) {
+            iframe.contentWindow.postMessage(JSON.stringify(message), '*');
+          });
+        };
+
+        $scope.$on('iframe-ready', function() {
+          $scope.iframeReady = true;
+          var iframe = $element.find('.formio-iframe')[0];
+          if (iframe) {
+            iframeReady.resolve(iframe);
+            if ($scope.form) {
+              sendIframeMessage({name: 'form', data: $scope.form});
+            }
+            if ($scope.submission) {
+              sendIframeMessage({name: 'submission', data: $scope.submission});
+            }
+          }
         });
+
+        $scope.$on('iframeMessage', function(event, message) {
+          sendIframeMessage(message);
+        });
+
+        var cancelFormLoadEvent = $scope.$on('formLoad', function(event, form) {
+          cancelFormLoadEvent();
+          iframeReady.promise.then(function() {
+            $scope.getPDFDownload(form.settings.pdf);
+          });
+          sendIframeMessage({name: 'form', data: form});
+        });
+
+        $scope.$on('submissionLoad', function(event, submission) {
+          submission.editable = !$scope.readOnly;
+          sendIframeMessage({name: 'submission', data: submission});
+        });
+
+        // Submit the form from the iframe.
+        $scope.$on('iframe-submission', function(event, submission) {
+          $scope.submitForm(submission);
+        });
+
+        // Called from the submit on iframe.
+        $scope.submitIFrameForm = function() {
+          sendIframeMessage({name: 'getSubmission'});
+        };
+
+        $scope.zoomIn = function() {
+          sendIframeMessage({name: 'zoomIn'});
+        };
+
+        $scope.zoomOut = function() {
+          sendIframeMessage({name: 'zoomOut'});
+        };
 
         // FOR-71
         if (!$scope._src && !$scope.builder) {
@@ -78568,6 +80229,69 @@ module.exports = function() {
             $scope.submission ? $scope.submission.data : null,
             $scope.hideComponents
           );
+        };
+
+        // Show the submit message and say the form is no longer submitting.
+        var onSubmit = function(submission, message, form) {
+          if (message) {
+            $scope.showAlerts({
+              type: 'success',
+              message: message
+            });
+          }
+          if (form) {
+            form.submitting = false;
+          }
+        };
+
+        // Called when a submission has been made.
+        var onSubmitDone = function(method, submission, form) {
+          var message = '';
+          if ($scope.options && $scope.options.submitMessage) {
+            message = $scope.options.submitMessage;
+          }
+          else {
+            message = 'Submission was ' + ((method === 'put') ? 'updated' : 'created') + '.';
+          }
+          onSubmit(submission, message, form);
+          // Trigger the form submission.
+          $scope.$emit('formSubmission', submission);
+        };
+
+        $scope.submitForm = function(submissionData, form) {
+          // Allow custom action urls.
+          if ($scope.action) {
+            var method = submissionData._id ? 'put' : 'post';
+            var action = $scope.action;
+            // Add the action Id if it is not already part of the url.
+            if (method === 'put' && (action.indexOf(submissionData._id) === -1)) {
+              action += '/' + submissionData._id;
+            }
+            $http[method](action, submissionData).then(function(response) {
+              Formio.clearCache();
+              onSubmitDone(method, response.data, form);
+            }, FormioScope.onError($scope, $element))
+              .finally(function() {
+                if (form) {
+                  form.submitting = false;
+                }
+              });
+          }
+
+          // If they wish to submit to the default location.
+          else if ($scope.formio && !$scope.formio.noSubmit) {
+            // copy to remove angular $$hashKey
+            $scope.formio.saveSubmission(submissionData, $scope.formioOptions).then(function(submission) {
+              onSubmitDone(submission.method, submission, form);
+            }, FormioScope.onError($scope, $element)).finally(function() {
+              if (form) {
+                form.submitting = false;
+              }
+            });
+          }
+          else {
+            $scope.$emit('formSubmission', submissionData);
+          }
         };
 
         $scope.isDisabled = function(component) {
@@ -78670,34 +80394,9 @@ module.exports = function() {
             }
           });
 
-          // Show the submit message and say the form is no longer submitting.
-          var onSubmit = function(submission, message) {
-            if (message) {
-              $scope.showAlerts({
-                type: 'success',
-                message: message
-              });
-            }
-            form.submitting = false;
-          };
-
-          // Called when a submission has been made.
-          var onSubmitDone = function(method, submission) {
-            var message = '';
-            if ($scope.options && $scope.options.submitMessage) {
-              message = $scope.options.submitMessage;
-            }
-            else {
-              message = 'Submission was ' + ((method === 'put') ? 'updated' : 'created') + '.';
-            }
-            onSubmit(submission, message);
-            // Trigger the form submission.
-            $scope.$emit('formSubmission', submission);
-          };
-
           // Allow the form to be completed externally.
           $scope.$on('submitDone', function(event, submission, message) {
-            onSubmit(submission, message);
+            onSubmit(submission, message, form);
           });
 
           // Allow an error to be thrown externally.
@@ -78714,36 +80413,7 @@ module.exports = function() {
 
           // Make sure to make a copy of the submission data to remove bad characters.
           submissionData = angular.copy(submissionData);
-
-          // Allow custom action urls.
-          if ($scope.action) {
-            var method = submissionData._id ? 'put' : 'post';
-            var action = $scope.action;
-            // Add the action Id if it is not already part of the url.
-            if (method === 'put' && (action.indexOf(submissionData._id) === -1)) {
-              action += '/' + submissionData._id;
-            }
-            $http[method](action, submissionData).then(function(response) {
-              Formio.clearCache();
-              onSubmitDone(method, response.data);
-            }, FormioScope.onError($scope, $element))
-              .finally(function() {
-                form.submitting = false;
-              });
-          }
-
-          // If they wish to submit to the default location.
-          else if ($scope.formio && !$scope.formio.noSubmit) {
-            // copy to remove angular $$hashKey
-            $scope.formio.saveSubmission(submissionData, $scope.formioOptions).then(function(submission) {
-              onSubmitDone(submission.method, submission);
-            }, FormioScope.onError($scope, $element)).finally(function() {
-              form.submitting = false;
-            });
-          }
-          else {
-            $scope.$emit('formSubmission', submissionData);
-          }
+          $scope.submitForm(submissionData, form);
         };
       }
     ],
@@ -78751,7 +80421,7 @@ module.exports = function() {
   };
 };
 
-},{}],235:[function(_dereq_,module,exports){
+},{}],237:[function(_dereq_,module,exports){
 "use strict";
 module.exports = ['$sce', '$parse', '$compile', function($sce, $parse, $compile) {
   return {
@@ -78768,11 +80438,21 @@ module.exports = ['$sce', '$parse', '$compile', function($sce, $parse, $compile)
   };
 }];
 
-},{}],236:[function(_dereq_,module,exports){
+},{}],238:[function(_dereq_,module,exports){
 "use strict";
 var _cloneDeep = _dereq_('lodash/cloneDeep');
 var _filter = _dereq_('lodash/filter');
 var _get = _dereq_('lodash/get');
+
+// FOR-524 - Attempt to load json logic.
+var jsonLogic;
+try {
+  jsonLogic = _dereq_('json-logic-js') || undefined;
+}
+catch (e) {
+  // Ignore optional module.
+}
+
 module.exports = [
   'Formio',
   'formioComponents',
@@ -78866,15 +80546,68 @@ module.exports = [
 
           // FOR-71 - Dont watch in the builder view.
           // Calculate value when data changes.
-          if (!$scope.builder && $scope.component.calculateValue) {
+          if (!$scope.builder && ($scope.component.calculateValue || (jsonLogic && _get($scope.component, 'validate.json')))) {
             $scope.$watch('data', function() {
-              try {
-                $scope.data[$scope.component.key] = eval('(function(data) { var value = [];' + $scope.component.calculateValue.toString() + '; return value; })($scope.data)');
+              // Process calculated value stuff if present.
+              if ($scope.component.calculateValue) {
+                try {
+                  $scope.data[$scope.component.key] = eval('(function(data) { var value = [];' + $scope.component.calculateValue.toString() + '; return value; })($scope.data)');
+                }
+                catch (e) {
+                  /* eslint-disable no-console */
+                  console.warn('An error occurred calculating a value for ' + $scope.component.key, e);
+                  /* eslint-enable no-console */
+                }
               }
-              catch (e) {
-                /* eslint-disable no-console */
-                console.warn('An error occurred calculating a value for ' + $scope.component.key, e);
-                /* eslint-enable no-console */
+
+              // Process jsonLogic stuff if present.
+              if (jsonLogic && _get($scope.component, 'validate.json')) {
+                var input;
+
+                // Only json parse once.
+                if (typeof $scope.component.validate.json === 'string') {
+                  try {
+                    input = JSON.parse($scope.component.validate.json);
+                    $scope.component.validate.json = input;
+                  }
+                  catch (e) {
+                    /* eslint-disable no-console */
+                    console.warn('Invalid JSON validator given for ' + $scope.component.key);
+                    console.warn($scope.component.validate.json);
+                    /* eslint-enable no-console */
+                    delete $scope.component.validate.json;
+                    return;
+                  }
+                }
+                else {
+                  input = $scope.component.validate.json;
+                }
+
+                var valid;
+                try {
+                  valid = jsonLogic.apply(input, {
+                    data: $scope.submission.data,
+                    row: $scope.data
+                  });
+                }
+                catch (err) {
+                  valid = err.message;
+                }
+
+                $timeout(function() {
+                  try {
+                    if (valid !== true) {
+                      $scope.component.customError = valid;
+                      $scope.formioForm[$scope.component.key].$setValidity('custom', false);
+                      return;
+                    }
+
+                    $scope.formioForm[$scope.component.key].$setValidity('custom', true);
+                  }
+                  catch (e) {
+                    // Ignore any issues while editing the components.
+                  }
+                });
               }
             }, true);
           }
@@ -79177,6 +80910,19 @@ module.exports = [
                     });
                   }
                 }
+                // FOR-504 - Fix default values for survey components.
+                else if ($scope.component.type === 'survey') {
+                  if (!$scope.component.hasOwnProperty('defaultValue')) {
+                    return;
+                  }
+
+                  $scope.data[$scope.component.key] = $scope.data[$scope.component.key] || {};
+                  $scope.component.questions.forEach(function(question) {
+                    $timeout(function() {
+                      $scope.data[$scope.component.key][question.value] = $scope.data[$scope.component.key][question.value] || $scope.component.defaultValue;
+                    });
+                  });
+                }
                 else {
                   if (!mult) {
                     $scope.data[$scope.component.key] = $scope.component.defaultValue;
@@ -79214,7 +80960,7 @@ module.exports = [
   }
 ];
 
-},{"lodash/cloneDeep":167,"lodash/filter":169,"lodash/get":170}],237:[function(_dereq_,module,exports){
+},{"json-logic-js":35,"lodash/cloneDeep":168,"lodash/filter":170,"lodash/get":171}],239:[function(_dereq_,module,exports){
 "use strict";
 module.exports = [
   'formioComponents',
@@ -79281,7 +81027,7 @@ module.exports = [
   }
 ];
 
-},{}],238:[function(_dereq_,module,exports){
+},{}],240:[function(_dereq_,module,exports){
 "use strict";
 module.exports = function() {
   return {
@@ -79364,7 +81110,7 @@ module.exports = function() {
   };
 };
 
-},{}],239:[function(_dereq_,module,exports){
+},{}],241:[function(_dereq_,module,exports){
 "use strict";
 module.exports = [
   '$compile',
@@ -79383,7 +81129,7 @@ module.exports = [
   }
 ];
 
-},{}],240:[function(_dereq_,module,exports){
+},{}],242:[function(_dereq_,module,exports){
 "use strict";
 module.exports = function() {
   return {
@@ -79393,7 +81139,7 @@ module.exports = function() {
   };
 };
 
-},{}],241:[function(_dereq_,module,exports){
+},{}],243:[function(_dereq_,module,exports){
 "use strict";
 module.exports = function() {
   return {
@@ -79425,7 +81171,7 @@ module.exports = function() {
   };
 };
 
-},{}],242:[function(_dereq_,module,exports){
+},{}],244:[function(_dereq_,module,exports){
 "use strict";
 module.exports = function() {
   return {
@@ -79480,7 +81226,7 @@ module.exports = function() {
   };
 };
 
-},{}],243:[function(_dereq_,module,exports){
+},{}],245:[function(_dereq_,module,exports){
 "use strict";
 module.exports = function() {
   return {
@@ -79489,6 +81235,7 @@ module.exports = function() {
     templateUrl: 'formio-wizard.html',
     scope: {
       src: '=?',
+      url: '=?',
       formAction: '=?',
       form: '=?',
       submission: '=?',
@@ -79553,6 +81300,7 @@ module.exports = function() {
         }
 
         $scope.formio = null;
+        $scope.url = $scope.url || $scope.src;
         $scope.page = {};
         $scope.pages = [];
         $scope.hasTitles = false;
@@ -79909,7 +81657,7 @@ module.exports = function() {
   };
 };
 
-},{}],244:[function(_dereq_,module,exports){
+},{}],246:[function(_dereq_,module,exports){
 "use strict";
 module.exports = [
   'Formio',
@@ -80092,7 +81840,7 @@ module.exports = [
   }
 ];
 
-},{}],245:[function(_dereq_,module,exports){
+},{}],247:[function(_dereq_,module,exports){
 "use strict";
 var formioUtils = _dereq_('formiojs/utils');
 
@@ -80204,7 +81952,7 @@ module.exports = function() {
   };
 };
 
-},{"formiojs/utils":33}],246:[function(_dereq_,module,exports){
+},{"formiojs/utils":33}],248:[function(_dereq_,module,exports){
 "use strict";
 module.exports = function() {
   var generic = function(data, component) {
@@ -80278,12 +82026,59 @@ module.exports = function() {
     return view;
   };
 
+  // Generate a column for the component.
+  var columnForComponent = function(data, component, $interpolate, componentInfo, tableChild) {
+    // If no component is given, generate an empty cell.
+    if (!component) {
+      return '<td></td>';
+    }
+
+    // Generate a table for each component with one column to display the key/value for each component.
+    var view = '<td>';
+    view += '<table class="table table-striped table-bordered' + (tableChild ? ' table-child' : '') + '">';
+    view += '<thead><tr>';
+    view += '<th>' + (component.label || '') + ' (' + component.key + ')</th>';
+    view += '</tr></thead>';
+    view += '<tbody>';
+
+    // If the component has a defined tableView, use that, otherwise try and use the raw data as a string.
+    var info = componentInfo.components.hasOwnProperty(component.type)
+      ? componentInfo.components[component.type]
+      : {};
+    if (info.tableView) {
+      view += '<td>' +
+        info.tableView(
+          data && component.key && (data.hasOwnProperty(component.key) ? data[component.key] : data),
+          component,
+          $interpolate,
+          componentInfo,
+          tableChild
+        ) + '</td>';
+    }
+    else {
+      view += '<td>';
+      if (component.prefix) {
+        view += component.prefix;
+      }
+      view += data && component.key && (data.hasOwnProperty(component.key) ? data[component.key] : '');
+      if (component.suffix) {
+        view += ' ' + component.suffix;
+      }
+      view += '</td>';
+    }
+
+    view += '</tbody></table>';
+    view += '</td>';
+    return view;
+  };
+
   return {
-    generic: generic
+    generic: generic,
+    columnForComponent: columnForComponent
   };
 };
 
-},{}],247:[function(_dereq_,module,exports){
+},{}],249:[function(_dereq_,module,exports){
 "use strict";
 module.exports = [
   '$q',
@@ -80332,7 +82127,7 @@ module.exports = [
   }
 ];
 
-},{}],248:[function(_dereq_,module,exports){
+},{}],250:[function(_dereq_,module,exports){
 "use strict";
 module.exports = [
   'Formio',
@@ -80344,7 +82139,7 @@ module.exports = [
     $interpolate
   ) {
     return function(value, component) {
-      if (!value) {
+      if (!value && value !== 0) {
         return '';
       }
       if (!component || !component.input|| !component.type) {
@@ -80366,7 +82161,7 @@ module.exports = [
   }
 ];
 
-},{}],249:[function(_dereq_,module,exports){
+},{}],251:[function(_dereq_,module,exports){
 "use strict";
 module.exports = [
   'FormioUtils',
@@ -80375,7 +82170,7 @@ module.exports = [
   }
 ];
 
-},{}],250:[function(_dereq_,module,exports){
+},{}],252:[function(_dereq_,module,exports){
 "use strict";
 module.exports = [
   '$sce',
@@ -80388,7 +82183,7 @@ module.exports = [
   }
 ];
 
-},{}],251:[function(_dereq_,module,exports){
+},{}],253:[function(_dereq_,module,exports){
 "use strict";
 module.exports = [
   function() {
@@ -80407,7 +82202,7 @@ module.exports = [
   }
 ];
 
-},{}],252:[function(_dereq_,module,exports){
+},{}],254:[function(_dereq_,module,exports){
 "use strict";
 module.exports = [
   'formioTableView',
@@ -80420,7 +82215,7 @@ module.exports = [
   }
 ];
 
-},{}],253:[function(_dereq_,module,exports){
+},{}],255:[function(_dereq_,module,exports){
 "use strict";
 module.exports = [
   'Formio',
@@ -80435,7 +82230,7 @@ module.exports = [
   }
 ];
 
-},{}],254:[function(_dereq_,module,exports){
+},{}],256:[function(_dereq_,module,exports){
 "use strict";
 module.exports = [
   '$filter',
@@ -80484,7 +82279,15 @@ module.exports = [
   }
 ];
 
-},{}],255:[function(_dereq_,module,exports){
+},{}],257:[function(_dereq_,module,exports){
+"use strict";
+module.exports = ['$sce', function($sce) {
+  return function(val) {
+    return $sce.trustAsResourceUrl(val);
+  };
+}];
+
+},{}],258:[function(_dereq_,module,exports){
 (function (global){
 "use strict";
 global.jQuery = _dereq_('jquery');
@@ -80498,10 +82301,11 @@ _dereq_('ng-file-upload');
 _dereq_('bootstrap');
 _dereq_('angular-ui-bootstrap');
 _dereq_('bootstrap-ui-datetime-picker/dist/datetime-picker');
+_dereq_('ng-dialog');
 _dereq_('./formio');
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./formio":256,"angular":10,"angular-file-saver":1,"angular-moment":2,"angular-sanitize":4,"angular-ui-bootstrap":6,"angular-ui-mask":8,"bootstrap":12,"bootstrap-ui-datetime-picker/dist/datetime-picker":11,"jquery":34,"ng-file-upload":195,"ui-select/dist/select":198}],256:[function(_dereq_,module,exports){
+},{"./formio":259,"angular":10,"angular-file-saver":1,"angular-moment":2,"angular-sanitize":4,"angular-ui-bootstrap":6,"angular-ui-mask":8,"bootstrap":12,"bootstrap-ui-datetime-picker/dist/datetime-picker":11,"jquery":34,"ng-dialog":195,"ng-file-upload":197,"ui-select/dist/select":200}],259:[function(_dereq_,module,exports){
 "use strict";
 _dereq_('./polyfills/polyfills');
 
@@ -80564,7 +82368,7 @@ app.filter('tableView', _dereq_('./filters/tableView'));
 app.filter('tableFieldView', _dereq_('./filters/tableFieldView'));
 app.filter('safehtml', _dereq_('./filters/safehtml'));
 app.filter('formioTranslate', _dereq_('./filters/translate'));
-
+app.filter('trustAsResourceUrl', _dereq_('./filters/trusturl'));
 app.config([
   '$httpProvider',
   '$injector',
@@ -80593,14 +82397,29 @@ app.config([
 
 app.run([
   '$templateCache',
-  function($templateCache) {
+  '$rootScope',
+  '$window',
+  function($templateCache, $rootScope, $window) {
+    $window.addEventListener('message', function(event) {
+      var eventData = null;
+      try {
+        eventData = JSON.parse(event.data);
+      }
+      catch (err) {
+        eventData = null;
+      }
+      if (eventData && eventData.name) {
+        $rootScope.$broadcast('iframe-' + eventData.name, eventData.data);
+      }
+    });
+
     // The template for the formio forms.
     $templateCache.put('formio.html',
-      "<div>\n  <i style=\"font-size: 2em;\" ng-if=\"formLoading\" ng-class=\"{'formio-hidden': !formLoading}\" class=\"formio-loading glyphicon glyphicon-refresh glyphicon-spin\"></i>\n  <formio-wizard ng-if=\"form.display === 'wizard'\" src=\"src\" form=\"form\" submission=\"submission\" form-action=\"formAction\" read-only=\"readOnly\" hide-components=\"hideComponents\" disable-components=\"disableComponents\" formio-options=\"formioOptions\" storage=\"form.name\"></formio-wizard>\n  <form ng-if=\"!form.display || (form.display === 'form')\" role=\"form\" name=\"formioForm\" ng-submit=\"onSubmit(formioForm)\" novalidate>\n    <div ng-repeat=\"alert in formioAlerts track by $index\" class=\"alert alert-{{ alert.type }}\" role=\"alert\" ng-if=\"::!builder\">\n      {{ alert.message | formioTranslate:null:builder }}\n    </div>\n    <!-- DO NOT PUT \"track by $index\" HERE SINCE DYNAMICALLY ADDING/REMOVING COMPONENTS WILL BREAK -->\n    <formio-component\n      ng-repeat=\"component in form.components track by $index\"\n      component=\"component\"\n      ng-if=\"builder ? '::true' : isVisible(component)\"\n      data=\"submission.data\"\n      formio-form=\"formioForm\"\n      formio=\"formio\"\n      submission=\"submission\"\n      hide-components=\"hideComponents\"\n      read-only=\"isDisabled(component, submission.data)\"\n      builder=\"builder\"\n    ></formio-component>\n  </form>\n</div>\n"
+      "<div>\n  <i style=\"font-size: 2em;\" ng-if=\"formLoading\" ng-class=\"{'formio-hidden': !formLoading}\" class=\"formio-loading glyphicon glyphicon-refresh glyphicon-spin\"></i>\n  <formio-wizard ng-if=\"form.display === 'wizard'\" src=\"src\" form=\"form\" submission=\"submission\" form-action=\"formAction\" read-only=\"readOnly\" hide-components=\"hideComponents\" disable-components=\"disableComponents\" formio-options=\"formioOptions\" storage=\"form.name\"></formio-wizard>\n  <div ng-if=\"form.display === 'pdf' && form.settings.pdf\" style=\"position:relative;\">\n    <span style=\"position:absolute;right:10px;top:10px;cursor:pointer;\" class=\"btn btn-default no-disable\" ng-click=\"zoomIn()\"><spann class=\"glyphicon glyphicon-zoom-in\"></spann></span>\n    <span style=\"position:absolute;right:10px;top:60px;cursor:pointer;\" class=\"btn btn-default no-disable\" ng-click=\"zoomOut()\"><span class=\"glyphicon glyphicon-zoom-out\"></span></span>\n    <a ng-if=\"downloadUrl\" style=\"position:absolute;right:10px;top:110px;cursor:pointer;\" class=\"btn btn-primary no-disable\" href=\"{{ downloadUrl | trustAsResourceUrl }}\" target=\"_blank\"><span class=\"glyphicon glyphicon-cloud-download\"></span></a>\n    <iframe src=\"{{ getIframeSrc(form.settings.pdf) | trustAsResourceUrl }}\" seamless class=\"formio-iframe\"></iframe>\n    <button ng-if=\"!readOnly && !form.builder\" type=\"button\" class=\"btn btn-primary\" ng-click=\"submitIFrameForm()\">Submit</button>\n  </div>\n  <form ng-if=\"!form.display || (form.display === 'form')\" role=\"form\" name=\"formioForm\" ng-submit=\"onSubmit(formioForm)\" novalidate>\n    <div ng-repeat=\"alert in formioAlerts track by $index\" class=\"alert alert-{{ alert.type }}\" role=\"alert\" ng-if=\"::!builder\">\n      {{ alert.message | formioTranslate:null:builder }}\n    </div>\n    <!-- DO NOT PUT \"track by $index\" HERE SINCE DYNAMICALLY ADDING/REMOVING COMPONENTS WILL BREAK -->\n    <formio-component\n      ng-repeat=\"component in form.components track by $index\"\n      component=\"component\"\n      ng-if=\"builder ? '::true' : isVisible(component)\"\n      data=\"submission.data\"\n      formio-form=\"formioForm\"\n      formio=\"formio\"\n      submission=\"submission\"\n      hide-components=\"hideComponents\"\n      read-only=\"isDisabled(component, submission.data)\"\n      builder=\"builder\"\n    ></formio-component>\n  </form>\n</div>\n"
     );
 
     $templateCache.put('formio-wizard.html',
-      "<div class=\"formio-wizard-wrapper\">\n  <div class=\"row bs-wizard\" style=\"border-bottom:0;\" ng-class=\"{hasTitles: hasTitles}\">\n    <div ng-class=\"{disabled: ($index > currentPage), active: ($index == currentPage), complete: ($index < currentPage), noTitle: !page.title}\" class=\"{{ colclass }} bs-wizard-step\" ng-repeat=\"page in pages track by $index\">\n      <div class=\"bs-wizard-stepnum-wrapper\">\n        <div class=\"text-center bs-wizard-stepnum\" ng-if=\"page.title\">{{ page.title }}</div>\n      </div>\n      <div class=\"progress\"><div class=\"progress-bar progress-bar-primary\"></div></div>\n      <a ng-click=\"goto($index)\" class=\"bs-wizard-dot bg-primary\"><div class=\"bs-wizard-dot-inner bg-success\"></div></a>\n    </div>\n  </div>\n  <style type=\"text/css\">.bs-wizard > .bs-wizard-step:first-child { margin-left: {{ margin }}%; }</style>\n  <i ng-show=\"!wizardLoaded\" id=\"formio-loading\" style=\"font-size: 2em;\" class=\"glyphicon glyphicon-refresh glyphicon-spin\"></i>\n  <div ng-repeat=\"alert in formioAlerts track by $index\" class=\"alert alert-{{ alert.type }}\" role=\"alert\">{{ alert.message | formioTranslate:null:builder }}</div>\n  <div class=\"formio-wizard\">\n    <formio\n      ng-if=\"wizardLoaded\"\n      submission=\"submission\"\n      form=\"page\"\n      read-only=\"readOnly\"\n      hide-components=\"hideComponents\"\n      disable-components=\"disableComponents\"\n      formio-options=\"formioOptions\"\n      id=\"formio-wizard-form\"\n    ></formio>\n  </div>\n  <ul ng-show=\"wizardLoaded\" class=\"list-inline\">\n    <li><a class=\"btn btn-default\" ng-click=\"cancel()\">Cancel</a></li>\n    <li ng-if=\"currentPage > 0\"><a class=\"btn btn-primary\" ng-click=\"prev()\">Previous</a></li>\n    <li ng-if=\"currentPage < (pages.length - 1)\">\n      <a class=\"btn btn-primary\" ng-click=\"next()\">Next</a>\n    </li>\n    <li ng-if=\"currentPage >= (pages.length - 1)\">\n      <a class=\"btn btn-primary\" ng-click=\"submit()\">Submit Form</a>\n    </li>\n  </ul>\n</div>\n"
+      "<div class=\"formio-wizard-wrapper\">\n  <div class=\"row bs-wizard\" style=\"border-bottom:0;\" ng-class=\"{hasTitles: hasTitles}\">\n    <div ng-class=\"{disabled: ($index > currentPage), active: ($index == currentPage), complete: ($index < currentPage), noTitle: !page.title}\" class=\"{{ colclass }} bs-wizard-step\" ng-repeat=\"page in pages track by $index\">\n      <div class=\"bs-wizard-stepnum-wrapper\">\n        <div class=\"text-center bs-wizard-stepnum\" ng-if=\"page.title\">{{ page.title }}</div>\n      </div>\n      <div class=\"progress\"><div class=\"progress-bar progress-bar-primary\"></div></div>\n      <a ng-click=\"goto($index)\" class=\"bs-wizard-dot bg-primary\"><div class=\"bs-wizard-dot-inner bg-success\"></div></a>\n    </div>\n  </div>\n  <style type=\"text/css\">.bs-wizard > .bs-wizard-step:first-child { margin-left: {{ margin }}%; }</style>\n  <i ng-show=\"!wizardLoaded\" id=\"formio-loading\" style=\"font-size: 2em;\" class=\"glyphicon glyphicon-refresh glyphicon-spin\"></i>\n  <div ng-repeat=\"alert in formioAlerts track by $index\" class=\"alert alert-{{ alert.type }}\" role=\"alert\">{{ alert.message | formioTranslate:null:builder }}</div>\n  <div class=\"formio-wizard\">\n    <formio\n      ng-if=\"wizardLoaded\"\n      submission=\"submission\"\n      form=\"page\"\n      url=\"url\"\n      read-only=\"readOnly\"\n      hide-components=\"hideComponents\"\n      disable-components=\"disableComponents\"\n      formio-options=\"formioOptions\"\n      id=\"formio-wizard-form\"\n    ></formio>\n  </div>\n  <ul ng-show=\"wizardLoaded\" class=\"list-inline\">\n    <li><a class=\"btn btn-default\" ng-click=\"cancel()\">Cancel</a></li>\n    <li ng-if=\"currentPage > 0\"><a class=\"btn btn-primary\" ng-click=\"prev()\">Previous</a></li>\n    <li ng-if=\"currentPage < (pages.length - 1)\">\n      <a class=\"btn btn-primary\" ng-click=\"next()\">Next</a>\n    </li>\n    <li ng-if=\"currentPage >= (pages.length - 1)\">\n      <a class=\"btn btn-primary\" ng-click=\"submit()\">Submit Form</a>\n    </li>\n  </ul>\n</div>\n"
     );
 
     $templateCache.put('formio-delete.html',
@@ -80636,7 +82455,7 @@ app.run([
 
 _dereq_('./components');
 
-},{"./components":217,"./directives/customValidator":233,"./directives/formio":234,"./directives/formioBindHtml.js":235,"./directives/formioComponent":236,"./directives/formioComponentView":237,"./directives/formioDelete":238,"./directives/formioElement":239,"./directives/formioErrors":240,"./directives/formioSubmission":241,"./directives/formioSubmissions":242,"./directives/formioWizard":243,"./factories/FormioScope":244,"./factories/FormioUtils":245,"./factories/formioInterceptor":247,"./factories/formioTableView":248,"./filters/flattenComponents":249,"./filters/safehtml":250,"./filters/tableComponents":251,"./filters/tableFieldView":252,"./filters/tableView":253,"./filters/translate":254,"./polyfills/polyfills":258,"./providers/Formio":259}],257:[function(_dereq_,module,exports){
+},{"./components":219,"./directives/customValidator":235,"./directives/formio":236,"./directives/formioBindHtml.js":237,"./directives/formioComponent":238,"./directives/formioComponentView":239,"./directives/formioDelete":240,"./directives/formioElement":241,"./directives/formioErrors":242,"./directives/formioSubmission":243,"./directives/formioSubmissions":244,"./directives/formioWizard":245,"./factories/FormioScope":246,"./factories/FormioUtils":247,"./factories/formioInterceptor":249,"./factories/formioTableView":250,"./filters/flattenComponents":251,"./filters/safehtml":252,"./filters/tableComponents":253,"./filters/tableFieldView":254,"./filters/tableView":255,"./filters/translate":256,"./filters/trusturl":257,"./polyfills/polyfills":261,"./providers/Formio":262}],260:[function(_dereq_,module,exports){
 "use strict";
 'use strict';
 
@@ -80667,13 +82486,13 @@ if (typeof Object.assign != 'function') {
   })();
 }
 
-},{}],258:[function(_dereq_,module,exports){
+},{}],261:[function(_dereq_,module,exports){
 "use strict";
 'use strict';
 
 _dereq_('./Object.assign');
 
-},{"./Object.assign":257}],259:[function(_dereq_,module,exports){
+},{"./Object.assign":260}],262:[function(_dereq_,module,exports){
 "use strict";
 module.exports = function() {
   // The formio class.
@@ -80741,5 +82560,5 @@ module.exports = function() {
   };
 };
 
-},{"formiojs":26}]},{},[255])(255)
+},{"formiojs":26}]},{},[258])(258)
 });
