@@ -11,14 +11,14 @@ gulp.task('clean', function () {
 gulp.task('minify', function() {
     return gulp.src(['src/index.html', 'src/embed.html'])
         .pipe(plugins.useref())
-        .pipe(plugins.if('*.js', plugins.uglify()))
+        /*.pipe(plugins.if('*.js', plugins.uglify()))
         .pipe(plugins.if('*.css', plugins.minifyCss()))
         .pipe(plugins.if('*.html', plugins.htmlmin({
             collapseWhitespace: true,
             minifyJS: true,
             minifyCSS: true,
             processScripts: ['text/template']
-        })))
+        })))*/
         .pipe(gulp.dest('dist'));
 });
 
