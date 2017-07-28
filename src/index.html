@@ -26,8 +26,15 @@
     <meta name="theme-color" content="#ffffff">
     <script type="text/javascript">
       var query = {};
-      location.hash.substr(1).replace(/\?/g, '&').split("&").forEach(function (item) {
-        query[item.split("=")[0]] = item.split("=")[1] && decodeURIComponent(item.split("=")[1]);
+      var hashes = location.hash.substr(1).replace(/\?/g, '&').split("&");
+      var path = hashes.shift();
+      var newPaths = [path];
+      hashes.forEach(function (item) {
+        var parts = item.split("=");
+        if (parts[0] !== 'token') {
+          newPaths.push(item);
+        }
+        query[parts[0]] = parts[1] && decodeURIComponent(parts[1]);
       });
 
       // Allow them to provide a custom theme.
@@ -46,7 +53,6 @@
         localStorage.setItem('formioToken', query.token);
         localStorage.removeItem('formioAppUser');
         localStorage.removeItem('formioUser');
-        window.history.pushState("", "", location.pathname + location.hash);
       }
 
       // Allow them to provide their own stylesheets.
@@ -56,6 +62,8 @@
           document.write('<link rel="stylesheet" href="' + styles + '" />');
         }
       }
+
+      window.history.pushState("", "", location.pathname + '#' + newPaths.join('&'));
     </script>
     <style type="text/css">
         [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
@@ -66,14 +74,16 @@
 </head>
 <body ng-app="formioFormApp">
 <script id="header" type="text/template">
-    <nav class="navbar navbar-inverse">
+    <nav class="navbar navbar-default">
         <div class="container">
             <div class="navbar-header">
                 <a class="navbar-brand" ng-cloak>{{ form.title }}</a>
             </div>
             <div class="collapse navbar-collapse">
-                <p class="navbar-text navbar-right"><a href="https://form.io" class="navbar-link">powered by &lt;form.io&gt;</a>
-                </p>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="https://form.io" class="navbar-link">powered by &lt;form.io&gt;</a></li>
+                    <li ng-if="user"><a ng-click="logout()" class="navbar-link"><span class="glyphicon glyphicon-off" aria-hidden="true"></span> Logout</a></li>
+                </ul>
             </div>
         </div>
     </nav>
@@ -125,7 +135,7 @@
     }
 
     .main {
-        margin-top: 4px;
+        margin-top: 12px;
     }
 
     .hasheader .main {
@@ -151,16 +161,16 @@
         width: 100%;
     }
 
-    .navbar .container .navbar-right {
-        margin-right: 0;
-    }
-
     .navbar {
         margin-bottom: 0px;
     }
 
     .formio-submission {
         margin-top: 34px;
+    }
+
+    .navbar-link {
+        cursor: pointer;
     }
 
     [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
@@ -244,10 +254,9 @@
         Formio,
         $controller
       ) {
-        var path = $location.path();
-        var query = $location.search();
-        var returnUrl = query.return;
-        var formSrc = query.form;
+        var urlQuery = $location.search();
+        var returnUrl = query.return || urlQuery.return;
+        var formSrc = query.form || urlQuery.form;
         var pdfName;
 
         $rootScope.formError = '';
@@ -255,6 +264,7 @@
         $rootScope.form = null;
         $rootScope.showLogin = false;
         $rootScope.submission = {data: {}};
+        $rootScope.user = null;
 
         var project = '';
         var projectApi = '';
@@ -267,8 +277,8 @@
         if (!formSrc && path) {
           path = path.replace(/^\//, '');
           var paths = path.split('/');
-          var protocol = query.protocol || 'https';
-          var host = query.host || 'form.io';
+          var protocol = query.protocol || urlQuery.protocol || 'https';
+          var host = query.host || urlQuery.host || 'form.io';
           if (paths.length < 2) {
             return;
           }
@@ -279,17 +289,27 @@
           formSrc = projectApi + '/' + formPath;
           if (!$rootScope.login) {
             $rootScope.login = projectApi + '/';
-            $rootScope.login += query.login ? query.login : 'user/login';
+            $rootScope.login += (query.login || urlQuery.login || 'user/login');
           }
         }
 
         // Set the base and project urls
         Formio.setBaseUrl(baseUrl);
         Formio.setProjectUrl(projectApi);
+        Formio.currentUser().then(function(user) {
+          $rootScope.user = user;
+          console.log(user);
+        });
+
+        $rootScope.logout = function() {
+          $rootScope.user = null;
+          Formio.setUser(null);
+          window.location.reload();
+        };
 
         // Ensure we have a login form.
         if (!$rootScope.login) {
-          $rootScope.login = query.login || (protocol + '://formio.' + host + '/user/login');
+          $rootScope.login = urlQuery.login || (protocol + '://formio.' + host + '/user/login');
         }
 
         // Get the main formio object.
@@ -375,6 +395,7 @@
           if ($rootScope.showLogin) {
             // Ensure we have a token.
             $rootScope.showLogin = !Formio.getToken();
+            $rootScope.user = submission;
             $timeout($rootScope.$apply.bind($rootScope));
             return;
           }
