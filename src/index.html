@@ -318,6 +318,17 @@
         var onError = function (err) {
           if (err.indexOf('Unauthorized') === 0) {
             $rootScope.showLogin = true;
+
+            // If they are authenticated and there is not form, then reload.
+            if (Formio.getToken() && !$rootScope.form) {
+              Formio.setUser(null);
+              $timeout(function() {
+                window.location.reload();
+              });
+              return;
+            }
+
+            // Delete the user.
             Formio.setUser(null);
           }
           $rootScope.formError = err;
