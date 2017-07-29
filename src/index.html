@@ -298,7 +298,6 @@
         Formio.setProjectUrl(projectApi);
         Formio.currentUser().then(function(user) {
           $rootScope.user = user;
-          console.log(user);
         });
 
         $rootScope.logout = function() {
@@ -317,6 +316,10 @@
 
         // Called when an error occurs.
         var onError = function (err) {
+          if (err.indexOf('Unauthorized') === 0) {
+            $rootScope.showLogin = true;
+            Formio.setUser(null);
+          }
           $rootScope.formError = err;
           $rootScope.formLoading = false;
           $timeout($rootScope.$apply.bind($rootScope));
