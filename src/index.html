@@ -203,7 +203,7 @@
                 <a ng-if="hasSubmission" type="button" ng-click="generatePDF()"
                    style="float:right;cursor:pointer;margin-top:-32px"><img src="assets/download-pdf.png"
                                                                             style="height:30px"/></a>
-                <formio form="form" submission="submission" ng-class="{'formio-submission': hasSubmission}"></formio>
+                <formio form="form" submission="submission" url="formSrc" ng-class="{'formio-submission': hasSubmission}"></formio>
             </div>
             <div ng-if="showLogin" style="margin-top: 20px;">
                 <div class="row">
@@ -256,7 +256,7 @@
       ) {
         var urlQuery = $location.search();
         var returnUrl = query.return || urlQuery.return;
-        var formSrc = query.form || urlQuery.form;
+        $rootScope.formSrc = query.form || urlQuery.form;
         var pdfName;
 
         $rootScope.formError = '';
@@ -271,10 +271,10 @@
         var formPath = '';
         var baseUrl = 'https://api.form.io';
         $rootScope.login = '';
-        if (!path && !formSrc) {
+        if (!path && !$rootScope.formSrc) {
           return;
         }
-        if (!formSrc && path) {
+        if (!$rootScope.formSrc && path) {
           path = path.replace(/^\//, '');
           var paths = path.split('/');
           var protocol = query.protocol || urlQuery.protocol || 'https';
@@ -286,7 +286,7 @@
           formPath = paths.join('/');
           projectApi = protocol + '://' + project + '.' + host;
           baseUrl = protocol + '://api.' + host;
-          formSrc = projectApi + '/' + formPath;
+          $rootScope.formSrc = projectApi + '/' + formPath;
           if (!$rootScope.login) {
             $rootScope.login = projectApi + '/';
             $rootScope.login += (query.login || urlQuery.login || 'user/login');
@@ -312,7 +312,7 @@
         }
 
         // Get the main formio object.
-        var formio = new Formio(formSrc);
+        var formio = new Formio($rootScope.formSrc);
 
         // Called when an error occurs.
         var onError = function (err) {
@@ -368,7 +368,7 @@
                 // Check for substring 'submission' to enable the download pdf button.
                 var checkSubmissionURL = new RegExp("/submission/");
                 pdfName = submission._id;
-                $rootScope.hasSubmission = checkSubmissionURL.test(formSrc);
+                $rootScope.hasSubmission = checkSubmissionURL.test($rootScope.formSrc);
                 if ($rootScope.hasSubmission) {
                   $rootScope.showLogin = !Formio.getToken();
                 }
@@ -440,7 +440,7 @@
               returnUrl += hasQuery ? '&' : '?';
               returnUrl += 'sub=' + result._id;
               if (!isOrigin) {
-                returnUrl += '&form=' + encodeURIComponent(formSrc);
+                returnUrl += '&form=' + encodeURIComponent($rootScope.formSrc);
               }
               window.location.href = returnUrl;
               if (isOrigin) {
