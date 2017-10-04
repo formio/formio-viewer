@@ -381,7 +381,7 @@
 
               // Check to see if they can submit the form.
               formio.canSubmit().then(function(canSubmit) {
-                if (!canSubmit && query.show) {
+                if (!canSubmit && query.login) {
                   $rootScope.showLogin = true;
                   Formio.setUser(null);
                 }
