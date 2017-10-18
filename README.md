@@ -1,5 +1,5 @@
-Form.io form viewer
---------------------------
+Form.io Form-Viewer
+-------------------
 This library serves as testing group for existing form.io projects. 
 
 Installation and Launching
