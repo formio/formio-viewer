@@ -204,7 +204,7 @@
                 <a ng-if="hasSubmission" type="button" ng-click="generatePDF()"
                    style="float:right;cursor:pointer;margin-top:-32px"><img src="assets/download-pdf.png"
                                                                             style="height:30px"/></a>
-                <formio form="form" submission="submission" url="formSrc" ng-class="{'formio-submission': hasSubmission}"></formio>
+                <formio form="form" read-only="submitted" submission="submission" url="formSrc" ng-class="{'formio-submission': hasSubmission}"></formio>
             </div>
             <div ng-if="showLogin" style="margin-top: 20px;">
                 <div class="row">
@@ -265,6 +265,7 @@
         $rootScope.form = null;
         $rootScope.showLogin = false;
         $rootScope.submission = {data: {}};
+        $rootScope.submitted = 0;
         $rootScope.user = null;
 
         var project = '';
@@ -450,7 +451,7 @@
             }
 
             $rootScope.$broadcast('submitDone', submission, submitMessage);
-            $rootScope.submission = {data: {}};
+            $rootScope.submitted = 1;
           }, onError).catch(onError);
         });
 
