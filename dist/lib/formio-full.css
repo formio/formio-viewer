@@ -671,6 +671,10 @@ body > .ui-select-bootstrap.open {
   -webkit-animation: none 0s;
 }
 
+.formio-form {
+  overflow: scroll;
+}
+
 .ngdialog.ngdialog-theme-default .ngdialog-content {
   width: 65%;
 }
@@ -868,6 +872,10 @@ input[type="password"][draggable="true"] {
 
 .inline-form-button {
   margin-right: 10px;
+}
+
+.tooltip-inner {
+  white-space: pre-wrap;
 }
 
 /*Form Wizard*/
