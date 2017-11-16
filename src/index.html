@@ -72,6 +72,10 @@
         }
     </style>
     <link rel="stylesheet" href="lib/formio-full.min.css"/>
+    
+    <!-- Add our own SoilTec Project CSS File -->
+    <link rel="stylesheet" href="css/soiltec.css"/>
+    
 </head>
 <body ng-app="formioFormApp">
 <script id="header" type="text/template">
@@ -105,6 +109,51 @@
     document.body.className = bodyClass;
   }
 </script>
+
+<!-- CUSTOM SOILTEC STYLE TWEAKS -->
+<style>
+	.cust-stamp iframe.formio-iframe {
+		height:100%;
+	}
+	.cust-stamp div.formio-form-wrapper {
+		margin: 0;
+	}
+	.cust-stamp div#page-container {
+		z-index: 100;
+	}
+	.cust-stamp .btn {
+		display: none;
+	}
+
+   .panel .po-heading {
+				 margin-bottom: 0px;
+				 margin-top: 10px;
+   }
+   .po-heading .panel-body {
+				 margin-left: 20px;
+				 margin-right: 55px;
+				 padding-bottom: 0px;
+				 padding-top: 5px;
+   }
+
+
+   .po-panel-main .panel-body {
+				 padding-left: 2px;
+   }
+   .po-grid .row {
+				 offset: 1px;
+				 margin-left: 0px;
+				 margin-right: 0px;
+   }
+   .po-grid .col {
+				 padding-left: 3px;
+				 padding-right: 0px;
+   }
+   .po-grid .btn {
+				 padding: 6px 6px;
+   }
+
+</style>
 
 <!-- BROWSE HAPPY BEGINS HERE -->
 <style>
