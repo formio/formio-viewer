@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+/*! ng-formio v2.24.2 | https://unpkg.com/ng-formio@2.24.2/LICENSE.txt */
+=======
 /*! ng-formio v2.25.1 | https://unpkg.com/ng-formio@2.25.1/LICENSE.txt */
+>>>>>>> formio/master
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.formio = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
 (function (root, factory) {
   // AMD
@@ -68352,7 +68356,11 @@ module.exports = toString;
 
 },{"./_baseToString":101}],251:[function(_dereq_,module,exports){
 //! moment.js
+<<<<<<< HEAD
+//! version : 2.19.1
+=======
 //! version : 2.19.2
+>>>>>>> formio/master
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
 //! license : MIT
 //! momentjs.com
@@ -72831,7 +72839,11 @@ addParseToken('x', function (input, array, config) {
 // Side effect imports
 
 
+<<<<<<< HEAD
+hooks.version = '2.19.1';
+=======
 hooks.version = '2.19.2';
+>>>>>>> formio/master
 
 setHookCallback(createLocal);
 
@@ -80906,7 +80918,11 @@ module.exports = function(app) {
     '$templateCache',
     function($templateCache) {
       $templateCache.put('formio/components/address.html',
+<<<<<<< HEAD
+        "<label ng-if=\"options.building || (component.label && !component.hideLabel)\" for=\"{{ componentId }}\" ng-class=\"{'field-required': isRequired(component)}\">\n  {{ component.label | formioTranslate:null:options.building }}\n  <formio-component-tooltip></formio-component-tooltip>\n</label>\n<span ng-if=\"!component.label && isRequired(component)\" class=\"glyphicon glyphicon-asterisk form-control-feedback field-required-inline\" aria-hidden=\"true\"></span>\n<ui-select ng-model=\"data[component.key]\" safe-multiple-to-single ng-disabled=\"readOnly\" ng-required=\"isRequired(component)\" id=\"{{ componentId }}\" name=\"{{ componentId }}\" tabindex=\"{{ component.tabindex || 0 }}\" theme=\"bootstrap\">\n  <ui-select-match class=\"ui-select-match\" placeholder=\"{{ component.placeholder | formioTranslate:null:options.building }}\">{{$item.formatted_address || $select.selected.formatted_address}}</ui-select-match>\n  <ui-select-choices class=\"ui-select-choices\" repeat=\"address in addresses\" refresh=\"refreshAddress($select.search)\" refresh-delay=\"500\">\n    <div ng-bind-html=\"address.formatted_address | highlight: $select.search\"></div>\n  </ui-select-choices>\n</ui-select>\n<formio-errors ng-if=\"::!options.building\"></formio-errors>\n"
+=======
         "<label ng-if=\"(options.building || (component.label && !component.hideLabel)) && component.labelPosition !== 'bottom'\" for=\"{{ componentId }}\" ng-class=\"{'field-required': isRequired(component)}\" ng-style=\"getLabelStyles(component)\">\n  {{ component.label | formioTranslate:null:options.building }}\n  <formio-component-tooltip></formio-component-tooltip>\n</label>\n<span ng-if=\"!component.label && isRequired(component)\" class=\"glyphicon glyphicon-asterisk form-control-feedback field-required-inline\" aria-hidden=\"true\"></span>\n<ui-select ng-model=\"data[component.key]\" safe-multiple-to-single ng-disabled=\"readOnly\" ng-required=\"isRequired(component)\" id=\"{{ componentId }}\" name=\"{{ componentId }}\" tabindex=\"{{ component.tabindex || 0 }}\" theme=\"bootstrap\" ng-style=\"getInputGroupStyles(component)\">\n  <ui-select-match class=\"ui-select-match\" placeholder=\"{{ component.placeholder | formioTranslate:null:options.building }}\">{{$item.formatted_address || $select.selected.formatted_address}}</ui-select-match>\n  <ui-select-choices class=\"ui-select-choices\" repeat=\"address in addresses\" refresh=\"refreshAddress($select.search)\" refresh-delay=\"500\">\n    <div ng-bind-html=\"address.formatted_address | highlight: $select.search\"></div>\n  </ui-select-choices>\n</ui-select>\n<label ng-if=\"(options.building || (component.label && !component.hideLabel)) && component.labelPosition === 'bottom'\" for=\"{{ componentId }}\" ng-class=\"{'field-required': isRequired(component)}\" class=\"control-label--bottom\">\n  {{ component.label | formioTranslate:null:options.building }}\n  <formio-component-tooltip></formio-component-tooltip>\n</label>\n<formio-errors ng-if=\"::!options.building\"></formio-errors>\n"
+>>>>>>> formio/master
       );
 
       // Change the ui-select to ui-select multiple.
@@ -81201,7 +81217,11 @@ module.exports = function(app) {
     '$templateCache',
     function($templateCache) {
       $templateCache.put('formio/components/checkbox.html',
+<<<<<<< HEAD
+        "<div class=\"checkbox\">\n  <label for=\"{{ componentId }}\" ng-class=\"{'field-required': isRequired(component)}\">\n    <input\n      ng-if=\"component.name\"\n      type=\"{{ component.inputType }}\"\n      id=\"{{ componentId }}\"\n      name=\"{{ component.name }}\"\n      value=\"{{ component.value }}\"\n      tabindex=\"{{ component.tabindex || 0 }}\"\n      ng-disabled=\"readOnly\"\n      ng-model=\"data[component.name]\"\n      ng-required=\"component.validate.required\"\n    >\n    <input\n      ng-if=\"!component.name\"\n      type=\"{{ component.inputType }}\"\n      id=\"{{ componentId }}\"\n      name=\"{{ componentId }}\"\n      tabindex=\"{{ component.tabindex || 0 }}\"\n      ng-disabled=\"readOnly\"\n      ng-model=\"data[component.key]\"\n      ng-required=\"isRequired(component)\"\n      custom-validator=\"component.validate.custom\"\n    >\n    <span ng-if=\"options.building || !(component.hideLabel && component.datagridLabel === false)\">\n      {{ component.label | formioTranslate:null:options.building }}\n      <formio-component-tooltip></formio-component-tooltip>\n    </span>\n  </label>\n</div>\n<div ng-if=\"!!component.description\" class=\"help-block\">\n  <span>{{ component.description }}</span>\n</div>\n"
+=======
         "<div class=\"checkbox\">\n  <label for=\"{{ componentId }}\" ng-class=\"{'field-required': isRequired(component)}\" ng-style=\"getOptionLabelStyles(component)\">\n    <span ng-if=\"(options.building || !(component.hideLabel && component.datagridLabel === false)) && topOrLeftOptionLabel(component)\">\n      {{ component.label | formioTranslate:null:options.building }}\n      <formio-component-tooltip></formio-component-tooltip>\n    </span>\n    <input\n      ng-if=\"component.name\"\n      type=\"{{ component.inputType }}\"\n      id=\"{{ componentId }}\"\n      name=\"{{ component.name }}\"\n      value=\"{{ component.value }}\"\n      tabindex=\"{{ component.tabindex || 0 }}\"\n      ng-disabled=\"readOnly\"\n      ng-model=\"data[component.name]\"\n      ng-required=\"component.validate.required\"\n      ng-style=\"getOptionInputStyles(component)\"\n    >\n    <input\n      ng-if=\"!component.name\"\n      type=\"{{ component.inputType }}\"\n      id=\"{{ componentId }}\"\n      name=\"{{ componentId }}\"\n      tabindex=\"{{ component.tabindex || 0 }}\"\n      ng-disabled=\"readOnly\"\n      ng-model=\"data[component.key]\"\n      ng-required=\"isRequired(component)\"\n      custom-validator=\"component.validate.custom\"\n      ng-style=\"getOptionInputStyles(component)\"\n    >\n    <span ng-if=\"(options.building || !(component.hideLabel && component.datagridLabel === false)) && !topOrLeftOptionLabel(component)\">\n      {{ component.label | formioTranslate:null:options.building | shortcut:component.shortcut }}\n      <formio-component-tooltip></formio-component-tooltip>\n    </span>\n  </label>\n</div>\n<div ng-if=\"!!component.description\" class=\"help-block\">\n  <span>{{ component.description }}</span>\n</div>\n"
+>>>>>>> formio/master
       );
     }
   ]);
@@ -82872,7 +82892,11 @@ module.exports = function(app) {
       );
 
       $templateCache.put('formio/components/file.html',
+<<<<<<< HEAD
+        "<label ng-if=\"options.building || (component.label && !component.hideLabel)\" for=\"{{ componentId }}\" class=\"control-label\" ng-class=\"{'field-required': isRequired(component)}\">\n  {{ component.label | formioTranslate:null:options.building }}\n  <formio-component-tooltip></formio-component-tooltip>\n</label>\n<span ng-if=\"!component.label && isRequired(component)\" class=\"glyphicon glyphicon-asterisk form-control-feedback field-required-inline\" aria-hidden=\"true\"></span>\n<div class=\"formio-errors\"><formio-errors ng-if=\"::!options.building\"></formio-errors></div>\n<div ng-controller=\"formioFileUpload\">\n  <formio-file-list files=\"data[component.key]\" form=\"formio.formUrl\" ng-if=\"!component.image\" ng-required=\"isRequired(component)\" ng-model=\"data[component.key]\" name=\"{{ componentId }}\"></formio-file-list>\n  <formio-image-list files=\"data[component.key]\" form=\"formio.formUrl\" width=\"component.imageSize\" ng-if=\"component.image\" ng-required=\"isRequired(component)\" ng-model=\"data[component.key]\" name=\"{{ componentId }}\"></formio-image-list>\n  <div ng-if=\"!readOnly && (component.multiple || (!component.multiple && !data[component.key].length))\">\n    <div ngf-drop=\"upload($files)\" class=\"fileSelector\" ngf-drag-over-class=\"'fileDragOver'\" ngf-multiple=\"component.multiple\" id=\"{{ componentId }}\" name=\"{{ componentId }}\"><span class=\"glyphicon glyphicon-cloud-upload\"></span>Drop files to attach, or <a style=\"cursor: pointer;\" ngf-select=\"upload($files)\" tabindex=\"{{ component.tabindex || 0 }}\" ngf-multiple=\"component.multiple\">browse</a>.</div>\n    <div ng-if=\"!component.storage\" class=\"alert alert-warning\">No storage has been set for this field. File uploads are disabled until storage is set up.</div>\n    <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>\n  </div>\n  <div ng-repeat=\"fileUpload in fileUploads track by $index\" ng-class=\"{'has-error': fileUpload.status === 'error'}\" class=\"file\">\n    <div class=\"row\">\n      <div class=\"fileName control-label col-sm-10\">{{ fileUpload.name }} <span ng-click=\"removeUpload(fileUpload.name)\" class=\"glyphicon glyphicon-remove\"></span></div>\n      <div class=\"fileSize control-label col-sm-2 text-right\">{{ fileSize(fileUpload.size) }}</div>\n    </div>\n    <div class=\"row\">\n      <div class=\"col-sm-12\">\n        <span ng-if=\"fileUpload.status === 'progress'\">\n          <div class=\"progress\">\n            <div class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\"{{fileUpload.progress}}\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width:{{fileUpload.progress}}%\">\n              <span class=\"sr-only\">{{fileUpload.progress}}% Complete</span>\n            </div>\n          </div>\n        </span>\n        <div ng-if=\"!fileUpload.status !== 'progress'\" class=\"bg-{{ fileUpload.status }} control-label\">{{ fileUpload.message }}</div>\n      </div>\n    </div>\n  </div>\n</div>\n"
+=======
         "<label ng-if=\"(options.building || (component.label && !component.hideLabel)) && component.labelPosition !== 'bottom'\" for=\"{{ componentId }}\" class=\"control-label\" ng-class=\"{'field-required': isRequired(component)}\" ng-style=\"getLabelStyles(component)\">\n  {{ component.label | formioTranslate:null:options.building }}\n  <formio-component-tooltip></formio-component-tooltip>\n</label>\n<span ng-if=\"!component.label && isRequired(component)\" class=\"glyphicon glyphicon-asterisk form-control-feedback field-required-inline\" aria-hidden=\"true\"></span>\n<div class=\"formio-errors\"><formio-errors ng-if=\"::!options.building\"></formio-errors></div>\n<div ng-controller=\"formioFileUpload\" ng-style=\"getInputGroupStyles(component)\">\n  <formio-file-list files=\"data[component.key]\" form=\"formio.formUrl\" ng-if=\"!component.image\" ng-required=\"isRequired(component)\" ng-model=\"data[component.key]\" name=\"{{ componentId }}\"></formio-file-list>\n  <formio-image-list files=\"data[component.key]\" form=\"formio.formUrl\" width=\"component.imageSize\" ng-if=\"component.image\" ng-required=\"isRequired(component)\" ng-model=\"data[component.key]\" name=\"{{ componentId }}\"></formio-image-list>\n  <div ng-if=\"!readOnly && (component.multiple || (!component.multiple && !data[component.key].length))\">\n    <div ngf-drop=\"upload($files)\"\n      class=\"fileSelector\"\n      ngf-drag-over-class=\"'fileDragOver'\"\n      ngf-pattern=\"component.filePattern\"\n      ngf-min-size=\"component.fileMinSize\"\n      ngf-max-size=\"component.fileMaxSize\"\n      ngf-multiple=\"component.multiple\"\n      id=\"{{ componentId }}\"\n      name=\"{{ componentId }}\">\n      <span class=\"glyphicon glyphicon-cloud-upload\"></span>Drop files to attach, or\n      <a style=\"cursor: pointer;\"\n        ngf-select=\"upload($files)\"\n        tabindex=\"{{ component.tabindex || 0 }}\"\n        ngf-pattern=\"component.filePattern\"\n        ngf-min-size=\"component.fileMinSize\"\n        ngf-max-size=\"component.fileMaxSize\"\n        ngf-multiple=\"component.multiple\">browse</a>.\n    </div>\n    <div ng-if=\"!component.storage\" class=\"alert alert-warning\">No storage has been set for this field. File uploads are disabled until storage is set up.</div>\n    <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>\n  </div>\n  <div ng-repeat=\"fileUpload in fileUploads track by $index\" ng-class=\"{'has-error': fileUpload.status === 'error'}\" class=\"file\">\n    <div class=\"row\">\n      <div class=\"fileName control-label col-sm-10\">{{ fileUpload.name }} <span ng-click=\"removeUpload(fileUpload.name)\" class=\"glyphicon glyphicon-remove\"></span></div>\n      <div class=\"fileSize control-label col-sm-2 text-right\">{{ fileSize(fileUpload.size) }}</div>\n    </div>\n    <div class=\"row\">\n      <div class=\"col-sm-12\">\n        <span ng-if=\"fileUpload.status === 'progress'\">\n          <div class=\"progress\">\n            <div class=\"progress-bar\" role=\"progressbar\" aria-valuenow=\"{{fileUpload.progress}}\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"width:{{fileUpload.progress}}%\">\n              <span class=\"sr-only\">{{fileUpload.progress}}% Complete</span>\n            </div>\n          </div>\n        </span>\n        <div ng-if=\"!fileUpload.status !== 'progress'\" class=\"bg-{{ fileUpload.status }} control-label\">{{ fileUpload.message }}</div>\n      </div>\n    </div>\n  </div>\n</div>\n<label ng-if=\"(options.building || (component.label && !component.hideLabel)) && component.labelPosition === 'bottom'\" for=\"{{ componentId }}\" class=\"control-label control-label--bottom\" ng-class=\"{'field-required': isRequired(component)}\">\n  {{ component.label | formioTranslate:null:options.building }}\n  <formio-component-tooltip></formio-component-tooltip>\n</label>\n"
+>>>>>>> formio/master
       );
 
       $templateCache.put('formio/componentsView/file.html',
@@ -83724,7 +83748,11 @@ module.exports = function(app) {
     '$templateCache',
     function($templateCache) {
       $templateCache.put('formio/components/resource.html',
+<<<<<<< HEAD
+        "<div ng-if=\"!component.addResource\">\n  <label ng-if=\"options.building || (component.label && !component.hideLabel)\" for=\"{{ componentId }}\" class=\"control-label\" ng-class=\"{'field-required': isRequired(component)}\">\n    {{ component.label | formioTranslate:null:options.building }}\n    <formio-component-tooltip></formio-component-tooltip>\n  </label>\n  <span ng-if=\"!component.label && isRequired(component)\" class=\"glyphicon glyphicon-asterisk form-control-feedback field-required-inline\" aria-hidden=\"true\"></span>\n  <ui-select ui-select-required safe-multiple-to-single ui-select-open-on-focus ng-model=\"data[component.key]\" ng-disabled=\"readOnly\" ng-required=\"isRequired(component)\" id=\"{{ componentId }}\" name=\"{{ componentId }}\" theme=\"bootstrap\" tabindex=\"{{ component.tabindex || 0 }}\">\n    <ui-select-match class=\"ui-select-match\" placeholder=\"{{ component.placeholder | formioTranslate:null:options.building }}\">\n      <formio-select-item template=\"component.template\" item=\"$item || $select.selected\" select=\"$select\"></formio-select-item>\n    </ui-select-match>\n    <ui-select-choices class=\"ui-select-choices\" repeat=\"item in selectItems | filter: $select.search\" refresh=\"refreshSubmissions($select.search)\" refresh-delay=\"250\">\n      <formio-select-item template=\"component.template\" item=\"item\" select=\"$select\"></formio-select-item>\n      <button ng-if=\"hasNextPage && ($index == $select.items.length-1)\" class=\"btn btn-success btn-block\" ng-click=\"loadMoreItems($select, $event)\" ng-disabled=\"resourceLoading\">Load more...</button>\n    </ui-select-choices>\n  </ui-select>\n  <formio-errors ng-if=\"::!options.building\"></formio-errors>\n</div>\n<div ng-if=\"component.addResource\">\n  <table class=\"table table-bordered\">\n    <label ng-if=\"options.building || (component.label && !component.hideLabel)\" for=\"{{ componentId }}\" class=\"control-label\" ng-class=\"{'field-required': isRequired(component)}\">\n      {{ component.label | formioTranslate:null:options.building }}\n      <formio-component-tooltip></formio-component-tooltip>\n    </label>\n    <span ng-if=\"!component.label && isRequired(component)\" class=\"glyphicon glyphicon-asterisk form-control-feedback field-required-inline\" aria-hidden=\"true\"></span>\n    <tr>\n      <td>\n        <ui-select ui-select-required safe-multiple-to-single ui-select-open-on-focus ng-model=\"data[component.key]\" ng-disabled=\"readOnly\" ng-required=\"isRequired(component)\" id=\"{{ componentId }}\" name=\"{{ componentId }}\" theme=\"bootstrap\" tabindex=\"{{ component.tabindex || 0 }}\">\n          <ui-select-match class=\"ui-select-match\" placeholder=\"{{ component.placeholder | formioTranslate:null:options.building }}\">\n            <formio-select-item template=\"component.template\" item=\"$item || $select.selected\" select=\"$select\"></formio-select-item>\n          </ui-select-match>\n          <ui-select-choices class=\"ui-select-choices\" repeat=\"item in selectItems | filter: $select.search\" refresh=\"refreshSubmissions($select.search)\" refresh-delay=\"250\">\n            <formio-select-item template=\"component.template\" item=\"item\" select=\"$select\"></formio-select-item>\n            <button ng-if=\"hasNextPage && ($index == $select.items.length-1)\" class=\"btn btn-success btn-block\" ng-click=\"loadMoreItems($select, $event)\" ng-disabled=\"resourceLoading\">Load more...</button>\n          </ui-select-choices>\n        </ui-select>\n        <formio-errors ng-if=\"::!options.building\"></formio-errors>\n      </td>\n    </tr>\n    <tr>\n      <td>\n        <a ng-click=\"newResource()\" class=\"btn btn-primary\">\n          <span class=\"glyphicon glyphicon-plus\" aria-hidden=\"true\"></span> {{ component.addResourceLabel || \"Add Resource\" | formioTranslate:null:options.building}}\n        </a>\n      </td>\n    </tr>\n  </table>\n</div>\n"
+=======
         "<div ng-if=\"!component.addResource\">\n  <label ng-if=\"(options.building || (component.label && !component.hideLabel)) && component.labelPosition !== 'bottom'\" for=\"{{ componentId }}\" class=\"control-label\" ng-class=\"{'field-required': isRequired(component)}\" ng-style=\"getLabelStyles(component)\">\n    {{ component.label | formioTranslate:null:options.building }}\n    <formio-component-tooltip></formio-component-tooltip>\n  </label>\n  <span ng-if=\"!component.label && isRequired(component)\" class=\"glyphicon glyphicon-asterisk form-control-feedback field-required-inline\" aria-hidden=\"true\"></span>\n  <ui-select ui-select-required safe-multiple-to-single ui-select-open-on-focus ng-model=\"data[component.key]\" ng-disabled=\"readOnly\" ng-required=\"isRequired(component)\" id=\"{{ componentId }}\" name=\"{{ componentId }}\" theme=\"bootstrap\" tabindex=\"{{ component.tabindex || 0 }}\" ng-style=\"getInputGroupStyles(component)\">\n    <ui-select-match class=\"ui-select-match\" placeholder=\"{{ component.placeholder | formioTranslate:null:options.building }}\">\n      <formio-select-item template=\"component.template\" item=\"$item || $select.selected\" select=\"$select\"></formio-select-item>\n    </ui-select-match>\n    <ui-select-choices class=\"ui-select-choices\" repeat=\"item in selectItems | filter: $select.search\" refresh=\"refreshSubmissions($select.search)\" refresh-delay=\"250\">\n      <formio-select-item template=\"component.template\" item=\"item\" select=\"$select\"></formio-select-item>\n      <button ng-if=\"hasNextPage && ($index == $select.items.length-1)\" class=\"btn btn-success btn-block\" ng-click=\"loadMoreItems($select, $event)\" ng-disabled=\"resourceLoading\">Load more...</button>\n    </ui-select-choices>\n  </ui-select>\n  <label ng-if=\"(options.building || (component.label && !component.hideLabel)) && component.labelPosition === 'bottom'\" for=\"{{ componentId }}\" class=\"control-label control-label--bottom\" ng-class=\"{'field-required': isRequired(component)}\">\n    {{ component.label | formioTranslate:null:options.building }}\n    <formio-component-tooltip></formio-component-tooltip>\n  </label>\n  <formio-errors ng-if=\"::!options.building\"></formio-errors>\n</div>\n<div ng-if=\"component.addResource\">\n  <table class=\"table table-bordered\">\n    <label ng-if=\"options.building || (component.label && !component.hideLabel)\" for=\"{{ componentId }}\" class=\"control-label\" ng-class=\"{'field-required': isRequired(component)}\">\n      {{ component.label | formioTranslate:null:options.building }}\n      <formio-component-tooltip></formio-component-tooltip>\n    </label>\n    <span ng-if=\"!component.label && isRequired(component)\" class=\"glyphicon glyphicon-asterisk form-control-feedback field-required-inline\" aria-hidden=\"true\"></span>\n    <tr>\n      <td>\n        <ui-select ui-select-required safe-multiple-to-single ui-select-open-on-focus ng-model=\"data[component.key]\" ng-disabled=\"readOnly\" ng-required=\"isRequired(component)\" id=\"{{ componentId }}\" name=\"{{ componentId }}\" theme=\"bootstrap\" tabindex=\"{{ component.tabindex || 0 }}\">\n          <ui-select-match class=\"ui-select-match\" placeholder=\"{{ component.placeholder | formioTranslate:null:options.building }}\">\n            <formio-select-item template=\"component.template\" item=\"$item || $select.selected\" select=\"$select\"></formio-select-item>\n          </ui-select-match>\n          <ui-select-choices class=\"ui-select-choices\" repeat=\"item in selectItems | filter: $select.search\" refresh=\"refreshSubmissions($select.search)\" refresh-delay=\"250\">\n            <formio-select-item template=\"component.template\" item=\"item\" select=\"$select\"></formio-select-item>\n            <button ng-if=\"hasNextPage && ($index == $select.items.length-1)\" class=\"btn btn-success btn-block\" ng-click=\"loadMoreItems($select, $event)\" ng-disabled=\"resourceLoading\">Load more...</button>\n          </ui-select-choices>\n        </ui-select>\n        <formio-errors ng-if=\"::!options.building\"></formio-errors>\n      </td>\n    </tr>\n    <tr>\n      <td>\n        <a ng-click=\"newResource()\" class=\"btn btn-primary\">\n          <span class=\"glyphicon glyphicon-plus\" aria-hidden=\"true\"></span> {{ component.addResourceLabel || \"Add Resource\" | formioTranslate:null:options.building}}\n        </a>\n      </td>\n    </tr>\n  </table>\n</div>\n"
+>>>>>>> formio/master
       );
 
       // Change the ui-select to ui-select multiple.
@@ -84351,7 +84379,11 @@ module.exports = function(app) {
     '$templateCache',
     function($templateCache) {
       $templateCache.put('formio/components/select.html',
+<<<<<<< HEAD
+        "<label ng-if=\"options.building || (component.label && !component.hideLabel)\"  for=\"{{ componentId }}\" class=\"control-label\" ng-class=\"{'field-required': isRequired(component)}\">\n  {{ component.label | formioTranslate:null:options.building }}\n  <formio-component-tooltip></formio-component-tooltip>\n</label>\n<span ng-if=\"!component.label && isRequired(component)\" class=\"glyphicon glyphicon-asterisk form-control-feedback field-required-inline\" aria-hidden=\"true\"></span>\n<ui-select\n  ui-select-required\n  ui-select-open-on-focus\n  ng-model=\"data[component.key]\"\n  safe-multiple-to-single\n  name=\"{{ componentId }}\"\n  ng-disabled=\"readOnly\"\n  ng-required=\"isRequired(component)\"\n  id=\"{{ componentId }}\"\n  theme=\"bootstrap\"\n  custom-validator=\"component.validate.custom\"\n  tabindex=\"{{ component.tabindex || 0 }}\"\n>\n  <ui-select-match class=\"ui-select-match\" placeholder=\"{{ component.placeholder | formioTranslate:null:options.building }}\">\n    <formio-select-item template=\"component.template\" item=\"$item || $select.selected\" select=\"$select\"></formio-select-item>\n  </ui-select-match>\n  <ui-select-choices class=\"ui-select-choices\" repeat=\"getSelectItem(item) as item in selectItems | filter: $select.search\" refresh=\"refreshItems($select.search)\" refresh-delay=\"250\">\n    <formio-select-item template=\"component.template\" item=\"item\" select=\"$select\"></formio-select-item>\n    <button ng-if=\"hasNextPage && ($index == $select.items.length-1)\" class=\"btn btn-success btn-block\" ng-click=\"loadMoreItems($select, $event)\" ng-disabled=\"selectLoading\">Load more...</button>\n  </ui-select-choices>\n</ui-select>\n<div ng-if=\"!!component.description\" class=\"help-block\">\n  <span>{{ component.description }}</span>\n</div>\n<formio-errors ng-if=\"::!options.building\"></formio-errors>\n"
+=======
         "<label ng-if=\"(options.building || (component.label && !component.hideLabel)) && component.labelPosition !== 'bottom'\" for=\"{{ componentId }}\" class=\"control-label\" ng-class=\"{'field-required': isRequired(component)}\" ng-style=\"getLabelStyles(component)\">\n  {{ component.label | formioTranslate:null:options.building }}\n  <formio-component-tooltip></formio-component-tooltip>\n</label>\n<span ng-if=\"!component.label && isRequired(component)\" class=\"glyphicon glyphicon-asterisk form-control-feedback field-required-inline\" aria-hidden=\"true\"></span>\n<ui-select\n  ui-select-required\n  ui-select-open-on-focus\n  ng-model=\"data[component.key]\"\n  safe-multiple-to-single\n  name=\"{{ componentId }}\"\n  ng-disabled=\"readOnly\"\n  ng-required=\"isRequired(component)\"\n  id=\"{{ componentId }}\"\n  theme=\"bootstrap\"\n  custom-validator=\"component.validate.custom\"\n  tabindex=\"{{ component.tabindex || 0 }}\"\n  ng-style=\"getInputGroupStyles(component)\"\n>\n  <ui-select-match class=\"ui-select-match\" placeholder=\"{{ component.placeholder | formioTranslate:null:options.building }}\">\n    <formio-select-item template=\"component.template\" item=\"$item || $select.selected\" select=\"$select\"></formio-select-item>\n  </ui-select-match>\n  <ui-select-choices class=\"ui-select-choices\" repeat=\"getSelectItem(item) as item in selectItems | filter: $select.search\" refresh=\"refreshItems($select.search)\" refresh-delay=\"250\">\n    <formio-select-item template=\"component.template\" item=\"item\" select=\"$select\"></formio-select-item>\n    <button ng-if=\"hasNextPage && ($index == $select.items.length-1)\" class=\"btn btn-success btn-block\" ng-click=\"loadMoreItems($select, $event)\" ng-disabled=\"selectLoading\">Load more...</button>\n  </ui-select-choices>\n</ui-select>\n<label ng-if=\"(options.building || (component.label && !component.hideLabel)) && component.labelPosition === 'bottom'\" for=\"{{ componentId }}\" class=\"control-label control-label--bottom\" ng-class=\"{'field-required': isRequired(component)}\">\n  {{ component.label | formioTranslate:null:options.building }}\n  <formio-component-tooltip></formio-component-tooltip>\n</label>\n<div ng-if=\"!!component.description\" class=\"help-block\">\n  <span>{{ component.description }}</span>\n</div>\n<formio-errors ng-if=\"::!options.building\"></formio-errors>\n"
+>>>>>>> formio/master
       );
 
       // Change the ui-select to ui-select multiple.
@@ -84481,7 +84513,11 @@ module.exports = function(app) {
         "<div class=\"select-boxes\">\n  <div ng-class=\"component.inline ? 'checkbox-inline' : 'checkbox'\" ng-repeat=\"v in component.values track by $index\">\n    <label class=\"control-label\" for=\"{{ componentId }}-{{ v.value }}\" ng-style=\"getOptionLabelStyles(component)\">\n      <span ng-if=\"topOrLeftOptionLabel(component)\">{{ v.label | formioTranslate:null:options.building }}</span>\n      <input type=\"checkbox\"\n        id=\"{{ componentId }}-{{ v.value }}\"\n        name=\"{{ componentId }}-{{ v.value }}\"\n        value=\"{{ v.value }}\"\n        tabindex=\"{{ component.tabindex || 0 }}\"\n        ng-disabled=\"readOnly\"\n        ng-click=\"toggleCheckbox(v.value)\"\n        ng-checked=\"model[v.value]\"\n        grid-row=\"gridRow\"\n        grid-col=\"gridCol\"\n        ng-style=\"getOptionInputStyles(component)\"\n      >\n      <span ng-if=\"!topOrLeftOptionLabel(component)\">{{ v.label | formioTranslate:null:options.building | shortcut:v.shortcut }}</span>\n    </label>\n  </div>\n</div>\n"
       );
       $templateCache.put('formio/components/selectboxes.html',
+<<<<<<< HEAD
+        "<div class=\"select-boxes\">\n  <label ng-if=\"options.building || (component.label && !component.hideLabel)\" for=\"{{ componentId }}\" class=\"control-label\" ng-class=\"{'field-required': isRequired(component)}\">\n    {{ component.label }}\n    <formio-component-tooltip></formio-component-tooltip>\n  </label>\n  <formio-select-boxes\n    name=\"{{componentId}}\"\n    ng-model=\"data[component.key]\"\n    ng-model-options=\"{allowInvalid: true}\"\n    component=\"component\"\n    component-id=\"componentId\"\n    read-only=\"readOnly\"\n    ng-required=\"isRequired(component)\"\n    custom-validator=\"component.validate.custom\"\n    grid-row=\"gridRow\"\n    grid-col=\"gridCol\"\n    options=\"options\"\n  ></formio-select-boxes>\n  <div ng-if=\"!!component.description\" class=\"help-block\">\n    <span>{{ component.description }}</span>\n  </div>\n  <formio-errors ng-if=\"::!options.building\"></formio-errors>\n</div>\n"
+=======
         "<div class=\"select-boxes\">\n  <label ng-if=\"(options.building || (component.label && !component.hideLabel)) && component.labelPosition !== 'bottom'\" for=\"{{ componentId }}\" class=\"control-label\" ng-class=\"{'field-required': isRequired(component)}\" ng-style=\"getLabelStyles(component)\">\n    {{ component.label }}\n    <formio-component-tooltip></formio-component-tooltip>\n  </label>\n  <formio-select-boxes\n    name=\"{{componentId}}\"\n    ng-model=\"data[component.key]\"\n    ng-model-options=\"{allowInvalid: true}\"\n    component=\"component\"\n    component-id=\"componentId\"\n    read-only=\"readOnly\"\n    ng-required=\"isRequired(component)\"\n    custom-validator=\"component.validate.custom\"\n    grid-row=\"gridRow\"\n    grid-col=\"gridCol\"\n    options=\"options\"\n    ng-style=\"getInputGroupStyles(component)\"\n  ></formio-select-boxes>\n  <label ng-if=\"(options.building || (component.label && !component.hideLabel)) && component.labelPosition === 'bottom'\" for=\"{{ componentId }}\" class=\"control-label control-label--bottom\" ng-class=\"{'field-required': isRequired(component)}\">\n    {{ component.label }}\n    <formio-component-tooltip></formio-component-tooltip>\n  </label>\n  <div ng-if=\"!!component.description\" class=\"help-block\">\n    <span>{{ component.description }}</span>\n  </div>\n  <formio-errors ng-if=\"::!options.building\"></formio-errors>\n</div>\n"
+>>>>>>> formio/master
       );
     }
   ]);
@@ -87436,11 +87472,15 @@ module.exports = function() {
     },
     fieldWrap: function(input) {
       var multiInput = input.replace('data[component.key]', 'data[component.key][$index]');
+<<<<<<< HEAD
+      var inputLabel = '<label ng-if="options.building || (component.label && !component.hideLabel)" for="{{ component.key }}" class="control-label" ng-class="{\'field-required\': isRequired(component)}">' +
+=======
       var inputTopLabel = '<label ng-if="(options.building || (component.label && !component.hideLabel)) && component.labelPosition !== \'bottom\'" for="{{ component.key }}" class="control-label" ng-class="{\'field-required\': isRequired(component)}" ng-style="getLabelStyles(component)">' +
         '{{ component.label | formioTranslate:null:options.building }} ' +
         '<formio-component-tooltip></formio-component-tooltip>' +
         '</label>';
       var inputBottomLabel = '<label ng-if="(options.building || (component.label && !component.hideLabel)) && component.labelPosition === \'bottom\'" for="{{ component.key }}" class="control-label control-label--bottom" ng-class="{\'field-required\': isRequired(component)}">' +
+>>>>>>> formio/master
         '{{ component.label | formioTranslate:null:options.building }} ' +
         '<formio-component-tooltip></formio-component-tooltip>' +
         '</label>';
@@ -87784,6 +87824,8 @@ module.exports = [
 ];
 
 },{}],317:[function(_dereq_,module,exports){
+<<<<<<< HEAD
+=======
 "use strict";
 module.exports = function() {
     return function(label, shortcut) {
@@ -87806,6 +87848,7 @@ module.exports = function() {
   }
   
 },{}],318:[function(_dereq_,module,exports){
+>>>>>>> formio/master
 "use strict";
 module.exports = [
   function() {
@@ -87824,7 +87867,11 @@ module.exports = [
   }
 ];
 
+<<<<<<< HEAD
+},{}],318:[function(_dereq_,module,exports){
+=======
 },{}],319:[function(_dereq_,module,exports){
+>>>>>>> formio/master
 "use strict";
 module.exports = [
   'formioTableView',
@@ -87837,7 +87884,11 @@ module.exports = [
   }
 ];
 
+<<<<<<< HEAD
+},{}],319:[function(_dereq_,module,exports){
+=======
 },{}],320:[function(_dereq_,module,exports){
+>>>>>>> formio/master
 "use strict";
 module.exports = [
   'Formio',
@@ -87852,7 +87903,11 @@ module.exports = [
   }
 ];
 
+<<<<<<< HEAD
+},{}],320:[function(_dereq_,module,exports){
+=======
 },{}],321:[function(_dereq_,module,exports){
+>>>>>>> formio/master
 "use strict";
 module.exports = [
   '$filter',
@@ -87909,7 +87964,11 @@ module.exports = [
   }
 ];
 
+<<<<<<< HEAD
+},{}],321:[function(_dereq_,module,exports){
+=======
 },{}],322:[function(_dereq_,module,exports){
+>>>>>>> formio/master
 "use strict";
 module.exports = ['$sce', function($sce) {
   return function(val) {
@@ -87917,7 +87976,11 @@ module.exports = ['$sce', function($sce) {
   };
 }];
 
+<<<<<<< HEAD
+},{}],322:[function(_dereq_,module,exports){
+=======
 },{}],323:[function(_dereq_,module,exports){
+>>>>>>> formio/master
 (function (global){
 "use strict";
 global.jQuery = _dereq_('jquery');
@@ -87937,7 +88000,11 @@ _dereq_('angular-ui-ace/src/ui-ace');
 _dereq_('./formio');
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+<<<<<<< HEAD
+},{"./formio":323,"angular":12,"angular-ckeditor":1,"angular-file-saver":2,"angular-moment":3,"angular-sanitize":5,"angular-ui-ace/src/ui-ace":6,"angular-ui-bootstrap":8,"angular-ui-mask":10,"bootstrap":14,"bootstrap-ui-datetime-picker/dist/datetime-picker":13,"jquery":39,"ng-dialog":253,"ng-file-upload":255,"ui-select/dist/select":259}],323:[function(_dereq_,module,exports){
+=======
 },{"./formio":324,"angular":12,"angular-ckeditor":1,"angular-file-saver":2,"angular-moment":3,"angular-sanitize":5,"angular-ui-ace/src/ui-ace":6,"angular-ui-bootstrap":8,"angular-ui-mask":10,"bootstrap":14,"bootstrap-ui-datetime-picker/dist/datetime-picker":13,"jquery":39,"ng-dialog":253,"ng-file-upload":255,"ui-select/dist/select":259}],324:[function(_dereq_,module,exports){
+>>>>>>> formio/master
 "use strict";
 _dereq_('./polyfills/polyfills');
 
@@ -88096,7 +88163,11 @@ app.run([
 
 _dereq_('./components');
 
+<<<<<<< HEAD
+},{"./components":280,"./directives/customValidator":297,"./directives/formio":298,"./directives/formioBindHtml.js":299,"./directives/formioComponent":300,"./directives/formioComponentTooltip":301,"./directives/formioComponentView":302,"./directives/formioDelete":303,"./directives/formioElement":304,"./directives/formioErrors":305,"./directives/formioScriptEditor":306,"./directives/formioSubmission":307,"./directives/formioSubmissions":308,"./directives/formioWizard":309,"./factories/FormioScope":310,"./factories/FormioUtils":311,"./factories/formioInterceptor":313,"./factories/formioTableView":314,"./filters/flattenComponents":315,"./filters/safehtml":316,"./filters/tableComponents":317,"./filters/tableFieldView":318,"./filters/tableView":319,"./filters/translate":320,"./filters/trusturl":321,"./polyfills/polyfills":325,"./providers/Formio":326}],324:[function(_dereq_,module,exports){
+=======
 },{"./components":280,"./directives/customValidator":297,"./directives/formio":298,"./directives/formioBindHtml.js":299,"./directives/formioComponent":300,"./directives/formioComponentTooltip":301,"./directives/formioComponentView":302,"./directives/formioDelete":303,"./directives/formioElement":304,"./directives/formioErrors":305,"./directives/formioScriptEditor":306,"./directives/formioSubmission":307,"./directives/formioSubmissions":308,"./directives/formioWizard":309,"./factories/FormioScope":310,"./factories/FormioUtils":311,"./factories/formioInterceptor":313,"./factories/formioTableView":314,"./filters/flattenComponents":315,"./filters/safehtml":316,"./filters/shortcut":317,"./filters/tableComponents":318,"./filters/tableFieldView":319,"./filters/tableView":320,"./filters/translate":321,"./filters/trusturl":322,"./polyfills/polyfills":326,"./providers/Formio":327}],325:[function(_dereq_,module,exports){
+>>>>>>> formio/master
 "use strict";
 'use strict';
 
@@ -88127,13 +88198,21 @@ if (typeof Object.assign != 'function') {
   })();
 }
 
+<<<<<<< HEAD
+},{}],325:[function(_dereq_,module,exports){
+=======
 },{}],326:[function(_dereq_,module,exports){
+>>>>>>> formio/master
 "use strict";
 'use strict';
 
 _dereq_('./Object.assign');
 
+<<<<<<< HEAD
+},{"./Object.assign":324}],326:[function(_dereq_,module,exports){
+=======
 },{"./Object.assign":325}],327:[function(_dereq_,module,exports){
+>>>>>>> formio/master
 "use strict";
 module.exports = function() {
   // The formio class.
@@ -88203,5 +88282,9 @@ module.exports = function() {
   };
 };
 
+<<<<<<< HEAD
+},{"formiojs":29}]},{},[322])(322)
+=======
 },{"formiojs":29}]},{},[323])(323)
+>>>>>>> formio/master
 });
