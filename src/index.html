@@ -310,7 +310,7 @@
 
         // Ensure we have a login form.
         if (!$rootScope.login) {
-          $rootScope.login = urlQuery.login || (protocol + '://formio.' + host + '/user/login');
+          $rootScope.login = urlQuery.login || (protocol + '://' + host + '/formio/user/login');
         }
 
         // Get the main formio object.
