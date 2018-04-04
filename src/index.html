@@ -286,7 +286,7 @@
           }
           project = paths.shift();
           formPath = paths.join('/');
-          projectApi = protocol + '://' + project + '.' + host;
+          projectApi = protocol + '://' + host + '/' + project;
           baseUrl = protocol + '://api.' + host;
           $rootScope.formSrc = projectApi + '/' + formPath;
           if (!$rootScope.login) {
