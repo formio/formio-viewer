@@ -280,14 +280,14 @@
           path = path.replace(/^\//, '');
           var paths = path.split('/');
           var protocol = query.protocol || urlQuery.protocol || 'https';
-          var host = query.host || urlQuery.host || 'form.io';
+          var host = query.host || urlQuery.host || 'api.form.io';
           if (paths.length < 2) {
             return;
           }
           project = paths.shift();
           formPath = paths.join('/');
-          projectApi = protocol + '://' + project + '.' + host;
-          baseUrl = protocol + '://api.' + host;
+          projectApi = protocol + '://' + host + '/' + project;
+          baseUrl = protocol + '://' + host;
           $rootScope.formSrc = projectApi + '/' + formPath;
           if (!$rootScope.login) {
             $rootScope.login = projectApi + '/';
@@ -310,7 +310,7 @@
 
         // Ensure we have a login form.
         if (!$rootScope.login) {
-          $rootScope.login = urlQuery.login || (protocol + '://formio.' + host + '/user/login');
+          $rootScope.login = urlQuery.login || (protocol + '://' + host + '/formio/user/login');
         }
 
         // Get the main formio object.
