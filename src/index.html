@@ -4,41 +4,14 @@
     <meta charset="utf-8">
     <title></title>
     <meta name="viewport" content="width=device-width">
-    <script src="lib/base64.min.js"></script>
-    <script src="https://cdn.ckeditor.com/4.7.3/full/ckeditor.js"></script>
-
-    <!-- Favicons -->
-    <link rel="apple-touch-icon" sizes="57x57" href="assets/favicons/apple-touch-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="assets/favicons/apple-touch-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="assets/favicons/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="assets/favicons/apple-touch-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="assets/favicons/apple-touch-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="assets/favicons/apple-touch-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="assets/favicons/apple-touch-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="assets/favicons/apple-touch-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicons/apple-touch-icon-180x180.png">
-    <link rel="icon" type="image/png" href="assets/favicons/favicon-32x32.png" sizes="32x32">
-    <link rel="icon" type="image/png" href="assets/favicons/android-chrome-192x192.png" sizes="192x192">
-    <link rel="icon" type="image/png" href="assets/favicons/favicon-96x96.png" sizes="96x96">
-    <link rel="icon" type="image/png" href="assets/favicons/favicon-16x16.png" sizes="16x16">
-    <link rel="manifest" href="assets/favicons/manifest.json">
-    <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="msapplication-TileImage" content="assets/favicons/mstile-144x144.png">
-    <meta name="theme-color" content="#ffffff">
+    <script id="header" type="text/template"><nav class="navbar navbar-default"><div class="container-fluid"><div class="navbar-header"><a class="navbar-brand" id="form-title"></a></div></div></nav></script>
+    <script id="branding" type="text/template"><hr /><h4 class="text-center text-muted">powered by <img src="assets/logo.png" style="height: 1.2em;" /></h4></script>
     <script type="text/javascript">
       var query = {};
-      var hashes = location.hash.substr(1).replace(/\?/g, '&').split("&");
-      var path = hashes.shift();
-      var newPaths = [path];
-      hashes.forEach(function (item) {
-        var parts = item.split("=");
-        if (parts[0] !== 'token') {
-          newPaths.push(item);
-        }
-        query[parts[0]] = parts[1] && decodeURIComponent(parts[1]);
+      location.search.substr(1).split("&").forEach(function(item) {
+        query[item.split("=")[0]] = item.split("=")[1] && decodeURIComponent(item.split("=")[1]);
       });
 
-      // Allow them to provide a custom theme.
       if (query.theme) {
         var cssLink = '<link rel="stylesheet" href="lib/bootswatch/';
         cssLink += query.theme;
@@ -46,50 +19,44 @@
         document.write(cssLink);
       }
       else {
-        document.write('<link rel="stylesheet" href="lib/bootstrap.min.css" />');
+        document.write('<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />');
       }
-
-      // Allow them to provide SSO tokens to the form viewer.
-      if (query.token) {
-        localStorage.setItem('formioToken', query.token);
-        localStorage.removeItem('formioAppUser');
-        localStorage.removeItem('formioUser');
-      }
-
-      // Allow them to provide their own stylesheets.
-      if (query.styles) {
-        var styles = Base64.decode(query.styles);
-        if (styles && styles.length) {
-          document.write('<link rel="stylesheet" href="' + styles + '" />');
-        }
-      }
-
-      window.history.pushState("", "", location.pathname + '#' + newPaths.join('&'));
     </script>
+    <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="lib/formiojs/formio.form.min.css" />
     <style type="text/css">
-        [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
-            display: none !important;
+        .main {
+            margin-top: 10px;
+        }
+
+        .iframe.notheme {
+            background-color: transparent;
+        }
+        .iframe .main {
+            margin:0;
+            padding:0;
+            width: 100%;
+        }
+        .iframe.hasheader .main {
+            margin-bottom: 55px;
+        }
+        .iframe .navbar .container {
+            margin:0;
+            width: 100%;
+        }
+        .navbar .container .navbar-right {
+            margin-right: 0;
+        }
+
+        .navbar {
+            margin-bottom: 0px;
         }
     </style>
-    <link rel="stylesheet" href="lib/formio-full.min.css"/>
+    <script src="lib/formiojs/formio.form.min.js"></script>
+    <script src="lib/seamless/seamless.child.min.js"></script>
 </head>
-<body ng-app="formioFormApp">
-<script id="header" type="text/template">
-    <nav class="navbar navbar-default">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" ng-cloak>{{ form.title }}</a>
-            </div>
-            <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="https://form.io" class="navbar-link">powered by <img src="assets/logo.png" style="height:1.2em;" /></a></li>
-                    <li ng-if="user" ng-cloak><a ng-click="logout()" class="navbar-link"><span class="glyphicon glyphicon-off" aria-hidden="true"></span> Logout</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-</script>
-<script>
+<body>
+<script type="text/javascript">
   var bodyClass = '';
   if (!query.header || parseInt(query.header, 10)) {
     document.write(document.getElementById('header').innerHTML);
@@ -105,404 +72,27 @@
     document.body.className = bodyClass;
   }
 </script>
-
-<!-- BROWSE HAPPY BEGINS HERE -->
-<style>
-    .browsehappy {
-        display: block;
-        width: 100%;
-        height: 100px;
-        background-color: #f2dede;
-        margin: 0 0 10px;
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        font-size: 22px;
-        line-height: 1.4;
-        color: #333;
-        padding-top: 15px;
-        vertical-align: middle;
-    }
-
-    .hasheader .browsehappy {
-        margin-top: 50px;
-    }
-
-    .browsehappy span {
-        vertical-align: middle;
-        margin: 20px 20px 20px 20px;
-        background: url("https://cdn.rawgit.com/alrra/browser-logos/master/internet-explorer/internet-explorer_64x64.png") no-repeat;
-        height: 64px;
-        width: 64px;
-        display: inline-block;
-    }
-
-    .main {
-        margin-top: 12px;
-    }
-
-    .hasheader .main {
-        margin-bottom: 55px;
-    }
-
-    .iframe.notheme {
-        background-color: transparent;
-    }
-
-    .iframe .main {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-    }
-
-    .iframe.hasheader .main {
-        margin-bottom: 55px;
-    }
-
-    .iframe .navbar .container {
-        margin: 0;
-        width: 100%;
-    }
-
-    .navbar {
-        margin-bottom: 0px;
-    }
-
-    .formio-submission {
-        margin-top: 34px;
-    }
-
-    .navbar-link {
-        cursor: pointer;
-    }
-
-    [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
-        display: none !important;
-    }
-</style>
-<!--[if IE 6]><p class="browsehappy"><img/>You are using an <strong>outdated</strong> browser. Please <a
-        href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]-->
-<!--[if IE 7]><p class="browsehappy"><img
-        src="https://cdn.rawgit.com/alrra/browser-logos/master/internet-explorer/internet-explorer_64x64.png"/>You are
-    using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to
-    improve your experience.</p><![endif]-->
-<!--[if IE 8]><p class="browsehappy"><img
-        src="https://cdn.rawgit.com/alrra/browser-logos/master/internet-explorer/internet-explorer_64x64.png"/>You are
-    using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to
-    improve your experience.</p><![endif]-->
-<!--[if IE 9]><p class="browsehappy"><img
-        src="https://cdn.rawgit.com/alrra/browser-logos/master/internet-explorer/internet-explorer_64x64.png"/>You are
-    using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to
-    improve your experience.</p><![endif]-->
-<!-- BROWSE HAPPY ENDS HERE -->
-
-<!-- Add the form.io form. -->
-<div class="container main">
-    <div ng-cloak>
-        <div class="alert alert-danger" ng-if="formError">{{ formError }}</div>
-        <i style="font-size: 2em;" ng-if="formLoading" ng-class="{'formio-hidden': !formLoading}" class="formio-loading glyphicon glyphicon-refresh glyphicon-spin"></i>
-        <div ng-if="!formLoading">
-            <div ng-if="!showLogin">
-                <a ng-if="hasSubmission" type="button" ng-click="generatePDF()"
-                   style="float:right;cursor:pointer;margin-top:-32px"><img src="assets/download-pdf.png"
-                                                                            style="height:30px"/></a>
-                <formio form="form" read-only="submitted" submission="submission" url="formSrc" ng-class="{'formio-submission': hasSubmission}"></formio>
-            </div>
-            <div ng-if="showLogin" style="margin-top: 20px;">
-                <div class="row">
-                    <div class="col-md-6 col-md-offset-3">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h1 class="panel-title"><strong>Please login to continue</strong></h1>
-                            </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <formio src="login"></formio>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="container-fluid main pf" id="main">
+    <div id="formio"></div>
 </div>
-<script src="lib/formio-full.min.js"></script>
-<script src="lib/seamless.child.min.js"></script>
-<script src="lib/jspdf.min.js"></script>
-<script src="lib/html2canvas.min.js"></script>
 <script type="text/javascript">
-  var parentPage = window.seamless.connect({
-    container: 'div.main'
-  });
-  angular.module('formioFormApp', ['formio'])
-    .config([
-      '$locationProvider',
-      function ($locationProvider) {
-        $locationProvider.hashPrefix('');
+  window.setForm = function(form, submission, options) {
+    return Formio.createForm(document.getElementById("formio"), form, options).then(function(instance) {
+      var title = document.getElementById("form-title");
+      if (title) {
+        title.appendChild(document.createTextNode(instance.form.title));
       }
-    ])
-    .run([
-      '$rootScope',
-      '$timeout',
-      '$location',
-      'Formio',
-      '$controller',
-      function (
-        $rootScope,
-        $timeout,
-        $location,
-        Formio,
-        $controller
-      ) {
-        var urlQuery = $location.search();
-        var returnUrl = query.return || urlQuery.return;
-        $rootScope.formSrc = query.form || urlQuery.form;
-        var pdfName;
+      return submission ? instance.setSubmission(submission) : instance;
+    });
+  };
 
-        $rootScope.formError = '';
-        $rootScope.formLoading = true;
-        $rootScope.form = null;
-        $rootScope.showLogin = false;
-        $rootScope.submission = {data: {}};
-        $rootScope.submitted = 0;
-        $rootScope.user = null;
+  if (query.src) {
+    window.setForm(query.src);
+  }
 
-        var project = '';
-        var projectApi = '';
-        var formPath = '';
-        var baseUrl = 'https://api.form.io';
-        $rootScope.login = '';
-        if (!path && !$rootScope.formSrc) {
-          return;
-        }
-        if (!$rootScope.formSrc && path) {
-          path = path.replace(/^\//, '');
-          var paths = path.split('/');
-          var protocol = query.protocol || urlQuery.protocol || 'https';
-          var host = query.host || urlQuery.host || 'api.form.io';
-          if (paths.length < 2) {
-            return;
-          }
-          project = paths.shift();
-          formPath = paths.join('/');
-          projectApi = protocol + '://' + host + '/' + project;
-          baseUrl = protocol + '://' + host;
-          $rootScope.formSrc = projectApi + '/' + formPath;
-          if (!$rootScope.login) {
-            $rootScope.login = projectApi + '/';
-            $rootScope.login += (query.login || urlQuery.login || 'user/login');
-          }
-        }
-
-        // Set the base and project urls
-        Formio.setBaseUrl(baseUrl);
-        Formio.setProjectUrl(projectApi);
-        Formio.currentUser().then(function(user) {
-          $rootScope.user = user;
-        });
-
-        $rootScope.logout = function() {
-          $rootScope.user = null;
-          Formio.setUser(null);
-          window.location.reload();
-        };
-
-        // Ensure we have a login form.
-        if (!$rootScope.login) {
-          $rootScope.login = urlQuery.login || (protocol + '://' + host + '/formio/user/login');
-        }
-
-        // Get the main formio object.
-        var formio = new Formio($rootScope.formSrc);
-
-        // Called when an error occurs.
-        var onError = function (err) {
-          if (err.indexOf('Unauthorized') === 0) {
-            $rootScope.showLogin = true;
-
-            // If they are authenticated and there is not form, then reload.
-            if (Formio.getToken() && !$rootScope.form) {
-              Formio.setUser(null);
-              $timeout(function() {
-                window.location.reload();
-              });
-              return;
-            }
-
-            // Delete the user.
-            Formio.setUser(null);
-          }
-          $rootScope.formError = err;
-          $rootScope.formLoading = false;
-          $timeout($rootScope.$apply.bind($rootScope));
-        };
-
-        // Load the form.
-        var loadForm = function () {
-          // Load the form.
-          formio.loadForm().then(function (form) {
-            // Reset the errors.
-            $rootScope.formError = '';
-
-            // Set the form object.
-            $rootScope.form = form;
-            if (
-              $rootScope.form.settings &&
-              $rootScope.form.settings.controller
-            ) {
-              try {
-                var controller = eval($rootScope.form.settings.controller);
-                if (controller) {
-                  $controller(controller, {$scope: $rootScope});
-                }
-              }
-              catch (err) {
-                console.log(err.message);
-              }
-            }
-
-            // If there is a submission, then load it as well.
-            if (formio.submissionId) {
-              formio.loadSubmission().then(function (submission) {
-                $rootScope.submission = submission;
-
-                // Check for substring 'submission' to enable the download pdf button.
-                var checkSubmissionURL = new RegExp("/submission/");
-                pdfName = submission._id;
-                $rootScope.hasSubmission = checkSubmissionURL.test($rootScope.formSrc);
-                if ($rootScope.hasSubmission) {
-                  $rootScope.showLogin = !Formio.getToken();
-                }
-
-                $rootScope.formLoading = false;
-                $timeout($rootScope.$apply.bind($rootScope));
-              }, onError).catch(onError);
-            }
-            else {
-
-              // Check to see if they can submit the form.
-              formio.canSubmit().then(function(canSubmit) {
-                if (!canSubmit && query.auth) {
-                  $rootScope.showLogin = true;
-                  Formio.setUser(null);
-                }
-                $rootScope.formLoading = false;
-                $timeout($rootScope.$apply.bind($rootScope));
-              });
-            }
-          }, onError).catch(onError);
-        };
-
-        // When a bad token is received, then just reload the form.
-        Formio.events.on('formio.badToken', function () {
-          // Reload the form.
-          loadForm();
-        });
-
-        // Load the form.
-        loadForm();
-
-        // Bind to the submission of the form.
-        $rootScope.$on('formSubmission', function (event, submission) {
-          // Disable the download pdf button for those submission which created from viewer application.
-          $rootScope.hasSubmission = false;
-          $rootScope.formError = '';
-
-          // If we are showing the login form, then we will need to reset the variable and return.
-          if ($rootScope.showLogin) {
-            // Ensure we have a token.
-            $rootScope.showLogin = !Formio.getToken();
-            $rootScope.user = submission;
-            $timeout($rootScope.$apply.bind($rootScope));
-            return;
-          }
-
-          if (!submission) {
-            return;
-          }
-
-          // Save the submission.
-          formio.saveSubmission(submission).then(function(result) {
-            var submitMessage = 'Submission complete.';
-            if ($rootScope.form && $rootScope.form.settings && $rootScope.form.settings.submitMessage) {
-              submitMessage = $rootScope.form.settings.submitMessage;
-            }
-
-            // Allow form based configuration for return url.
-            if (!returnUrl && ($rootScope.form && $rootScope.form.settings && $rootScope.form.settings.returnUrl)) {
-              returnUrl = $rootScope.form.settings.returnUrl;
-            }
-
-            // Send the message to the parent page.
-            parentPage.send({formSubmission: result});
-            if (returnUrl) {
-              var hasQuery = !!returnUrl.match(/\?/);
-              var isOrigin = returnUrl.indexOf(location.origin) === 0;
-              returnUrl += hasQuery ? '&' : '?';
-              returnUrl += 'sub=' + result._id;
-              if (!isOrigin) {
-                returnUrl += '&form=' + encodeURIComponent($rootScope.formSrc);
-              }
-              window.location.href = returnUrl;
-              if (isOrigin) {
-                window.location.reload();
-              }
-            }
-
-            $rootScope.$broadcast('submitDone', submission, submitMessage);
-            $rootScope.submitted = 1;
-          }, onError).catch(onError);
-        });
-
-        // Generate a PDF output of the submission.
-        $rootScope.generatePDF = function () {
-          var doc = new jsPDF({unit: 'px', format: 'a4'});
-          var formElement = jQuery('form[name="formioForm"]');
-          var formTop = formElement.offset().top;
-          var formWidth = formElement.width();
-          var a4 = [595.28, 841.89];
-          var a4Width = (a4[0] * 1.33333);
-          var a4Height = (a4[1] * 1.33333);
-          formElement.width(a4Width - 80).css('max-width', 'none');
-
-          var imgWidth = doc.internal.pageSize.width - 20;
-          var pageHeight = doc.internal.pageSize.height;
-          var formChildren = formElement.children();
-          var numberOfChild = formChildren.length;
-          var pageNum = 1;
-          for (var i = 0; i < numberOfChild - 1; i++) {
-            var childElement = formChildren.eq(i);
-            var childElementTop = childElement.offset().top - formTop;
-            var childElementHeight = childElement.outerHeight(true);
-            var pageSpace = (pageNum * a4Height) - childElementTop;
-            if ((pageSpace > 0) && (childElementHeight > pageSpace)) {
-              childElement.css('marginTop', (pageSpace + 10) + 'px');
-              pageNum++;
-            }
-          }
-
-          html2canvas(formElement, {
-            imageTimeout: 2000,
-            removeContainer: true
-          }).then(function (canvas) {
-            var img = canvas.toDataURL("image/png");
-            var imgHeight = canvas.height * imgWidth / canvas.width;
-            var heightLeft = imgHeight;
-            var position = 10;
-            doc.addImage(img, 'PNG', 10, position, imgWidth, imgHeight);
-            heightLeft -= pageHeight;
-            while (heightLeft >= 0) {
-              position = heightLeft - imgHeight;
-              doc.addPage();
-              doc.addImage(img, 'PNG', 10, position, imgWidth, imgHeight);
-              heightLeft -= pageHeight;
-            }
-            doc.save(pdfName + '.pdf');
-            formElement.width(formWidth);
-          });
-        };
-      }]);
+  if (!query.branding || parseInt(query.branding, 10)) {
+    document.write(document.getElementById('branding').innerHTML);
+  }
 </script>
 </body>
 </html>
