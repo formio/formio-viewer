@@ -1,1 +1,150 @@
-<!doctype html><html class="no-js"><head><meta charset="utf-8"><title></title><meta name="viewport" content="width=device-width"><script id="header" type="text/template"><nav class="navbar navbar-default"><div class="container-fluid"><div class="navbar-header"><a class="navbar-brand" id="form-title"></a></div></div></nav></script><script id="branding" type="text/template"><hr /><h4 class="text-center text-muted">powered by <img src="assets/logo.png" style="height: 1.2em;" /></h4></script><script type="text/javascript">var query={};if(location.search.substr(1).split("&").forEach(function(s){query[s.split("=")[0]]=s.split("=")[1]&&decodeURIComponent(s.split("=")[1])}),query.theme){var cssLink='<link rel="stylesheet" href="lib/bootswatch/';cssLink+=query.theme,cssLink+='/bootstrap.min.css" />',document.write(cssLink)}else document.write('<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />')</script><link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css"><link rel="stylesheet" href="lib/formiojs/formio.form.min.css"><style type="text/css">.main{margin-top:10px}.iframe.notheme{background-color:transparent}.iframe .main{margin:0;padding:0;width:100%}.iframe.hasheader .main{margin-bottom:55px}.iframe .navbar .container{margin:0;width:100%}.navbar .container .navbar-right{margin-right:0}.navbar{margin-bottom:0}</style><script src="lib/formiojs/formio.form.min.js"></script><script src="lib/seamless/seamless.child.min.js"></script></head><body><script type="text/javascript">var bodyClass="";query.header&&!parseInt(query.header,10)||(document.write(document.getElementById("header").innerHTML),bodyClass+="hasheader "),query.iframe&&parseInt(query.iframe,10)&&(bodyClass+="iframe ",query.theme||(bodyClass+="notheme ")),bodyClass&&(document.body.className=bodyClass)</script><div class="container-fluid main pf" id="main"><div id="formio"></div></div><script type="text/javascript">window.setForm=function(e,t,n){return Formio.createForm(document.getElementById("formio"),e,n).then(function(e){var n=document.getElementById("form-title");return n&&n.appendChild(document.createTextNode(e.form.title)),t?e.setSubmission(t):e})},query.src&&window.setForm(query.src),query.branding&&!parseInt(query.branding,10)||document.write(document.getElementById("branding").innerHTML)</script></body></html>
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width">
+    <script id="header" type="text/template"><nav class="navbar navbar-default"><div class="container-fluid"><div class="navbar-header"><a class="navbar-brand" id="form-title"></a></div></div></nav></script>
+    <script id="branding" type="text/template"><hr /><h4 class="text-center text-muted">powered by <img src="assets/logo.png" style="height: 1.2em;" /></h4></script>
+    <script src="lib/formiojs/formio.form.min.js"></script>
+    <script src="lib/seamless/seamless.child.min.js"></script>
+    <script type="text/javascript">
+      var query = {};
+      var parts = [];
+      var paths = [];
+      var src = '';
+      var hashes = location.hash.substr(1).replace(/\?/g, '&').split("&");
+
+      // Search the location search for query parameters.
+      location.search.substr(1).split("&").forEach(function(item) {
+        parts = item.split('=');
+        if (parts.length > 1) {
+          query[parts[0]] = parts[1] && decodeURIComponent(parts[1]);
+        }
+      });
+
+      // Also search hashes.
+      hashes.forEach(function (item) {
+        var parts = item.split("=");
+        if (parts.length > 1) {
+          query[parts[0]] = parts[1] && decodeURIComponent(parts[1]);
+        }
+        else if (item.indexOf('/') === 0) {
+          paths = item.substr(1).split('/');
+        }
+      });
+
+      var protocol = query.protocol || 'https';
+      var host = query.host || 'api.form.io';
+      var baseUrl = protocol + '://' + host;
+      Formio.setBaseUrl(baseUrl);
+
+      if (query.src) {
+        src = query.src;
+      }
+
+      // If there are paths provided.
+      if (paths.length > 1) {
+        var projectUrl = baseUrl + '/' + paths[0];
+
+        // Set the project url.
+        Formio.setProjectUrl(projectUrl);
+
+        // Set the source.
+        if (!query.src) {
+          src = projectUrl + '/' + paths[1];
+          if (paths.length > 3 && paths[2] === 'submission') {
+            src += '/submission/' + paths[3];
+          }
+        }
+      }
+
+      // Allow them to provide SSO tokens to the form viewer.
+      if (query.token) {
+        localStorage.setItem('formioToken', query.token);
+        localStorage.removeItem('formioAppUser');
+        localStorage.removeItem('formioUser');
+      }
+
+      if (query.theme) {
+        var cssLink = '<link rel="stylesheet" href="lib/bootswatch/';
+        cssLink += query.theme;
+        cssLink += '/bootstrap.min.css" />';
+        document.write(cssLink);
+      }
+      else {
+        document.write('<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />');
+      }
+    </script>
+    <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="lib/formiojs/formio.form.min.css" />
+    <style type="text/css">
+        .main {
+            margin-top: 10px;
+        }
+
+        .iframe.notheme {
+            background-color: transparent;
+        }
+        .iframe .main {
+            margin:0;
+            padding:0;
+            width: 100%;
+        }
+        .iframe.hasheader .main {
+            margin-bottom: 55px;
+        }
+        .iframe .navbar .container {
+            margin:0;
+            width: 100%;
+        }
+        .navbar .container .navbar-right {
+            margin-right: 0;
+        }
+
+        .navbar {
+            margin-bottom: 0px;
+        }
+    </style>
+</head>
+<body>
+<script type="text/javascript">
+  var bodyClass = '';
+  if (!query.header || parseInt(query.header, 10)) {
+    document.write(document.getElementById('header').innerHTML);
+    bodyClass += 'hasheader ';
+  }
+  if (query.iframe && parseInt(query.iframe, 10)) {
+    bodyClass += 'iframe ';
+    if (!query.theme) {
+      bodyClass += 'notheme ';
+    }
+  }
+  if (bodyClass) {
+    document.body.className = bodyClass;
+  }
+</script>
+<div class="container-fluid main pf" id="main">
+    <div id="formio"></div>
+</div>
+<script type="text/javascript">
+  window.setForm = function(form, submission, options) {
+    return Formio.createForm(document.getElementById("formio"), form, options).then(function(instance) {
+      var title = document.getElementById("form-title");
+      if (title) {
+        title.appendChild(document.createTextNode(instance.form.title));
+      }
+      return submission ? instance.setSubmission(submission) : instance;
+    });
+  };
+
+  if (src) {
+    window.setForm(src);
+  }
+
+  if (!query.branding || parseInt(query.branding, 10)) {
+    document.write(document.getElementById('branding').innerHTML);
+  }
+</script>
+</body>
+</html>

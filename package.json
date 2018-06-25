@@ -20,8 +20,8 @@
     "bootstrap": "^3.3.7",
     "bootswatch": "^3.3.7",
     "font-awesome": "^4.7.0",
-    "seamless": "^1.3.0",
-    "formiojs": "^3.0.0-rc.12"
+    "formiojs": "^3.0.0-rc.12",
+    "seamless": "^1.3.0"
   },
   "devDependencies": {
     "del": "^3.0.0",

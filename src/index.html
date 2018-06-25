@@ -6,11 +6,65 @@
     <meta name="viewport" content="width=device-width">
     <script id="header" type="text/template"><nav class="navbar navbar-default"><div class="container-fluid"><div class="navbar-header"><a class="navbar-brand" id="form-title"></a></div></div></nav></script>
     <script id="branding" type="text/template"><hr /><h4 class="text-center text-muted">powered by <img src="assets/logo.png" style="height: 1.2em;" /></h4></script>
+    <script src="lib/formiojs/formio.form.min.js"></script>
+    <script src="lib/seamless/seamless.child.min.js"></script>
     <script type="text/javascript">
       var query = {};
+      var parts = [];
+      var paths = [];
+      var src = '';
+      var hashes = location.hash.substr(1).replace(/\?/g, '&').split("&");
+
+      // Search the location search for query parameters.
       location.search.substr(1).split("&").forEach(function(item) {
-        query[item.split("=")[0]] = item.split("=")[1] && decodeURIComponent(item.split("=")[1]);
+        parts = item.split('=');
+        if (parts.length > 1) {
+          query[parts[0]] = parts[1] && decodeURIComponent(parts[1]);
+        }
       });
+
+      // Also search hashes.
+      hashes.forEach(function (item) {
+        var parts = item.split("=");
+        if (parts.length > 1) {
+          query[parts[0]] = parts[1] && decodeURIComponent(parts[1]);
+        }
+        else if (item.indexOf('/') === 0) {
+          paths = item.substr(1).split('/');
+        }
+      });
+
+      var protocol = query.protocol || 'https';
+      var host = query.host || 'api.form.io';
+      var baseUrl = protocol + '://' + host;
+      Formio.setBaseUrl(baseUrl);
+
+      if (query.src) {
+        src = query.src;
+      }
+
+      // If there are paths provided.
+      if (paths.length > 1) {
+        var projectUrl = baseUrl + '/' + paths[0];
+
+        // Set the project url.
+        Formio.setProjectUrl(projectUrl);
+
+        // Set the source.
+        if (!query.src) {
+          src = projectUrl + '/' + paths[1];
+          if (paths.length > 3 && paths[2] === 'submission') {
+            src += '/submission/' + paths[3];
+          }
+        }
+      }
+
+      // Allow them to provide SSO tokens to the form viewer.
+      if (query.token) {
+        localStorage.setItem('formioToken', query.token);
+        localStorage.removeItem('formioAppUser');
+        localStorage.removeItem('formioUser');
+      }
 
       if (query.theme) {
         var cssLink = '<link rel="stylesheet" href="lib/bootswatch/';
@@ -52,8 +106,6 @@
             margin-bottom: 0px;
         }
     </style>
-    <script src="lib/formiojs/formio.form.min.js"></script>
-    <script src="lib/seamless/seamless.child.min.js"></script>
 </head>
 <body>
 <script type="text/javascript">
@@ -86,8 +138,8 @@
     });
   };
 
-  if (query.src) {
-    window.setForm(query.src);
+  if (src) {
+    window.setForm(src);
   }
 
   if (!query.branding || parseInt(query.branding, 10)) {
