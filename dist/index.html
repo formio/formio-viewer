@@ -79,6 +79,15 @@
     <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css" />
     <link rel="stylesheet" href="lib/formiojs/formio.form.min.css" />
     <style type="text/css">
+        .page-break-after {
+            page-break-after: always;
+        }
+
+        .page-break-before {
+            page-break-before: always;
+            margin-top: 10px;
+        }
+
         .main {
             margin-top: 10px;
         }
@@ -134,7 +143,7 @@
       if (title) {
         title.appendChild(document.createTextNode(instance.form.title));
       }
-      return submission ? instance.setSubmission(submission) : instance;
+      return submission ? instance.setSubmission(submission) : instance
     });
   };
 
