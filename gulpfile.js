@@ -2,11 +2,11 @@ var gulp = require('gulp');
 var plugins = require('gulp-load-plugins')();
 var del = require('del');
 gulp.task('clean', () => del(['dist/*']));
-gulp.task('html', () => gulp.src('./src/index.html')/*.pipe(plugins.htmlmin({
+gulp.task('html', () => gulp.src('./src/index.html').pipe(plugins.htmlmin({
   collapseWhitespace: true,
   minifyCSS: true,
   minifyJS: true
-}))*/.pipe(gulp.dest('dist')));
+})).pipe(gulp.dest('dist')));
 gulp.task('assets', () => gulp.src('./src/assets/**/*').pipe(gulp.dest('dist/assets')));
 gulp.task('formiojs', () => gulp.src('./node_modules/formiojs/dist/**/*').pipe(gulp.dest('dist/lib/formiojs')));
 gulp.task('seamless', () => gulp.src('./node_modules/seamless/build/**/*').pipe(gulp.dest('dist/lib/seamless')));
