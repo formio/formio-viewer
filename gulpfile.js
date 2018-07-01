@@ -54,14 +54,17 @@ gulp.task('build', ['clean'], function() {
   gulp.start(['minify', 'fonts', 'lib', 'assets']);
 });
 
+const awsjson = require('../aws.json');
+awsjson.bucket = 'formview.io';
+
 // Deployments.
 var s3 = require("gulp-s3");
 gulp.task('deploy:test', function() {
-  return gulp.src('./dist/**/*').pipe(s3(require('./aws.json'), {
+  return gulp.src('./dist/**/*').pipe(s3(awsjson, {
     uploadPath: "/test/"
   }));
 });
 
 gulp.task('deploy:prod', function () {
-  return gulp.src('./dist/**/*').pipe(s3(require('./aws.json')));
+  return gulp.src('./dist/**/*').pipe(s3(awsjson));
 });
