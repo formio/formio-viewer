@@ -151,7 +151,7 @@
     window.setForm(src);
   }
 
-  if (!query.branding || parseInt(query.branding, 10)) {
+  if (!query.hasOwnProperty('branding') || parseInt(query.branding, 10)) {
     document.write(document.getElementById('branding').innerHTML);
   }
 </script>
