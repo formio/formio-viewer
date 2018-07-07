@@ -159,7 +159,14 @@
       if (title) {
         title.appendChild(document.createTextNode(instance.form.title));
       }
-      return submission ? instance.setSubmission(submission) : instance
+      if (!submission) {
+        return instance;
+      }
+
+      return instance.setSubmission(submission).then(function() {
+        instance.redraw();
+        return instance;
+      });
     });
   };
 
