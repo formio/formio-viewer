@@ -138,6 +138,22 @@
 </div>
 <script type="text/javascript">
   window.setForm = function(form, submission, options) {
+    if (!form) {
+      console.warn('No form object provided');
+    }
+    options.show = {};
+    options.hide = {};
+    FormioUtils.eachComponent(form.components, function(component) {
+      if (component.tags && component.tags.length) {
+        if (component.tags.includes('pdf:show')) {
+          options.show[component.key] = true;
+        }
+        if (component.tags.includes('pdf:hide')) {
+          options.hide[component.key] = true;
+        }
+      }
+    });
+
     return Formio.createForm(document.getElementById("formio"), form, options).then(function(instance) {
       var title = document.getElementById("form-title");
       if (title) {
