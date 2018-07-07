@@ -21,7 +21,7 @@
     "bootstrap": "^3.3.7",
     "bootswatch": "^3.3.7",
     "font-awesome": "^4.7.0",
-    "formiojs": "^3.0.0-rc.18",
+    "formiojs": "^3.0.0-rc.19",
     "seamless": "^1.3.0"
   },
   "devDependencies": {

@@ -165,6 +165,9 @@
 
       return instance.setSubmission(submission).then(function() {
         instance.redraw();
+        instance.checkData(instance.data, {
+          noValidate: true
+        });
         return instance;
       });
     });
