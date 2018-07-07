@@ -145,10 +145,10 @@
     options.hide = {};
     FormioUtils.eachComponent(form.components, function(component) {
       if (component.tags && component.tags.length) {
-        if (component.tags.includes('pdf:show')) {
+        if (component.tags.includes('viewer:show')) {
           options.show[component.key] = true;
         }
-        if (component.tags.includes('pdf:hide')) {
+        if (component.tags.includes('viewer:hide')) {
           options.hide[component.key] = true;
         }
       }
