@@ -119,7 +119,7 @@
 <body>
 <script type="text/javascript">
   var bodyClass = '';
-  if (!query.header || parseInt(query.header, 10)) {
+  if (!query.hasOwnProperty('header') || parseInt(query.header, 10)) {
     document.write(document.getElementById('header').innerHTML);
     bodyClass += 'hasheader ';
   }
@@ -141,6 +141,7 @@
     if (!form) {
       console.warn('No form object provided');
     }
+    options = options || {};
     options.show = {};
     options.hide = {};
     FormioUtils.eachComponent(form.components, function(component) {
