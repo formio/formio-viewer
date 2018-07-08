@@ -134,13 +134,31 @@
   }
 </script>
 <div class="container-fluid main pf" id="main">
+    <div class="well src-form" id="srcform" styles="display:none;">
+        <div class="form-group">
+            <label for="formsrc">Form Embed URL</label>
+            <input type="text" class="form-control" id="formsrc" name="formsrc" placeholder="https://examples.form.io/example">
+        </div>
+        <button type="submit" class="btn btn-primary" id="setsrc">Submit</button>
+    </div>
     <div id="formio"></div>
 </div>
 <script type="text/javascript">
+  var mainElem = document.getElementById('main');
+  var srcForm = document.getElementById('srcform');
+  var srcBtn = document.getElementById('setsrc');
+  var formSrcElem = document.getElementById('formsrc');
+  var formioElem = document.getElementById("formio");
+  var titleElem = document.getElementById("form-title");
+
   window.setForm = function(form, submission, options) {
     if (!form) {
       console.warn('No form object provided');
     }
+
+    // Remove the source form from the view.
+    mainElem.removeChild(srcForm);
+
     options = options || {};
     options.show = {};
     options.hide = {};
@@ -155,10 +173,9 @@
       }
     });
 
-    return Formio.createForm(document.getElementById("formio"), form, options).then(function(instance) {
-      var title = document.getElementById("form-title");
-      if (title) {
-        title.appendChild(document.createTextNode(instance.form.title));
+    return Formio.createForm(formioElem, form, options).then(function(instance) {
+      if (titleElem) {
+        titleElem.appendChild(document.createTextNode(instance.form.title));
       }
       if (!submission) {
         return instance;
@@ -176,6 +193,13 @@
 
   if (src) {
     window.setForm(src);
+  }
+  else {
+    srcForm.setAttribute('styles', 'display: inherit');
+    srcBtn.addEventListener('click', function(event) {
+      event.preventDefault();
+      window.setForm(formSrcElem.value);
+    });
   }
 
   if (!query.hasOwnProperty('branding') || parseInt(query.branding, 10)) {
