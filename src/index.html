@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title></title>
     <meta name="viewport" content="width=device-width">
-    <script id="header" type="text/template"><nav class="navbar navbar-default"><div class="container-fluid"><div class="navbar-header"><a class="navbar-brand" id="form-title"></a></div></div></nav></script>
+    <script id="header" type="text/template"><nav class="navbar navbar-default"><div class="container-fluid"><div class="navbar-header"><a class="navbar-brand" id="form-title"><img src="assets/logo.png" style="display: inline-block; height: 1.3em;" /> Form Viewer</a></div></div></nav></script>
     <script id="branding" type="text/template"><hr /><h4 class="text-center text-muted">powered by <img src="assets/logo.png" style="height: 1.2em;" /></h4></script>
     <script src="lib/formiojs/formio.form.min.js"></script>
     <script src="lib/seamless/seamless.child.min.js"></script>
@@ -114,6 +114,31 @@
         .navbar {
             margin-bottom: 0px;
         }
+
+        .fa-spin-custom, .glyphicon-spin {
+            -webkit-animation: spin 1000ms infinite linear;
+            animation: spin 1000ms infinite linear;
+        }
+        @-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(359deg);
+                transform: rotate(359deg);
+            }
+        }
+        @keyframes spin {
+            0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(359deg);
+                transform: rotate(359deg);
+            }
+        }
     </style>
 </head>
 <body>
@@ -139,7 +164,7 @@
             <label for="formsrc">Form Embed URL</label>
             <input type="text" class="form-control" id="formsrc" name="formsrc" placeholder="https://examples.form.io/example">
         </div>
-        <button type="submit" class="btn btn-primary" id="setsrc">Submit</button>
+        <button type="submit" class="btn btn-primary" id="setsrc"><span class="glyphicon glyphicon-check" id="btnicon"></span> Show Form</button>
     </div>
     <div id="formio"></div>
 </div>
@@ -147,6 +172,7 @@
   var mainElem = document.getElementById('main');
   var srcForm = document.getElementById('srcform');
   var srcBtn = document.getElementById('setsrc');
+  var btnIcon = document.getElementById('btnicon');
   var formSrcElem = document.getElementById('formsrc');
   var formioElem = document.getElementById("formio");
   var titleElem = document.getElementById("form-title");
@@ -155,9 +181,6 @@
     if (!form) {
       console.warn('No form object provided');
     }
-
-    // Remove the source form from the view.
-    mainElem.removeChild(srcForm);
 
     options = options || {};
     options.show = {};
@@ -174,8 +197,10 @@
     });
 
     return Formio.createForm(formioElem, form, options).then(function(instance) {
+      mainElem.removeChild(srcForm);
+
       if (titleElem) {
-        titleElem.appendChild(document.createTextNode(instance.form.title));
+        titleElem.innerHTML = instance.form.title;
       }
       if (!submission) {
         return instance;
@@ -198,6 +223,7 @@
     srcForm.setAttribute('styles', 'display: inherit');
     srcBtn.addEventListener('click', function(event) {
       event.preventDefault();
+      btnIcon.setAttribute('class', 'glyphicon glyphicon-refresh glyphicon-spin');
       window.setForm(formSrcElem.value);
     });
   }
