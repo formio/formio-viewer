@@ -178,11 +178,20 @@
   var titleElem = document.getElementById("form-title");
 
   window.setForm = function(form, submission, options) {
+    options = options || {};
     if (!form) {
       console.warn('No form object provided');
     }
 
-    options = options || {};
+    // If the form is a string, then load it first and then try again.
+    if (typeof form === 'string') {
+      (new Formio(form)).loadForm().then(function(formObj) {
+        formObj.src = form;
+        window.setForm(formObj, submission, options);
+      });
+      return;
+    }
+
     options.show = {};
     options.hide = {};
     FormioUtils.eachComponent(form.components, function(component) {
@@ -198,6 +207,12 @@
 
     return Formio.createForm(formioElem, form, options).then(function(instance) {
       mainElem.removeChild(srcForm);
+
+      // Set the source of the form if it is provided.
+      if (form.src) {
+        instance.url = form.src;
+        instance.nosubmit = false;
+      }
 
       if (titleElem) {
         titleElem.innerHTML = instance.form.title;
