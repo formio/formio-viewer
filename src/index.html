@@ -244,8 +244,17 @@
         return;
       }
 
-      btnIcon.setAttribute('class', 'glyphicon glyphicon-refresh glyphicon-spin');
-      window.setForm(formSrcElem.value);
+      var formSrc = formSrcElem.value;
+      if (formSrc && formSrc.split('?')[0].match(/\/download$/)) {
+        // This is a pdf form to render.
+        var script = document.createElement('script');
+        script.setAttribute('src', formSrc + '&format=html');
+        document.body.appendChild(script);
+      }
+      else {
+        btnIcon.setAttribute('class', 'glyphicon glyphicon-refresh glyphicon-spin');
+        window.setForm(formSrcElem.value);
+      }
     });
   }
 
