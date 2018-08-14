@@ -1,5 +1,8 @@
-// Change this file to alter the renderer to create custom renderer for your viewer.
+// Import all components and alter those for this viewer.
 import AllComponents from 'formiojs/components';
+import ViewerDateTime from './components/DateTime';
+AllComponents.datetime = ViewerDateTime;
+
 import Formio from 'formiojs/Formio';
 import Components from 'formiojs/components/Components';
 Components.setComponents(AllComponents);
