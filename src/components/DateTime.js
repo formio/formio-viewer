@@ -1,7 +1,7 @@
 import DateTimeComponent from 'formiojs/components/datetime/DateTime';
 export default class ViewerDateTime extends DateTimeComponent {
-  offset(date) {
-    // Ensure the displayInTimezone in viewer is never "viewer" for server PDF generation to work correctly...
+  get timezone() {
+    // Ensure the displayInTimezone is never viewer...
     if (
       this.options.pdf &&
       (!this.component.displayInTimezone || (this.component.displayInTimezone === 'viewer'))
@@ -13,6 +13,6 @@ export default class ViewerDateTime extends DateTimeComponent {
         this.component.displayInTimezone = 'gmt';
       }
     }
-    return super.offset(date);
+    return super.timezone;
   }
 }
