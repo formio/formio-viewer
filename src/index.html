@@ -90,6 +90,12 @@
             margin-top: 10px;
         }
 
+        .page-break	{
+            display: block;
+            page-break-before: always;
+            margin-top: 10px;
+        }
+
         .main {
             margin-top: 10px;
         }
@@ -202,7 +208,8 @@
       }
     });
 
-    return Formio.createForm(formioElem, form, options).then(function(instance) {
+    return Formio.createForm(formioElem, form, options)
+    .then(function(instance) {
       // Remove the entire preform element.
       mainElem.removeChild(preFormElem);
 
@@ -226,6 +233,37 @@
         });
         return instance;
       });
+    })
+    .then(function(instance) {
+      var pageSize = 800;
+      // Need to wait for loading to be done. Apparently instance.ready doesn't work for this.
+      var wait = function() {
+        if (instance.loading) {
+          setTimeout(wait, 100);
+        }
+        else {
+          // Calculate page breaks.
+          var container = document.getElementById('formio').firstChild;
+          var totalSize = 0;
+          var insertBefore = [];
+          [].forEach.call(container.childNodes, function(child) {
+            if (totalSize + child.offsetHeight > pageSize) {
+              insertBefore.push(child);
+              totalSize = child.offsetHeight;
+            }
+            else {
+              totalSize += child.offsetHeight;
+            }
+          });
+          insertBefore.forEach(function(child) {
+            var pageBreak = document.createElement('div');
+            pageBreak.classList.add('page-break');
+            container.insertBefore(pageBreak, child);
+          });
+        }
+      };
+      setTimeout(wait, 100);
+      return instance;
     });
   };
 
