@@ -6,11 +6,14 @@ export default class ViewerDateTime extends DateTimeComponent {
       this.options.pdf &&
       (!this.component.displayInTimezone || (this.component.displayInTimezone === 'viewer'))
     ) {
-      if (this.root && this.root.hasTimezone) {
+      if (
+        this.options.submissionTimezone ||
+        (this.root && this.root.options && this.root.options.submissionTimezone)
+      ) {
         this.component.displayInTimezone = 'submission';
       }
       else {
-        this.component.displayInTimezone = 'gmt';
+        this.component.displayInTimezone = 'utc';
       }
     }
     return super.timezone;
