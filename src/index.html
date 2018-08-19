@@ -235,35 +235,37 @@
       });
     })
     .then(function(instance) {
-      var pageSize = 800;
-      // Need to wait for loading to be done. Apparently instance.ready doesn't work for this.
-      var wait = function() {
-        if (instance.loading) {
-          setTimeout(wait, 100);
-        }
-        else {
-          // Calculate page breaks.
-          var container = document.getElementById('formio').firstChild;
-          var totalSize = 0;
-          var insertBefore = [];
-          [].forEach.call(container.childNodes, function(child) {
-            if (totalSize + child.offsetHeight > pageSize) {
-              insertBefore.push(child);
-              totalSize = child.offsetHeight;
-            }
-            else {
-              totalSize += child.offsetHeight;
-            }
-          });
-          insertBefore.forEach(function(child) {
-            var pageBreak = document.createElement('div');
-            pageBreak.classList.add('page-break');
-            container.insertBefore(pageBreak, child);
-          });
-        }
-      };
-      setTimeout(wait, 100);
-      return instance;
+      return new Formio.Promise(function(resolve) {
+        var pageSize = 800;
+        // Need to wait for loading to be done. Apparently instance.ready doesn't work for this.
+        var wait = function() {
+          if (instance.loading) {
+            setTimeout(wait, 100);
+          }
+          else {
+            // Calculate page breaks.
+            var container = document.getElementById('formio').firstChild;
+            var totalSize = 0;
+            var insertBefore = [];
+            [].forEach.call(container.childNodes, function(child) {
+              if (totalSize + child.offsetHeight > pageSize) {
+                insertBefore.push(child);
+                totalSize = child.offsetHeight;
+              }
+              else {
+                totalSize += child.offsetHeight;
+              }
+            });
+            insertBefore.forEach(function(child) {
+              var pageBreak = document.createElement('div');
+              pageBreak.classList.add('page-break');
+              container.insertBefore(pageBreak, child);
+            });
+            resolve(instance);
+          }
+        };
+        setTimeout(wait, 100);
+      });
     });
   };
 
