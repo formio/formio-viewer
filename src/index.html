@@ -247,13 +247,19 @@
             var container = document.getElementById('formio').firstChild;
             var totalSize = 0;
             var insertBefore = [];
+            // If we are already at a pagebreak, don't insert another.
+            var noBreak = true;
             [].forEach.call(container.childNodes, function(child) {
               if (totalSize + child.offsetHeight > pageSize) {
-                insertBefore.push(child);
-                totalSize = child.offsetHeight;
+                if (!noBreak) {
+                  insertBefore.push(child);
+                }
+                totalSize = child.offsetHeight % pageSize;
+                noBreak = false;
               }
               else {
                 totalSize += child.offsetHeight;
+                noBreak = false;
               }
             });
             insertBefore.forEach(function(child) {
