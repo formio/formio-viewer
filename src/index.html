@@ -96,6 +96,10 @@
             margin-top: 10px;
         }
 
+        .formio-component {
+            page-break-inside:avoid;
+        }
+
         .main {
             margin-top: 10px;
         }
@@ -232,45 +236,6 @@
           noValidate: true
         });
         return instance;
-      });
-    })
-    .then(function(instance) {
-      return new Formio.Promise(function(resolve) {
-        var pageSize = 800;
-        // Need to wait for loading to be done. Apparently instance.ready doesn't work for this.
-        var wait = function() {
-          if (instance.loading) {
-            setTimeout(wait, 100);
-          }
-          else {
-            // Calculate page breaks.
-            var container = document.getElementById('formio').firstChild;
-            var totalSize = 0;
-            var insertBefore = [];
-            // If we are already at a pagebreak, don't insert another.
-            var noBreak = true;
-            [].forEach.call(container.childNodes, function(child) {
-              if (totalSize + child.offsetHeight > pageSize) {
-                if (!noBreak) {
-                  insertBefore.push(child);
-                }
-                totalSize = child.offsetHeight % pageSize;
-                noBreak = false;
-              }
-              else {
-                totalSize += child.offsetHeight;
-                noBreak = false;
-              }
-            });
-            insertBefore.forEach(function(child) {
-              var pageBreak = document.createElement('div');
-              pageBreak.classList.add('page-break');
-              container.insertBefore(pageBreak, child);
-            });
-            resolve(instance);
-          }
-        };
-        setTimeout(wait, 100);
       });
     });
   };
