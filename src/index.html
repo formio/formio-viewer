@@ -4,12 +4,21 @@
     <meta charset="utf-8">
     <title></title>
     <meta name="viewport" content="width=device-width">
-    <script id="header" type="text/template"><nav class="navbar navbar-default"><div class="container-fluid"><div class="navbar-header"><a class="navbar-brand" id="form-title"><img src="assets/logo.png" style="display: inline-block; height: 1.3em;" /> Form Viewer</a></div></div></nav></script>
+    <script id="header" type="text/template">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand" id="form-title">
+                    <img src="assets/logo.png" style="display: inline-block; height: 1.3em;" /> Form Viewer
+                </a>
+            </div>
+        </nav>
+    </script>
     <script id="branding" type="text/template"><hr /><h4 class="text-center text-muted">powered by <img src="assets/logo.png" style="height: 1.2em;" /></h4></script>
     <script id="srcform" type="text/template"><div class="well src-form"><div class="form-group"><label for="formsrc">Form Embed URL</label><input type="text" class="form-control" id="formsrc" name="formsrc" placeholder="https://examples.form.io/example"></div><button type="submit" class="btn btn-primary" id="setsrc"><span class="glyphicon glyphicon-check" id="btnicon"></span> Show Form</button></div></script>
     <script id="loader" type="text/template"><div class="loader-wrapper"><div class="loader text-center"></div></div></script>
     <script src="lib/formiojs/formio.form.min.js"></script>
     <script src="lib/seamless/seamless.child.min.js"></script>
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
     <script type="text/javascript">
       var query = {};
       var parts = [];
@@ -69,13 +78,10 @@
       }
 
       if (query.theme) {
-        var cssLink = '<link rel="stylesheet" href="lib/bootswatch/';
+        var cssLink = '<link rel="stylesheet" href="lib/bootswatch/dist/';
         cssLink += query.theme;
         cssLink += '/bootstrap.min.css" />';
         document.write(cssLink);
-      }
-      else {
-        document.write('<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />');
       }
     </script>
     <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css" />
@@ -170,7 +176,7 @@
     document.body.className = bodyClass;
   }
 </script>
-<div class="container-fluid main pf" id="main">
+<div class="container main pf" id="main">
     <div id="preform"></div>
     <div id="formio"></div>
 </div>
@@ -212,6 +218,7 @@
       }
     });
 
+    Formio.icons = 'fontawesome';
     return Formio.createForm(formioElem, form, options)
     .then(function(instance) {
       // Remove the entire preform element.
