@@ -231,6 +231,7 @@
 <script src="lib/seamless.child.min.js"></script>
 <script src="lib/jspdf.min.js"></script>
 <script src="lib/html2canvas.min.js"></script>
+<script src="lib/formiojs-plugin-offline.min.js"></script>
 <script type="text/javascript">
   var parentPage = window.seamless.connect({
     container: 'div.main'
@@ -294,6 +295,12 @@
             $rootScope.login += (query.login || urlQuery.login || 'user/login');
           }
         }
+
+        var plugin = new FormioOfflineProject('https://jmkksvdekksjjnl.form.io', '/assets/project.json');
+        Formio.registerPlugin(plugin, 'abc-offline');
+
+        // Make the offline plugin globally available so it can be triggered via web views.
+        window.offlinePlugin = plugin;
 
         // Set the base and project urls
         Formio.setBaseUrl(baseUrl);

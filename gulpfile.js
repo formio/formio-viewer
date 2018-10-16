@@ -40,7 +40,8 @@ gulp.task('lib', ['bootswatch'], function() {
       './node_modules/seamless/build/seamless.child.min.js',
       './node_modules/jspdf/dist/jspdf.min.js',
       './node_modules/html2canvas/dist/html2canvas.min.js',
-      './node_modules/js-base64/base64.min.js'
+      './node_modules/js-base64/base64.min.js',
+      './node_modules/formio-plugin-offline/dist/formiojs-plugin-offline.min.js'
     ]).pipe(gulp.dest('dist/lib'));
 });
 
