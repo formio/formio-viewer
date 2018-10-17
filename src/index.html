@@ -318,6 +318,7 @@
 
         // Called when an error occurs.
         var onError = function (err) {
+          if (typeof err === 'string') {
           if (err.indexOf('Unauthorized') === 0) {
             $rootScope.showLogin = true;
 
@@ -333,7 +334,15 @@
             // Delete the user.
             Formio.setUser(null);
           }
+
           $rootScope.formError = err;
+          }
+
+          if (typeof err === 'object' && err.name === 'ValidationError') {
+            $rootScope.formError = 'ValidationError: ' + err.details[0].message;
+            $rootScope.$broadcast('submitDone');
+          }
+          
           $rootScope.formLoading = false;
           $timeout($rootScope.$apply.bind($rootScope));
         };
