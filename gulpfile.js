@@ -41,7 +41,7 @@ gulp.task('lib', ['bootswatch'], function() {
       './node_modules/jspdf/dist/jspdf.min.js',
       './node_modules/html2canvas/dist/html2canvas.min.js',
       './node_modules/js-base64/base64.min.js',
-      './node_modules/formio-plugin-offline/dist/formiojs-plugin-offline.min.js'
+      './node_modules/formiojs-plugin-offline/dist/formiojs-plugin-offline.min.js'
     ]).pipe(gulp.dest('dist/lib'));
 });
 
@@ -53,6 +53,18 @@ gulp.task('assets', function() {
 // Define the build task.
 gulp.task('build', ['clean'], function() {
   gulp.start(['minify', 'fonts', 'lib', 'assets']);
+});
+
+gulp.task('manifest', function(){
+  gulp.src(['dist/**'], { base: './dist/' })
+    .pipe(plugins.manifest({
+      hash: true,
+      preferOnline: true,
+      network: ['*'],
+      filename: 'app.manifest',
+      exclude: ['app.manifest']
+    }))
+    .pipe(gulp.dest('dist'));
 });
 
 const awsjson = require('../aws.json');
