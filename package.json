@@ -1,6 +1,6 @@
 {
   "name": "formio-viewer",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A simple form viewer library.",
   "main": "index.js",
   "scripts": {
@@ -14,9 +14,9 @@
     "bootswatch": "^3.3.7",
     "formiojs-plugin-offline": "git+ssh://git@github.com/formio/formio-plugin-offline.git#v1.3.0",
     "html2canvas": "^0.5.0-beta4",
-    "js-base64": "^2.4.5",
+    "js-base64": "^2.4.9",
     "jspdf": "^1.4.1",
-    "ng-formio": "^2.35.4",
+    "ng-formio": "^2.36.8",
     "seamless": "^1.3.0"
   },
   "devDependencies": {
@@ -28,7 +28,7 @@
     "gulp-manifest": "^0.1.1",
     "gulp-minify-css": "^1.2.3",
     "gulp-s3": "^0.11.0",
-    "gulp-uglify": "^3.0.0",
+    "gulp-uglify": "^3.0.1",
     "gulp-useref": "^3.1.5"
   }
 }

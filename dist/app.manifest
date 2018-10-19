@@ -60,13 +60,6 @@ lib/bootswatch/cerulean/bootstrap.min.css
 lib/bootswatch/cerulean/bootswatch.less
 lib/bootswatch/cerulean/thumbnail.png
 lib/bootswatch/cerulean/variables.less
-lib/bootswatch/cyborg/_bootswatch.scss
-lib/bootswatch/cyborg/_variables.scss
-lib/bootswatch/cyborg/bootstrap.css
-lib/bootswatch/cyborg/bootstrap.min.css
-lib/bootswatch/cyborg/bootswatch.less
-lib/bootswatch/cyborg/thumbnail.png
-lib/bootswatch/cyborg/variables.less
 lib/bootswatch/cosmo/_bootswatch.scss
 lib/bootswatch/cosmo/_variables.scss
 lib/bootswatch/cosmo/bootstrap.css
@@ -74,6 +67,13 @@ lib/bootswatch/cosmo/bootstrap.min.css
 lib/bootswatch/cosmo/bootswatch.less
 lib/bootswatch/cosmo/thumbnail.png
 lib/bootswatch/cosmo/variables.less
+lib/bootswatch/cyborg/_bootswatch.scss
+lib/bootswatch/cyborg/_variables.scss
+lib/bootswatch/cyborg/bootstrap.css
+lib/bootswatch/cyborg/bootstrap.min.css
+lib/bootswatch/cyborg/bootswatch.less
+lib/bootswatch/cyborg/thumbnail.png
+lib/bootswatch/cyborg/variables.less
 lib/bootswatch/darkly/_bootswatch.scss
 lib/bootswatch/darkly/_variables.scss
 lib/bootswatch/darkly/bootstrap.css
@@ -177,4 +177,4 @@ NETWORK:
 SETTINGS:
 prefer-online
 
-# hash: 53a180f15d5c997aeae517d63ecb3550957106c5464307950cb3a0d51d858851
+# hash: bf03cf9cde900ea562d9e882ffe9b65e0c9fb256d2b63da18d73cf4378830a54
