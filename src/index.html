@@ -192,15 +192,26 @@
   window.setForm = function(form, submission, options) {
     preFormElem.innerHTML = loader.innerHTML;
     options = options || {};
+    options.pdf = true;
+    options.readOnly = true;
     if (!form) {
       console.warn('No form object provided');
     }
 
     // If the form is a string, then load it first and then try again.
     if (typeof form === 'string') {
-      (new Formio(form)).loadForm().then(function(formObj) {
-        formObj.src = form;
-        window.setForm(formObj, submission, options);
+      var formio = new Formio(form);
+      formio.loadForm().then(function(formObj) {
+        if (!submission && formio.submissionId) {
+          formio.loadSubmission().then(function(subObj) {
+            formObj.src = form;
+            window.setForm(formObj, subObj, options);
+          });
+        }
+        else {
+          formObj.src = form;
+          window.setForm(formObj, submission, options);
+        }
       });
       return;
     }

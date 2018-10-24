@@ -1,4 +1,5 @@
 // Import all components and alter those for this viewer.
+import './components/ViewerCalendar';
 import AllComponents from 'formiojs/components';
 import ViewerDateTime from './components/DateTime';
 AllComponents.datetime = ViewerDateTime;
