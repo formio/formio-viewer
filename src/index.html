@@ -189,11 +189,11 @@
   var titleElem = document.getElementById("form-title");
   preFormElem.innerHTML = loader.innerHTML;
 
+  // You must keep "window.setForm = function(form, submission, options)". This
+  // is what the PDF renderer uses to generate a form with predefined form, submission, and options.
   window.setForm = function(form, submission, options) {
     preFormElem.innerHTML = loader.innerHTML;
     options = options || {};
-    options.pdf = true;
-    options.readOnly = true;
     if (!form) {
       console.warn('No form object provided');
     }
