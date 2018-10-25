@@ -41,6 +41,7 @@ gulp.task('lib', ['bootswatch'], function() {
       './node_modules/jspdf/dist/jspdf.min.js',
       './node_modules/html2canvas/dist/html2canvas.min.js',
       './node_modules/js-base64/base64.min.js',
+      './node_modules/ckeditor/**',
       './node_modules/formiojs-plugin-offline/dist/formiojs-plugin-offline.min.js'
     ]).pipe(gulp.dest('dist/lib'));
 });
@@ -58,6 +59,11 @@ gulp.task('build', ['clean'], function() {
 gulp.task('manifest', function(){
   gulp.src(['dist/**'], { base: './dist/' })
     .pipe(plugins.manifest({
+      cache: [
+        'lib/skins/moono-lisa/icons_hidpi.png?t=I8BH',
+        'lib/skins/moono-lisa/icons.png?t=I8BH',
+        'lib/contents.css?t=I8BH'
+      ],
       hash: true,
       preferOnline: true,
       network: ['*'],
