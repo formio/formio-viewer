@@ -295,15 +295,16 @@
           }
         }
 
+        // Set the base and project urls
+        Formio.setBaseUrl(baseUrl);
+        Formio.setProjectUrl(projectApi);
+
         var plugin = new FormioOfflineProject(projectApi, '/assets/project.json');
         Formio.registerPlugin(plugin, 'abc-offline');
 
         // Make the offline plugin globally available so it can be triggered via web views.
         window.offlinePlugin = plugin;
 
-        // Set the base and project urls
-        Formio.setBaseUrl(baseUrl);
-        Formio.setProjectUrl(projectApi);
         Formio.currentUser().then(function(user) {
           $rootScope.user = user;
         });
