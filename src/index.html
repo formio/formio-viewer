@@ -296,7 +296,7 @@
           }
         }
 
-        var plugin = new FormioOfflineProject('https://jmkksvdekksjjnl.form.io', '/assets/project.json');
+        var plugin = new FormioOfflineProject(projectApi, '/assets/project.json');
         Formio.registerPlugin(plugin, 'abc-offline');
 
         // Make the offline plugin globally available so it can be triggered via web views.
@@ -349,7 +349,7 @@
             $rootScope.formError = 'ValidationError: ' + err.details[0].message;
             $rootScope.$broadcast('submitDone');
           }
-          
+
           $rootScope.formLoading = false;
           $timeout($rootScope.$apply.bind($rootScope));
         };
@@ -396,16 +396,8 @@
               }, onError).catch(onError);
             }
             else {
-
-              // Check to see if they can submit the form.
-              formio.canSubmit().then(function(canSubmit) {
-                if (!canSubmit && query.auth) {
-                  $rootScope.showLogin = true;
-                  Formio.setUser(null);
-                }
-                $rootScope.formLoading = false;
-                $timeout($rootScope.$apply.bind($rootScope));
-              });
+              $rootScope.formLoading = false;
+              $timeout($rootScope.$apply.bind($rootScope));
             }
           }, onError).catch(onError);
         };
