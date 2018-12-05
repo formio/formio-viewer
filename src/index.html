@@ -229,10 +229,6 @@
       }
     });
 
-    if (submission) {
-      options.readOnly = true;
-    }
-
     Formio.icons = 'fontawesome';
     return Formio.createForm(formioElem, form, options)
     .then(function(instance) {
