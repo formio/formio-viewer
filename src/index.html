@@ -56,7 +56,7 @@
 
       // If there are paths provided.
       if (paths.length > 1) {
-        var projectUrl = baseUrl + '/' + paths[0];
+        var projectUrl = query.host ? (baseUrl + '/' + paths[0]) : (protocol + '://' + paths[0] + '.form.io');
 
         // Set the project url.
         Formio.setProjectUrl(projectUrl);
@@ -228,6 +228,10 @@
         }
       }
     });
+
+    if (submission) {
+      options.readOnly = true;
+    }
 
     Formio.icons = 'fontawesome';
     return Formio.createForm(formioElem, form, options)
