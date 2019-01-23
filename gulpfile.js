@@ -13,14 +13,12 @@ gulp.task('seamless', () => gulp.src('./node_modules/seamless/build/**/*').pipe(
 gulp.task('bootstrap', () => gulp.src('./node_modules/bootstrap/dist/**/*').pipe(gulp.dest('dist/lib/bootstrap')));
 gulp.task('bootswatch', () => gulp.src('./node_modules/bootswatch/**/*').pipe(gulp.dest('dist/lib/bootswatch')));
 gulp.task('fa', () => gulp.src('./node_modules/font-awesome/**/*').pipe(gulp.dest('dist/lib/font-awesome')));
-gulp.task('build', ['clean'], function() {
-  gulp.start([
-    'html',
-    'assets',
-    'formiojs',
-    'seamless',
-    'bootstrap',
-    'bootswatch',
-    'fa'
-  ]);
-});
+gulp.task('build', gulp.series('clean', gulp.parallel(
+  'html',
+  'assets',
+  'formiojs',
+  'seamless',
+  'bootstrap',
+  'bootswatch',
+  'fa')
+));
