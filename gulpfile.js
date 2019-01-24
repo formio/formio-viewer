@@ -32,17 +32,17 @@ gulp.task('bootswatch', function() {
 });
 
 // Create the lib folders.
-gulp.task('lib', ['bootswatch'], function() {
-    return gulp.src([
-      './node_modules/bootstrap/dist/css/bootstrap.min.css',
-      './node_modules/bootstrap/dist/css/bootstrap.min.css.map',
-      './node_modules/ng-formio/dist/formio-full**.*',
-      './node_modules/seamless/build/seamless.child.min.js',
-      './node_modules/jspdf/dist/jspdf.min.js',
-      './node_modules/html2canvas/dist/html2canvas.min.js',
-      './node_modules/js-base64/base64.min.js'
-    ]).pipe(gulp.dest('dist/lib'));
-});
+gulp.task('lib', gulp.series('bootswatch', function libs() {
+  return gulp.src([
+    './node_modules/bootstrap/dist/css/bootstrap.min.css',
+    './node_modules/bootstrap/dist/css/bootstrap.min.css.map',
+    './node_modules/ng-formio/dist/formio-full**.*',
+    './node_modules/seamless/build/seamless.child.min.js',
+    './node_modules/jspdf/dist/jspdf.min.js',
+    './node_modules/html2canvas/dist/html2canvas.min.js',
+    './node_modules/js-base64/base64.min.js'
+  ]).pipe(gulp.dest('dist/lib'));
+}));
 
 // Copy the assets.
 gulp.task('assets', function() {
@@ -50,9 +50,7 @@ gulp.task('assets', function() {
 });
 
 // Define the build task.
-gulp.task('build', ['clean'], function() {
-  gulp.start(['minify', 'fonts', 'lib', 'assets']);
-});
+gulp.task('build', gulp.series('clean', gulp.parallel('minify', 'fonts', 'lib', 'assets')));
 
 const awsjson = require('../aws.json');
 awsjson.bucket = 'formview.io';

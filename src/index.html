@@ -5,7 +5,7 @@
     <title></title>
     <meta name="viewport" content="width=device-width">
     <script src="lib/base64.min.js"></script>
-    <script src="https://cdn.ckeditor.com/4.7.3/full/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/4.11.2/full/ckeditor.js"></script>
 
     <!-- Favicons -->
     <link rel="apple-touch-icon" sizes="57x57" href="assets/favicons/apple-touch-icon-57x57.png">
@@ -201,9 +201,9 @@
         <i style="font-size: 2em;" ng-if="formLoading" ng-class="{'formio-hidden': !formLoading}" class="formio-loading glyphicon glyphicon-refresh glyphicon-spin"></i>
         <div ng-if="!formLoading">
             <div ng-if="!showLogin">
-                <a ng-if="hasSubmission" type="button" ng-click="generatePDF()"
-                   style="float:right;cursor:pointer;margin-top:-32px"><img src="assets/download-pdf.png"
-                                                                            style="height:30px"/></a>
+                <a ng-if="hasSubmission" type="button" ng-click="generatePDF()" style="float:right;cursor:pointer;margin-top:-32px">
+                    <img src="assets/download-pdf.png" style="height:30px" />
+                </a>
                 <formio form="form" read-only="submitted" submission="submission" url="formSrc" ng-class="{'formio-submission': hasSubmission}"></formio>
             </div>
             <div ng-if="showLogin" style="margin-top: 20px;">
@@ -342,7 +342,7 @@
             $rootScope.formError = 'ValidationError: ' + err.details[0].message;
             $rootScope.$broadcast('submitDone');
           }
-          
+
           $rootScope.formLoading = false;
           $timeout($rootScope.$apply.bind($rootScope));
         };
