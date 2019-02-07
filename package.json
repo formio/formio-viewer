@@ -1,6 +1,6 @@
 {
   "name": "formio-viewer",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "A simple form viewer library.",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,7 @@
     "html2canvas": "^0.5.0-beta4",
     "js-base64": "^2.5.1",
     "jspdf": "^1.5.3",
-    "ng-formio": "^2.37.1",
+    "ng-formio": "^2.37.3",
     "seamless": "^1.4.0"
   },
   "devDependencies": {
