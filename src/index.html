@@ -106,6 +106,10 @@
             page-break-inside:avoid;
         }
 
+        .formio-component-form {
+            page-break-inside: auto;
+        }
+
         .main {
             margin-top: 10px;
         }
@@ -254,7 +258,12 @@
           instance.checkData(instance.data, {
             noValidate: true
           });
-          return instance;
+          return new Promise(function(resolve) {
+            // Wait for window to stop rendering
+            setTimeout(function() {
+              return window.requestAnimationFrame(resolve);
+            }, 1000);
+          });
         });
       });
     });
