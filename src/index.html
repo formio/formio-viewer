@@ -261,9 +261,7 @@
           });
           return new Promise(function(resolve) {
             // Wait for window to stop rendering
-            setTimeout(function() {
-              return window.requestAnimationFrame(resolve);
-            }, 1000);
+            return window.requestAnimationFrame(resolve);
           });
         });
       });
