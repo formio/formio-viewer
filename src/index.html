@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <title></title>
     <meta name="viewport" content="width=device-width">
-    <script id="header" type="text/template">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <script id="header-template" type="text/template">
+        <nav id="navbar" class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
                 <a class="navbar-brand" id="form-title">
                     <img src="assets/logo.png" style="display: inline-block; height: 1.3em;" /> Form Viewer
@@ -88,6 +88,25 @@
     <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css" />
     <link rel="stylesheet" href="lib/formiojs/formio.form.min.css" />
     <style type="text/css">
+        .no-space {
+            margin:0;
+            padding: 0;
+        }
+
+        #header {
+            background-color: white;
+            width: 100%;
+            position: fixed;
+            top: 0;
+        }
+
+        #footer {
+            background-color: white;
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+        }
+
         .page-break-after {
             page-break-after: always;
         }
@@ -104,14 +123,18 @@
         }
 
         .formio-component {
-            page-break-inside:avoid;
+            page-break-inside: avoid;
         }
 
         .formio-component-form {
             page-break-inside: auto;
         }
 
-        .main {
+        .table-main {
+            width: 100%;
+        }
+
+        .hasheader .main {
             margin-top: 10px;
         }
 
@@ -168,7 +191,7 @@
 <script type="text/javascript">
   var bodyClass = '';
   if (!query.hasOwnProperty('header') || parseInt(query.header, 10)) {
-    document.write(document.getElementById('header').innerHTML);
+    document.write(document.getElementById('header-template').innerHTML);
     bodyClass += 'hasheader ';
   }
   if (query.iframe && parseInt(query.iframe, 10)) {
@@ -181,10 +204,34 @@
     document.body.className = bodyClass;
   }
 </script>
-<div class="container-fluid main pf" id="main">
-    <div id="preform"></div>
-    <div id="formio"></div>
-</div>
+<table class="table-main no-space">
+    <thead class="no-space">
+        <tr class="no-space">
+            <td class="no-space">
+                <div id="header-space">&nbsp;</div>
+            </td>
+        </tr>
+    </thead>
+    <tbody class="no-space">
+        <tr class="no-space">
+            <td class="no-space">
+                <div class="container-fluid main pf" id="main">
+                    <div id="preform"></div>
+                    <div id="formio"></div>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+    <tfoot class="no-space">
+        <tr class="no-space">
+            <td class="no-space">
+                <div id="footer-space">&nbsp;</div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+<div id="header" class="no-space"></div>
+<div id="footer" class="no-space"></div>
 <script type="text/javascript">
   window.seamless.connect({container: 'div.main', allowStyleInjection: true});
   var mainElem = document.getElementById('main');
@@ -192,6 +239,7 @@
   var loader = document.getElementById('loader');
   var formioElem = document.getElementById("formio");
   var titleElem = document.getElementById("form-title");
+  var navBarElem = document.getElementById('navbar');
   preFormElem.innerHTML = loader.innerHTML;
 
   // You must keep "window.setForm = function(form, submission, options)". This
@@ -233,6 +281,32 @@
         }
       }
     });
+
+    var additionalCSS = '';
+    if (form.settings && form.settings.header) {
+      var headerElem = document.getElementById('header');
+      navBarElem.innerHTML = '';
+      headerElem.innerHTML = form.settings.header;
+      additionalCSS += '#header, #header-space { height: ' + headerElem.offsetHeight + 'px; }';
+    }
+    else {
+      additionalCSS += '#header, #header-space { height: 0px; }';
+    }
+
+    if (form.settings && form.settings.footer) {
+      var footerElem = document.getElementById('footer');
+      footerElem.innerHTML = form.settings.footer;
+      additionalCSS += '#footer, #footer-space { height: ' + footerElem.offsetHeight + 'px; }';
+    }
+    else {
+      additionalCSS += '#footer, #footer-space { height: 0px; }';
+    }
+
+    if (additionalCSS) {
+      var sheet = document.createElement('style')
+      sheet.innerHTML = additionalCSS;
+      document.body.prepend(sheet);
+    }
 
     Formio.icons = 'fontawesome';
     return Formio.createForm(formioElem, form, options)
