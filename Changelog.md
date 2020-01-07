@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.28.0
+### Fixed
+ - The navbar to not use an anchor link.
+
 ## 2.27.0
 - Upgrade formio.js@4.8.0-rc.12
 
