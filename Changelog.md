@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.27.0
+- Upgrade formio.js@4.8.0-rc.12
+
 ## 2.25.0
 ### Changed
  - Upgraded [formio.js@3.24.3](https://github.com/formio/formio.js/blob/master/Changelog.md#3243)

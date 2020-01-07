@@ -97,10 +97,19 @@ dialog.fixed {
 .builder-component.has-error .invalid-feedback,
 .formio-component.has-error .invalid-feedback,
 .formio-component.alert-danger .invalid-feedback,
-.formio-component.alert-warning .invalid-feedback {
+.formio-component.has-message .invalid-feedback {
   display: block;
   color: inherit;
   margin-top: 4px; }
+
+.formio-errors .error {
+  color: #dc3545; }
+
+.formio-errors .warning {
+  color: #856404; }
+
+.formio-errors .info {
+  color: #004085; }
 
 .formio-wysiwyg-editor {
   min-height: 200px;
@@ -611,6 +620,9 @@ body.formio-dialog-open {
 .formio-component-label-hidden {
   position: relative; }
 
+.formio-hidden {
+  margin: 0; }
+
 .control-label--hidden {
   position: absolute;
   top: 6px;
@@ -852,6 +864,10 @@ div[data-oembed-url] {
 .radio label.label-position-left input[type="radio"], .checkbox label.label-position-left input[type="checkbox"] {
   margin-left: 10px; }
 
+.open-modal-button {
+  width: 100%;
+  text-align: left; }
+
 /* ckeditor5-image/theme/image.css */
 .formio-component-content .image {
   display: table;
@@ -966,7 +982,7 @@ div[data-oembed-url] {
 .panel-body > .drag-container.formio-builder-components:hover,
 .tab-pane > .drag-container.formio-builder-components,
 .tab-pane > .drag-container.formio-builder-components:hover {
-  padding: 0;
+  padding: 0 0 1rem 0;
   border: none; }
 
 .component-btn-group {
@@ -1093,3 +1109,35 @@ div[data-oembed-url] {
 
 .builder-sidebar .btn {
   white-space: normal; }
+
+/* Styles for component edit modal */
+.component-settings {
+  padding-top: 20px !important;
+  padding-bottom: 20px !important; }
+
+.component-settings .formio-dialog-content {
+  max-height: 100%; }
+
+.component-edit-container {
+  height: 100%;
+  overflow: hidden; }
+
+.component-edit-content {
+  height: calc(100% - 4em); }
+
+.component-edit-tabs.col-sm-6 {
+  height: 100%;
+  overflow-y: auto; }
+
+.component-edit-tabs.col-sm-12 {
+  height: calc(100% - 4em);
+  overflow-y: auto; }
+
+.component-edit-tabs.col-sm-12 .editForm {
+  height: calc(100% - 4em);
+  overflow-y: auto; }
+
+.formio-component-modal-wrapper {
+  margin-bottom: 10px; }
+  .formio-component-modal-wrapper .component-rendering-hidden {
+    visibility: hidden; }

@@ -13,14 +13,10 @@
             </div>
         </nav>
     </script>
-    <script id="barcode-template" type="text/template">
-        <img id="barcode" />
-    </script>
     <script id="branding" type="text/template"><hr /><h4 class="text-center text-muted">powered by <img src="assets/logo.png" style="height: 1.2em;" /></h4></script>
     <script id="srcform" type="text/template"><div class="well src-form"><div class="form-group"><label for="formsrc">Form Embed URL</label><input type="text" class="form-control" id="formsrc" name="formsrc" placeholder="https://examples.form.io/example"></div><button type="submit" class="btn btn-primary" id="setsrc"><span class="glyphicon glyphicon-check" id="btnicon"></span> Show Form</button></div></script>
     <script id="loader" type="text/template"><div class="loader-wrapper"><div class="loader text-center"></div></div></script>
     <script src="lib/formiojs/formio.form.min.js"></script>
-    <script src="lib/jsbarcode/jsBarcode.all.min.js"></script>
     <script src="lib/formiojs/formio.contrib.min.js"></script>
     <script src="lib/seamless/seamless.child.min.js"></script>
     <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
@@ -175,10 +171,6 @@
     document.write(document.getElementById('header-template').innerHTML);
     bodyClass += 'hasheader ';
   }
-  if (query.barcode) {
-    document.write(document.getElementById('barcode-template').innerHTML);
-    bodyClass += 'hasbarcode ';
-  }
   if (query.iframe && parseInt(query.iframe, 10)) {
     bodyClass += 'iframe ';
     if (!query.theme) {
@@ -209,17 +201,6 @@
     options = options || {};
     if (!form) {
       console.warn('No form object provided');
-    }
-
-    if (query.barcode && submission && submission._id) {
-      var barcodeString = submission._id;
-      if (form.settings && form.settings.barcode) {
-        barcodeString = FormioUtils.interpolate(form.settings.barcode, {
-          form: form,
-          submission: submission
-        });
-      }
-      JsBarcode("#barcode", barcodeString);
     }
 
     // If the form is a string, then load it first and then try again.
