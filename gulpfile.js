@@ -9,6 +9,7 @@ gulp.task('html', () => gulp.src('./src/index.html').pipe(plugins.htmlmin({
 })).pipe(gulp.dest('dist')));
 gulp.task('assets', () => gulp.src('./src/assets/**/*').pipe(gulp.dest('dist/assets')));
 gulp.task('formiojs', () => gulp.src('./node_modules/formiojs/dist/**/*').pipe(gulp.dest('dist/lib/formiojs')));
+gulp.task('jsbarcode', () => gulp.src('./node_modules/jsbarcode/dist/**/*').pipe(gulp.dest('dist/lib/jsbarcode')));
 gulp.task('seamless', () => gulp.src('./node_modules/seamless/build/**/*').pipe(gulp.dest('dist/lib/seamless')));
 gulp.task('bootstrap', () => gulp.src('./node_modules/bootstrap/dist/**/*').pipe(gulp.dest('dist/lib/bootstrap')));
 gulp.task('bootswatch', () => gulp.src('./node_modules/bootswatch/**/*').pipe(gulp.dest('dist/lib/bootswatch')));
@@ -17,6 +18,7 @@ gulp.task('build', gulp.series('clean', gulp.parallel(
   'html',
   'assets',
   'formiojs',
+  'jsbarcode',
   'seamless',
   'bootstrap',
   'bootswatch',
