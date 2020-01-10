@@ -1,6 +1,6 @@
 {
   "name": "formio-viewer",
-  "version": "2.28.0",
+  "version": "2.29.0",
   "description": "A Form.io form viewer application",
   "main": "index.js",
   "scripts": {
@@ -22,7 +22,7 @@
     "bootswatch": "^4.4.1",
     "core-js": "^3.6.2",
     "font-awesome": "^4.7.0",
-    "formiojs": "^4.8.0-rc.12",
+    "formiojs": "^4.8.0-rc.13",
     "seamless": "^1.4.1"
   },
   "devDependencies": {
