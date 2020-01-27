@@ -22,3 +22,8 @@ gulp.task('build', gulp.series('clean', gulp.parallel(
   'bootswatch',
   'fa')
 ));
+gulp.task('deploy', function () {
+  return gulp.src('./dist/**/*').pipe(plugins.s3(require('../formio-apps/aws.json'), {
+    uploadPath: "/viewer/"
+  }));
+});
