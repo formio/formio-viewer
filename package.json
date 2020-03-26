@@ -1,6 +1,6 @@
 {
   "name": "formio-viewer",
-  "version": "2.37.0",
+  "version": "2.38.0",
   "description": "A Form.io form viewer application",
   "main": "index.js",
   "scripts": {
@@ -22,7 +22,7 @@
     "bootswatch": "^4.4.1",
     "core-js": "^3.6.4",
     "font-awesome": "^4.7.0",
-    "formiojs": "^4.9.5",
+    "formiojs": "^4.9.8",
     "gulp-s3": "^0.11.0",
     "seamless": "^1.4.1"
   },
@@ -45,7 +45,7 @@
     "gulp-streamify": "^1.0.2",
     "gulp-uglify": "^3.0.2",
     "vinyl-source-stream": "^2.0.0",
-    "webpack": "^4.42.0",
+    "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11"
   }
 }
