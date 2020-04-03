@@ -22,7 +22,7 @@
     "bootswatch": "^4.4.1",
     "core-js": "^3.6.4",
     "font-awesome": "^4.7.0",
-    "formiojs": "^4.9.8",
+    "formiojs": "^4.9.13",
     "gulp-s3": "^0.11.0",
     "seamless": "^1.4.1"
   },
