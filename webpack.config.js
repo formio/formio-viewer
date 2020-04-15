@@ -4,6 +4,9 @@ module.exports = {
   mode: 'production',
   entry: './src/renderer.js',
   output: {
+    library: 'Formio',
+    libraryTarget: 'umd',
+    libraryExport: 'Formio',
     path: path.resolve(__dirname, 'dist/lib/formiojs'),
     filename: 'formio.form.min.js'
   },
