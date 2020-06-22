@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.45.0
+### Changed
+ - Upgrad formiojs@4.10.4
+
+### Fixed
+ - FJS-872: Fixed an issue with not hidden Panel with 'viewer:hide' tag provided
+
 ## 2.45.0-rc.1
 ### Changed
  - Upgrade formiojs@4.10.0-rc.6

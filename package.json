@@ -1,6 +1,6 @@
 {
   "name": "formio-viewer",
-  "version": "2.45.0-rc.1",
+  "version": "2.45.0",
   "description": "A Form.io form viewer application",
   "main": "index.js",
   "scripts": {
@@ -18,21 +18,21 @@
   },
   "homepage": "https://github.com/formio/formio-viewer#readme",
   "dependencies": {
-    "bootstrap": "^4.4.1",
-    "bootswatch": "^4.4.1",
+    "bootstrap": "^4.5.0",
+    "bootswatch": "^4.5.0",
     "core-js": "^3.6.5",
     "font-awesome": "^4.7.0",
-    "formiojs": "^4.10.0-rc.6",
+    "formiojs": "^4.10.4",
     "gulp-s3": "^0.11.0",
     "seamless": "^1.4.1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.8.4",
-    "@babel/core": "^7.9.6",
-    "@babel/plugin-proposal-export-default-from": "^7.8.3",
-    "@babel/plugin-proposal-optional-chaining": "^7.9.0",
-    "@babel/polyfill": "^7.8.7",
-    "@babel/preset-env": "^7.9.6",
+    "@babel/cli": "^7.10.3",
+    "@babel/core": "^7.10.3",
+    "@babel/plugin-proposal-export-default-from": "^7.10.1",
+    "@babel/plugin-proposal-optional-chaining": "^7.10.3",
+    "@babel/polyfill": "^7.10.1",
+    "@babel/preset-env": "^7.10.3",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
     "del": "^5.1.0",
@@ -46,6 +46,6 @@
     "gulp-uglify": "^3.0.2",
     "vinyl-source-stream": "^2.0.0",
     "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "^3.3.12"
   }
 }

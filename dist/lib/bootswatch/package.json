@@ -1,27 +1,28 @@
 {
-  "_from": "bootswatch@^4.4.1",
+  "_from": "bootswatch@4.5.0",
   "_id": "bootswatch@4.5.0",
   "_inBundle": false,
   "_integrity": "sha512-kAfYTTWIsgUOA5nybJNM4yvOpwxm37eIb1DFZlD5jLgPttK+bLJTt9UpKWAoMQZRBQbWfC1O1w1P5PGU7lz83Q==",
   "_location": "/bootswatch",
   "_phantomChildren": {},
   "_requested": {
-    "type": "range",
+    "type": "version",
     "registry": true,
-    "raw": "bootswatch@^4.4.1",
+    "raw": "bootswatch@4.5.0",
     "name": "bootswatch",
     "escapedName": "bootswatch",
-    "rawSpec": "^4.4.1",
+    "rawSpec": "4.5.0",
     "saveSpec": null,
-    "fetchSpec": "^4.4.1"
+    "fetchSpec": "4.5.0"
   },
   "_requiredBy": [
+    "#USER",
     "/"
   ],
   "_resolved": "https://registry.npmjs.org/bootswatch/-/bootswatch-4.5.0.tgz",
   "_shasum": "1f4ea460118d0da8113418f1627ca755697d7e0f",
-  "_spec": "bootswatch@^4.4.1",
-  "_where": "/Users/randallknutson/Projects/formio-viewer",
+  "_spec": "bootswatch@4.5.0",
+  "_where": "/Users/travistidwell/Documents/formio/formio-viewer",
   "author": {
     "name": "Thomas Park"
   },
