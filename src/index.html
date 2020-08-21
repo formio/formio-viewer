@@ -252,16 +252,27 @@
         return instance;
       }
 
-      return instance.setSubmission(submission).then(function() {
-        instance.redraw();
-        return instance.dataReady.then(function() {
-          instance.checkData(instance.data, {
-            noValidate: true
+      return new Formio.Promise(function(resolve) {
+        var timeout = null;
+        var doneChanging = function() {
+          instance.dataReady.then(function() {
+            instance.checkData(instance.data, {
+              noValidate: true
+            });
+            window.requestAnimationFrame(resolve);
           });
-          return new Promise(function(resolve) {
-            // Wait for window to stop rendering
-            return window.requestAnimationFrame(resolve);
-          });
+        };
+        var resetTimer = function() {
+          if (timeout) {
+            clearTimeout(timeout);
+          }
+          timeout = setTimeout(doneChanging, 100);
+        };
+        instance.on('change', resetTimer);
+        instance.setSubmission(submission).then(function() {
+          resetTimer();
+          instance.redraw();
+          resetTimer();
         });
       });
     });
