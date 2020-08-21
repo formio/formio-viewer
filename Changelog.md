@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.49.1
+### Changed
+ - Upgrade formiojs@4.11.2
+
+### Fixed
+ - Issue where PDF would be generated when the form is still changing.
+
 ## 2.49.0
 ### Changed
  - Upgrade formiojs@4.11.1
