@@ -266,7 +266,7 @@
           if (timeout) {
             clearTimeout(timeout);
           }
-          timeout = setTimeout(doneChanging, 100);
+          timeout = setTimeout(doneChanging, 150);
         };
         instance.on('change', resetTimer);
         instance.setSubmission(submission).then(function() {
