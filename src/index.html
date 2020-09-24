@@ -102,14 +102,6 @@
             margin-top: 10px;
         }
 
-        .formio-component {
-            page-break-inside:avoid;
-        }
-
-        .formio-component-form {
-            page-break-inside: auto;
-        }
-
         .main {
             margin-top: 10px;
         }
@@ -186,6 +178,15 @@
   }
   if (bodyClass) {
     document.body.className = bodyClass;
+  }
+
+  // Add the auto page break styles to the header unless they turn them off.
+  if (!query.autoPageBreak || query.autoPageBreak !== 'none') {
+    var style = document.createElement('style');
+    style.setAttribute('style', 'text/css');
+    style.innerHTML = ".formio-component { page-break-inside:avoid; } " +
+      ".formio-component-form { page-break-inside:auto; }";
+    document.getElementsByTagName('head')[0].appendChild(style);
   }
 </script>
 <div class="container-fluid main pf" id="main">
