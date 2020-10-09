@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.50.0-rc.8
+### Changed
+ - Upgrade formiojs@4.12.1-rc.10
+
+### Fixed
+ - Removed auto page size to fix errors with columns collapsing.
+
 ## 2.50.0-rc.6
 ### Changed
  - Upgrade formiojs@4.12.1-rc.1
