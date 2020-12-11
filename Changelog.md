@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.50.2-rc.1
+### Changed
+ - Upgrade formiojs@4.12.4-rc.2
+
+### Fixed
+ - FJS-1485: Using original display in timezone
+
 ## 2.50.1-rc.1
 ### Changed
  - Upgrade formiojs@4.12.2-rc.5
