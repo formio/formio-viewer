@@ -1,8 +1,8 @@
-/* flatpickr v4.6.6, @license MIT */
+/* flatpickr v4.6.8, @license MIT */
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
     typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, global.flatpickr = factory());
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.flatpickr = factory());
 }(this, (function () { 'use strict';
 
     /*! *****************************************************************************
@@ -55,7 +55,6 @@
     ];
     var defaults = {
         _disable: [],
-        _enable: [],
         allowInput: false,
         allowInvalidPreload: false,
         altFormat: "F j, Y",
@@ -74,7 +73,6 @@
         defaultSeconds: 0,
         disable: [],
         disableMobile: false,
-        enable: [],
         enableSeconds: false,
         enableTime: false,
         errorHandler: function (err) {
@@ -206,19 +204,12 @@
     };
     var int = function (bool) { return (bool === true ? 1 : 0); };
     /* istanbul ignore next */
-    function debounce(func, wait, immediate) {
-        if (immediate === void 0) { immediate = false; }
-        var timeout;
+    function debounce(fn, wait) {
+        var t;
         return function () {
-            var context = this, args = arguments;
-            timeout !== null && clearTimeout(timeout);
-            timeout = window.setTimeout(function () {
-                timeout = null;
-                if (!immediate)
-                    func.apply(context, args);
-            }, wait);
-            if (immediate && !timeout)
-                func.apply(context, args);
+            var _this = this;
+            clearTimeout(t);
+            t = setTimeout(function () { return fn.apply(_this, arguments); }, wait);
         };
     }
     var arrayify = function (obj) {
@@ -863,12 +854,10 @@
             if (window.ontouchstart !== undefined)
                 bind(window.document, "touchstart", documentClick);
             else
-                bind(window.document, "click", documentClick);
+                bind(window.document, "mousedown", documentClick);
             bind(window.document, "focus", documentClick, { capture: true });
-            if (self.config.clickOpens === true) {
-                bind(self._input, "focus", self.open);
-                bind(self._input, "click", self.open);
-            }
+            bind(self._input, "focus", self.open);
+            bind(self._input, "mousedown", self.open);
             if (self.daysContainer !== undefined) {
                 bind(self.monthNav, "click", onMonthNavClick);
                 bind(self.monthNav, ["keyup", "increment"], onYearInput);
@@ -893,8 +882,9 @@
                     });
                 }
             }
-            if (self.config.allowInput)
+            if (self.config.allowInput) {
                 bind(self._input, "blur", onBlur);
+            }
         }
         /**
          * Set the calendar view to a particular date.
@@ -1313,8 +1303,10 @@
             self.minuteElement.setAttribute("step", self.config.minuteIncrement.toString());
             self.hourElement.setAttribute("min", self.config.time_24hr ? "0" : "1");
             self.hourElement.setAttribute("max", self.config.time_24hr ? "23" : "12");
+            self.hourElement.setAttribute("maxlength", "2");
             self.minuteElement.setAttribute("min", "0");
             self.minuteElement.setAttribute("max", "59");
+            self.minuteElement.setAttribute("maxlength", "2");
             self.timeContainer.appendChild(hourInput);
             self.timeContainer.appendChild(separator);
             self.timeContainer.appendChild(minuteInput);
@@ -1330,6 +1322,7 @@
                 self.secondElement.setAttribute("step", self.minuteElement.getAttribute("step"));
                 self.secondElement.setAttribute("min", "0");
                 self.secondElement.setAttribute("max", "59");
+                self.secondElement.setAttribute("maxlength", "2");
                 self.timeContainer.appendChild(createElement("span", "flatpickr-time-separator", ":"));
                 self.timeContainer.appendChild(secondInput);
             }
@@ -1575,6 +1568,7 @@
             }
         }
         function isEnabled(date, timeless) {
+            var _a;
             if (timeless === void 0) { timeless = true; }
             var dateToCheck = self.parseDate(date, undefined, timeless); // timeless
             if ((self.config.minDate &&
@@ -1584,11 +1578,11 @@
                     dateToCheck &&
                     compareDates(dateToCheck, self.config.maxDate, timeless !== undefined ? timeless : !self.maxDateHasTime) > 0))
                 return false;
-            if (self.config.enable.length === 0 && self.config.disable.length === 0)
+            if (!self.config.enable && self.config.disable.length === 0)
                 return true;
             if (dateToCheck === undefined)
                 return false;
-            var bool = self.config.enable.length > 0, array = bool ? self.config.enable : self.config.disable;
+            var bool = !!self.config.enable, array = (_a = self.config.enable) !== null && _a !== void 0 ? _a : self.config.disable;
             for (var i = 0, d = void 0; i < array.length; i++) {
                 d = array[i];
                 if (typeof d === "function" &&
@@ -1600,7 +1594,7 @@
                     d.getTime() === dateToCheck.getTime())
                     // disabled by date
                     return bool;
-                else if (typeof d === "string" && dateToCheck !== undefined) {
+                else if (typeof d === "string") {
                     // disabled by date string
                     var parsed = self.parseDate(d, undefined, true);
                     return parsed && parsed.getTime() === dateToCheck.getTime()
@@ -1629,6 +1623,7 @@
         function onBlur(e) {
             var isInput = e.target === self._input;
             if (isInput &&
+                (self.selectedDates.length > 0 || self._input.value.length > 0) &&
                 !(e.relatedTarget && isCalendarElem(e.relatedTarget))) {
                 self.setDate(self._input.value, true, e.target === self.altInput
                     ? self.config.altFormat
@@ -1861,7 +1856,7 @@
                 triggerEvent("onOpen");
                 return;
             }
-            if (self._input.disabled || self.config.inline)
+            if (self._input.disabled || self.config.inline || !self.config.clickOpens)
                 return;
             var wasOpen = self.isOpen;
             self.isOpen = true;
@@ -1995,7 +1990,7 @@
                     !self.config.inline &&
                     self.config.mode === "single" &&
                     !self.config.disable.length &&
-                    !self.config.enable.length &&
+                    !self.config.enable &&
                     !self.config.weekNumbers &&
                     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
             for (var i = 0; i < self.config.plugins.length; i++) {
@@ -2040,6 +2035,9 @@
             self.parseDate = createDateParser({ config: self.config, l10n: self.l10n });
         }
         function positionCalendar(customPositionElement) {
+            if (typeof self.config.position === "function") {
+                return void self.config.position(self, customPositionElement);
+            }
             if (self.calendarContainer === undefined)
                 return;
             triggerEvent("onPreCalendarPosition");
@@ -2645,7 +2643,6 @@
             return _flatpickr(this, config);
         };
     }
-    // eslint-disable-next-line @typescript-eslint/camelcase
     Date.prototype.fp_incr = function (days) {
         return new Date(this.getFullYear(), this.getMonth(), this.getDate() + (typeof days === "string" ? parseInt(days, 10) : days));
     };

@@ -39,7 +39,7 @@ export interface BaseOptions {
     hourIncrement: number;
     ignoredFocusElements: HTMLElement[];
     inline: boolean;
-    locale: LocaleKey | CustomLocale;
+    locale: LocaleKey | Partial<CustomLocale>;
     maxDate: DateOption;
     maxTime: DateOption;
     minDate: DateOption;
@@ -64,7 +64,7 @@ export interface BaseOptions {
     onPreCalendarPosition: Hook | Hook[];
     parseDate: (date: string, format: string) => Date;
     plugins: Plugin[];
-    position: "auto" | "above" | "below";
+    position: "auto" | "above" | "below" | ((self: Instance, customElement: HTMLElement | undefined) => void);
     positionElement: Element;
     prevArrow: string;
     shorthandCurrentMonth: boolean;
@@ -77,7 +77,7 @@ export interface BaseOptions {
 export declare type Options = Partial<BaseOptions>;
 export interface ParsedOptions {
     _disable: DateLimit<Date>[];
-    _enable: DateLimit<Date>[];
+    _enable?: DateLimit<Date>[];
     _maxDate?: Date;
     _maxTime?: Date;
     _minDate?: Date;
@@ -101,7 +101,7 @@ export interface ParsedOptions {
     defaultSeconds: number;
     disable: DateLimit<Date>[];
     disableMobile: boolean;
-    enable: DateLimit<Date>[];
+    enable?: DateLimit<Date>[];
     enableSeconds: boolean;
     enableTime: boolean;
     errorHandler: (err: Error) => void;

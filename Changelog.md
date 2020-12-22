@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.50.2
+### Changed
+ - Upgrade formiojs@4.12.4
+ - Upgrade flatpickr@4.6.8, @babel/cli@7.12.10, @babel/core@7.12.10, @babel/preset-env@7.12.11, webpack@5.11.0
+
 ## 2.50.2-rc.1
 ### Changed
  - Upgrade formiojs@4.12.4-rc.2
