@@ -1,44 +1,42 @@
 {
-  "_args": [
-    [
-      "bootswatch@4.5.3",
-      "/var/lib/jenkins/workspace/Master build jobs/formio-viewer"
-    ]
-  ],
-  "_from": "bootswatch@4.5.3",
-  "_id": "bootswatch@4.5.3",
+  "_from": "bootswatch@4.6.0",
+  "_id": "bootswatch@4.6.0",
   "_inBundle": false,
-  "_integrity": "sha512-gaB3gBSAegmYbk97aVELKcSKVdPjWsSY4yCITkUt/SqbqjtMU/HtIUszb4O9vzdbrfuVXThc/qCXzjoJaAPgiQ==",
+  "_integrity": "sha512-Yr6YqFBC8jwTzoJoLViYlvO97IhPWGqZEm+6FXHfD/G6gbUok6sZkdXxdh4Zb6iCGEwr9p7zGCn38yKQD/bh2Q==",
   "_location": "/bootswatch",
   "_phantomChildren": {},
   "_requested": {
     "type": "version",
     "registry": true,
-    "raw": "bootswatch@4.5.3",
+    "raw": "bootswatch@4.6.0",
     "name": "bootswatch",
     "escapedName": "bootswatch",
-    "rawSpec": "4.5.3",
+    "rawSpec": "4.6.0",
     "saveSpec": null,
-    "fetchSpec": "4.5.3"
+    "fetchSpec": "4.6.0"
   },
   "_requiredBy": [
+    "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/bootswatch/-/bootswatch-4.5.3.tgz",
-  "_spec": "4.5.3",
-  "_where": "/var/lib/jenkins/workspace/Master build jobs/formio-viewer",
+  "_resolved": "https://registry.npmjs.org/bootswatch/-/bootswatch-4.6.0.tgz",
+  "_shasum": "295237ed0e118decb3e3543f2ac14e9bb8ae48ea",
+  "_spec": "bootswatch@4.6.0",
+  "_where": "/Users/travistidwell/Documents/formio/formio-viewer",
   "author": {
     "name": "Thomas Park"
   },
   "bugs": {
     "url": "https://github.com/thomaspark/bootswatch/issues"
   },
+  "bundleDependencies": false,
   "dependencies": {},
+  "deprecated": false,
   "description": "Bootswatch is a collection of themes for Bootstrap.",
   "devDependencies": {
     "@lodder/grunt-postcss": "^3.0.0",
-    "autoprefixer": "^10.0.1",
-    "bootstrap": "^4.5.3",
+    "autoprefixer": "^10.1.0",
+    "bootstrap": "^4.6.0",
     "font-awesome": "^4.7.0",
     "grunt": "^1.3.0",
     "grunt-contrib-clean": "^2.0.0",
@@ -50,9 +48,9 @@
     "grunt-html": "^14.2.0",
     "grunt-sass": "^3.1.0",
     "jquery": "^3.5.1",
-    "node-sass": "^4.14.1",
-    "postcss": "^8.1.2",
-    "stylelint": "^13.7.2",
+    "node-sass": "^5.0.0",
+    "postcss": "^8.2.0",
+    "stylelint": "^13.8.0",
     "stylelint-config-twbs-bootstrap": "^2.1.0"
   },
   "files": [
@@ -71,5 +69,5 @@
     "stylelint": "stylelint \"**/*.scss\" --rd",
     "test": "npm run stylelint"
   },
-  "version": "4.5.3"
+  "version": "4.6.0"
 }

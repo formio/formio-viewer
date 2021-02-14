@@ -8,10 +8,16 @@ module.exports = {
     libraryTarget: 'umd',
     libraryExport: 'Formio',
     path: path.resolve(__dirname, 'dist/lib/formiojs'),
-    filename: 'formio.form.min.js'
+    filename: 'formio.form.min.js',
+    environment: {
+      arrowFunction: false
+    },
   },
   plugins: [
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.IgnorePlugin({
+      resourceRegExp: /^\.\/locale$/,
+      contextRegExp: /moment$/
+    }),
   ],
   module: {
     rules: [
