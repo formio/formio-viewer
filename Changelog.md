@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## 2.50.3-rc.3
 ### Changed
  - Upgrade formiojs@4.13.0-rc.11
+### Fixed
+ - FIO-565: Fix components overlapping inside datagrid
 
 ## 2.50.3-rc.2
 ### Fixed
