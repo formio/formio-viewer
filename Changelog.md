@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## 2.50.3-rc.3
+## 2.50.3-rc.4
 ### Fixed
  - FIO-565: Fix components overlapping inside datagrid
 
