@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.50.3-rc.8
+### Changed
+ - Upgrade formiojs@4.13.0-rc.26
+
+### Fixed
+ - FIO-2596: Fix panel spread on multiple pages
+
 ## 2.50.3-rc.7
 ### Changed
  - Upgrade formiojs@4.13.0-rc.23
