@@ -93,14 +93,8 @@
             page-break-after: always;
         }
 
-        .page-break-before {
+        .page-break-before, .page-break {
             display: flex;
-            page-break-before: always;
-            margin-top: 10px;
-        }
-
-        .page-break	{
-            display: block;
             page-break-before: always;
             margin-top: 10px;
         }
@@ -232,7 +226,6 @@
     if (pageBreak) {
       formioElem.setAttribute('class', 'page-break-before');
     }
-    formioElem.appendChild(document.createTextNode('Loading ...'));
     mainElem.appendChild(formioElem);
 
     // If the form is a string, then load it first and then try again.
