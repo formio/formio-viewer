@@ -89,10 +89,12 @@
     <link rel="stylesheet" href="lib/formiojs/formio.form.min.css" />
     <style type="text/css">
         .page-break-after {
+            display: flex;
             page-break-after: always;
         }
 
         .page-break-before {
+            display: flex;
             page-break-before: always;
             margin-top: 10px;
         }
@@ -205,25 +207,33 @@
 </script>
 <div class="container-fluid main pf" id="main">
     <div id="preform"></div>
-    <div id="formio"></div>
 </div>
 <script type="text/javascript">
   window.seamless.connect({container: 'div.main', allowStyleInjection: true});
   var mainElem = document.getElementById('main');
   var preFormElem = document.getElementById('preform');
   var loader = document.getElementById('loader');
-  var formioElem = document.getElementById("formio");
   var titleElem = document.getElementById("form-title");
+  var formioElem = null;
+  var pageBreak = false;
   preFormElem.innerHTML = loader.innerHTML;
-
-  // You must keep "window.setForm = function(form, submission, options)". This
-  // is what the PDF renderer uses to generate a form with predefined form, submission, and options.
-  window.setForm = function(form, submission, options) {
+  var createFormPage = function(form, submission, options) {
     preFormElem.innerHTML = loader.innerHTML;
     options = options || {};
     if (!form) {
       console.warn('No form object provided');
     }
+
+    // Create the formio element.
+    if (formioElem) {
+      pageBreak = true;
+    }
+    formioElem = document.createElement('span');
+    if (pageBreak) {
+      formioElem.setAttribute('class', 'page-break-before');
+    }
+    formioElem.appendChild(document.createTextNode('Loading ...'));
+    mainElem.appendChild(formioElem);
 
     // If the form is a string, then load it first and then try again.
     if (typeof form === 'string') {
@@ -257,10 +267,12 @@
     }, true);
 
     Formio.icons = 'fontawesome';
-    return Formio.createForm(formioElem, form, options)
-    .then(function(instance) {
-      // Remove the entire preform element.
-      mainElem.removeChild(preFormElem);
+    return Formio.createForm(formioElem, form, options).then(function(instance) {
+      if (preFormElem) {
+        // Remove the entire preform element.
+        mainElem.removeChild(preFormElem);
+        preFormElem = null;
+      }
 
       // Set the source of the form if it is provided.
       if (form.src) {
@@ -276,28 +288,29 @@
       }
 
       return new Formio.Promise(function(resolve) {
-        var timeout = null;
-        var doneChanging = function() {
+        instance.setSubmission(submission).then(function() {
           instance.dataReady.then(function() {
             instance.checkData(instance.data, {
               noValidate: true
             });
             window.requestAnimationFrame(resolve);
           });
-        };
-        var resetTimer = function() {
-          if (timeout) {
-            clearTimeout(timeout);
-          }
-          timeout = setTimeout(doneChanging, 150);
-        };
-        instance.setSubmission(submission).then(function() {
-          instance.on('redraw', () => resetTimer())
-          instance.redraw();
-          resetTimer();
         });
       });
     });
+  };
+
+  // You must keep "window.setForm = function(form, submission, options)". This
+  // is what the PDF renderer uses to generate a form with predefined form, submission, and options.
+  window.setForm = function(form, submission, options) {
+    if (Array.isArray(submission) && submission.length) {
+      var promises = [];
+      submission.forEach(function(sub) {
+        promises.push(createFormPage(form, sub, options));
+      });
+      return Formio.Promise.all(promises);
+    }
+    return createFormPage(form, submission, options);
   };
 
   if (src) {
