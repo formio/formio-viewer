@@ -151,6 +151,11 @@
             -webkit-animation: spin 1000ms infinite linear;
             animation: spin 1000ms infinite linear;
         }
+
+        input[type=radio]:checked {
+          filter: brightness(0.5);
+        }
+
         @-webkit-keyframes spin {
             0% {
                 -webkit-transform: rotate(0deg);
