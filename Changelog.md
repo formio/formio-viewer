@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.51.2-rc.2
+### Changed
+ - Upgrade formiojs@4.13.2-rc.3
+
+### Fixed
+ - FIO-2992: Fixes an issue where Panel doesn't always take the full width of the page
+
 ## 2.51.2-rc.1
 ### Changed
  - Upgrade formiojs@4.13.2-rc.2
