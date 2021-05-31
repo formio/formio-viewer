@@ -89,13 +89,15 @@
     <link rel="stylesheet" href="lib/formiojs/formio.form.min.css" />
     <style type="text/css">
         .page-break-after {
-            display: flex;
+
             page-break-after: always;
+            break-after: page;
         }
 
         .page-break-before, .page-break {
-            display: flex;
+
             page-break-before: always;
+            break-before: page;
             margin-top: 10px;
         }
 
@@ -231,7 +233,7 @@
     if (formioElem) {
       pageBreak = true;
     }
-    formioElem = document.createElement('span');
+    formioElem = document.createElement('div');
     if (pageBreak) {
       formioElem.setAttribute('class', 'page-break-before');
     }
