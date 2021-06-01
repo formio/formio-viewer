@@ -4,6 +4,33 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.51.3-rc.1
+### Fixed
+ - FIO-3117: Fixes an issue where components with manual page breaks has smaller width
+
+## 2.51.2
+### Changed
+ - Upgrade formiojs@4.13.2
+
+## 2.51.2-rc.2
+### Changed
+ - Upgrade formiojs@4.13.2-rc.3
+
+### Fixed
+ - FIO-2992: Fixes an issue where Panel doesn't always take the full width of the page
+
+## 2.51.2-rc.1
+### Changed
+ - Upgrade formiojs@4.13.2-rc.2
+
+### Fixed
+ - FIO-2678: add style to make checked radio more visible 
+ - FIO-2765, FIO-2882: Fixes an issue where on downloaded as PDF submission some components are cut by a page
+
+## 2.51.1
+### Changed
+ - Upgrade formiojs@4.13.1
+
 ## 2.51.1-rc.3
 ### Changed
  - Upgrade formiojs@4.13.1-rc.7

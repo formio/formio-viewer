@@ -89,13 +89,15 @@
     <link rel="stylesheet" href="lib/formiojs/formio.form.min.css" inline/>
     <style type="text/css">
         .page-break-after {
-            display: flex;
+
             page-break-after: always;
+            break-after: page;
         }
 
         .page-break-before, .page-break {
-            display: flex;
+
             page-break-before: always;
+            break-before: page;
             margin-top: 10px;
         }
 
@@ -130,9 +132,13 @@
             white-space: pre-wrap;
         }
 
-        .formio-form, .formio-component-panel .card-body {
-          display: flex;
-          flex-direction: column;
+        .formio-component-panel, .formio-component-panel .card-body {
+            break-inside: auto !important;
+        }
+
+        .formio-component-panel .card {
+            display: block !important;
+            width: 100%;
         }
 
         .formio-component-panel .border {
@@ -151,6 +157,11 @@
             -webkit-animation: spin 1000ms infinite linear;
             animation: spin 1000ms infinite linear;
         }
+
+        input[type=radio]:checked {
+          filter: brightness(0.5);
+        }
+
         @-webkit-keyframes spin {
             0% {
                 -webkit-transform: rotate(0deg);
@@ -194,8 +205,8 @@
   if (!query.autoPageBreak || query.autoPageBreak !== 'none') {
     var style = document.createElement('style');
     style.setAttribute('style', 'text/css');
-    style.innerHTML = ".formio-component { page-break-inside:avoid; } " +
-      ".formio-component-form { page-break-inside:auto; }";
+    style.innerHTML = ".formio-component { page-break-inside:avoid; break-inside:avoid; } " +
+      ".formio-component-form { page-break-inside:auto; break-inside:auto; }";
     document.getElementsByTagName('head')[0].appendChild(style);
   }
 </script>
@@ -222,7 +233,7 @@
     if (formioElem) {
       pageBreak = true;
     }
-    formioElem = document.createElement('span');
+    formioElem = document.createElement('div');
     if (pageBreak) {
       formioElem.setAttribute('class', 'page-break-before');
     }
