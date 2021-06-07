@@ -132,7 +132,14 @@
             white-space: pre-wrap;
         }
 
-        .formio-component-panel, .formio-component-panel .card-body {
+        /* Components where we want to allow auto page breaks inside,
+        because they could have a very long content or other components inside*/
+        .formio-component-panel,
+        .formio-component-panel .card-body
+        .formio-component-htmlelement,
+        .formio-component-textarea,
+        .formio-component.formio-component-datagrid {
+            page-break-inside: auto;
             break-inside: auto !important;
         }
 
@@ -143,10 +150,6 @@
 
         .formio-component-panel .border {
           border-bottom: none !important;
-        }
-
-        .formio-component.formio-component-datagrid {
-            page-break-inside: auto;
         }
 
         .formio-component.formio-component-datagrid tr {
