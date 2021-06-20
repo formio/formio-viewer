@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.51.4-rc.2
+### Changed
+ - Upgrade formiojs@4.13.3-rc.6
+
 ## 2.51.4-rc.1
 ### Fixed
  - FIO-3120: Fixes an issue where component with long content (TextArea, HTML) cause excessive page breaks
