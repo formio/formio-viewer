@@ -1,8 +1,8 @@
 import CalendarWidget from 'formiojs/widgets/CalendarWidget';
 import Widgets from 'formiojs/widgets';
 export class ViewerCalendar extends CalendarWidget {
-  constructor(settings, component) {
-    super(settings, component);
+  constructor(settings, component, instance, index) {
+    super(settings, component, instance, index);
     this.originalDisplayInTimezone = this.settings.displayInTimezone;
   }
   get timezone() {
