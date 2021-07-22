@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.51.5-rc.3
+### Fixed
+ - FIO-3538: Text field data that contains letters isn't showing and data that contains digits is showing as Date in PDF download
+
 ## 2.51.5-rc.2
 ### Changed
  - Ugprade formiojs@4.13.5-rc.2
