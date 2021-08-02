@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.51.5-rc.6
+### Fixed
+ - FIO-3500, FIO-3545: allow PDF page break inside layout components
+ - Upgrade formiojs@4.13.5-rc.6
+
 ## 2.51.5-rc.5
 ### Fixed
  - Upgrade formiojs@4.13.5-rc.5
