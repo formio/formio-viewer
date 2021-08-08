@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.51.6-rc.1
+### Fixed
+ - FIO-3500: allow page break inside container`
+
 ## 2.51.5
 ### Changed
  - Upgrade formiojs@4.13.5
