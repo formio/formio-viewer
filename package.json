@@ -1,6 +1,6 @@
 {
   "name": "formio-viewer",
-  "version": "2.51.6",
+  "version": "2.51.7-rc.1",
   "description": "A Form.io form viewer application",
   "main": "index.js",
   "scripts": {
@@ -20,19 +20,19 @@
   "dependencies": {
     "bootstrap": "^4.6.0",
     "bootswatch": "^4.6.0",
-    "core-js": "^3.16.3",
+    "core-js": "^3.18.0",
     "flatpickr": "^4.6.6",
     "font-awesome": "^4.7.0",
-    "formiojs": "^4.13.5",
+    "formiojs": "^4.13.6",
     "seamless": "^1.4.1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.14.8",
-    "@babel/core": "^7.15.0",
+    "@babel/cli": "^7.15.7",
+    "@babel/core": "^7.15.5",
     "@babel/plugin-proposal-export-default-from": "^7.14.5",
     "@babel/plugin-proposal-optional-chaining": "^7.14.5",
     "@babel/polyfill": "^7.12.1",
-    "@babel/preset-env": "^7.15.0",
+    "@babel/preset-env": "^7.15.6",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.2",
     "del": "^6.0.0",
@@ -47,7 +47,7 @@
     "gulp-streamify": "^1.0.2",
     "gulp-uglify": "^3.0.2",
     "vinyl-source-stream": "^2.0.0",
-    "webpack": "^5.51.1",
+    "webpack": "^5.53.0",
     "webpack-cli": "^4.8.0"
   }
 }

@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.51.7-rc.1
+### Fixed
+ - FIO-510: fix double header and branding if format=html param
+
 ## 2.51.6
 ### Changed
  - Official release.
