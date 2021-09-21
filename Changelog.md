@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.51.7-rc.2
+### Changed
+ - Reverted: FIO-2880: Fix process of building
+
 ## 2.51.7-rc.1
 ### Fixed
  - FIO-510: fix double header and branding if format=html param
