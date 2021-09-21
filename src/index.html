@@ -196,7 +196,7 @@
 <body>
 <script type="text/javascript">
   var bodyClass = '';
-  if (!query.hasOwnProperty('header') || parseInt(query.header, 10)) {
+  if ((!query.hasOwnProperty('header') || parseInt(query.header, 10)) && query.format !== 'html') {
     document.write(document.getElementById('header-template').innerHTML);
     bodyClass += 'hasheader ';
   }
@@ -355,7 +355,7 @@
     });
   }
 
-  if (!query.hasOwnProperty('branding') || parseInt(query.branding, 10)) {
+  if ((!query.hasOwnProperty('branding') || parseInt(query.branding, 10)) && query.format !== 'html') {
     document.write(document.getElementById('branding').innerHTML);
   }
 </script>
