@@ -1,10 +1,10 @@
 {
   "name": "formio-viewer",
-  "version": "2.51.7-rc.2",
+  "version": "2.51.7-rc.3",
   "description": "A Form.io form viewer application",
   "main": "index.js",
   "scripts": {
-    "build": "gulp build && webpack --config webpack.config.js",
+    "build": "gulp build && webpack --config webpack.config.js && gulp inlinesource",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

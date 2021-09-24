@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.51.7-rc.3
+### Fixed
+ - FIO-2880: Add style and script tags for premium replacement
+
 ## 2.51.7-rc.2
 ### Changed
  - Reverted: FIO-2880: Fix process of building
