@@ -58,9 +58,9 @@
       var hasTitle = false;
       var hasLogo = false;
       if (form.config) {
-        if (form.config.js && form.config.jsLibrary) {
-          Formio.requireLibrary(form.config.jsLibrary, form.config.jsLibrary, form.config.js, true);
-          return Formio.libraries[form.config.jsLibrary].ready.then(function () {
+        if (form.config.js && form.config.library) {
+          Formio.requireLibrary(form.config.library, form.config.library, form.config.js, true);
+          return Formio.libraries[form.config.library].ready.then(function () {
             form.config.js = false;
             return window.setForm(form, submission, options);
           });
