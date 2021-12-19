@@ -1,365 +1,434 @@
 <!doctype html>
 <html class="no-js">
+
 <head>
-    <meta charset="utf-8">
-    <title></title>
-    <meta name="viewport" content="width=device-width">
-    <script id="header-template" type="text/template">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light d-print-block">
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="viewport" content="width=device-width">
+  <script id="header-template" type="text/template">
+        <nav id="navbar" class="navbar navbar-expand-lg navbar-light bg-light d-print-block">
             <div class="container-fluid">
-                <span class="navbar-brand mb-0 h1" id="form-title">
-                    <img src="assets/logo.png" style="display: inline-block; height: 1.3em;" /> Form Viewer
+                <span class="navbar-brand mb-0 h1">
+                    <img id="logo" src="assets/logo.png" class="d-inline-block align-top mr-4" style="height: 1.3em;" /><span id="form-title">Form Viewer</span>
                 </span>
             </div>
         </nav>
     </script>
-    <script id="branding" type="text/template"><hr /><h4 class="text-center text-muted">powered by <img src="assets/logo.png" style="height: 1.2em;" /></h4></script>
-    <script id="srcform" type="text/template"><div class="well src-form"><div class="form-group"><label for="formsrc">Form Embed URL</label><input type="text" class="form-control" id="formsrc" name="formsrc" placeholder="https://examples.form.io/example"></div><button type="submit" class="btn btn-primary" id="setsrc"><span class="glyphicon glyphicon-check" id="btnicon"></span> Show Form</button></div></script>
-    <script id="loader" type="text/template"><div class="loader-wrapper"><div class="loader text-center"></div></div></script>
-    <script src="lib/flatpickr/flatpickr.min.js" inline></script>
-    <script src="lib/formiojs/formio.form.min.js" inline></script>
-    <script src="lib/seamless/seamless.child.min.js" inline></script>
-    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" inline/>
-    <script type="text/javascript">
-      var query = {};
-      var parts = [];
-      var paths = [];
-      var src = '';
-      var hashes = location.hash.substr(1).replace(/\?/g, '&').split("&");
+  <script id="branding"
+    type="text/template"><hr /><h4 class="text-center text-muted">powered by <img src="assets/logo.png" style="height: 1.2em;" /></h4></script>
+  <script id="srcform"
+    type="text/template"><div class="well src-form"><div class="form-group"><label for="formsrc">Form Embed URL</label><input type="text" class="form-control" id="formsrc" name="formsrc" placeholder="https://examples.form.io/example"></div><button type="submit" class="btn btn-primary" id="setsrc"><span class="glyphicon glyphicon-check" id="btnicon"></span> Show Form</button></div></script>
+  <script id="loader"
+    type="text/template"><div class="loader-wrapper" id="formio-loader"><div class="loader text-center"></div></div></script>
+  <script src="lib/flatpickr/flatpickr.min.js" inline></script>
+  <script src="lib/formiojs/formio.form.min.js" inline></script>
+  <script src="lib/seamless/seamless.child.min.js" inline></script>
+  <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" inline />
+  <script type="text/javascript">
+    var query = {};
+    var parts = [];
+    var paths = [];
+    var src = '';
+    var hashes = location.hash.substr(1).replace(/\?/g, '&').split("&");
 
-      // Search the location search for query parameters.
-      location.search.substr(1).split("&").forEach(function(item) {
-        parts = item.split('=');
-        if (parts.length > 1) {
-          query[parts[0]] = parts[1] && decodeURIComponent(parts[1]);
-        }
-      });
-
-      // Also search hashes.
-      hashes.forEach(function (item) {
-        var parts = item.split("=");
-        if (parts.length > 1) {
-          query[parts[0]] = parts[1] && decodeURIComponent(parts[1]);
-        }
-        else if (item.indexOf('/') === 0) {
-          paths = item.substr(1).split('/');
-        }
-      });
-
-      var protocol = query.protocol || 'https';
-      var host = query.host || 'api.form.io';
-      var baseUrl = protocol + '://' + host;
-      Formio.setBaseUrl(baseUrl);
-
-      if (query.src) {
-        src = query.src;
+    // Search the location search for query parameters.
+    location.search.substr(1).split("&").forEach(function (item) {
+      parts = item.split('=');
+      if (parts.length > 1) {
+        query[parts[0]] = parts[1] && decodeURIComponent(parts[1]);
       }
+    });
 
-      // If there are paths provided.
-      if (paths.length > 1) {
-        var projectUrl = query.host ? (baseUrl + '/' + paths[0]) : (protocol + '://' + paths[0] + '.form.io');
+    // Also search hashes.
+    hashes.forEach(function (item) {
+      var parts = item.split("=");
+      if (parts.length > 1) {
+        query[parts[0]] = parts[1] && decodeURIComponent(parts[1]);
+      }
+      else if (item.indexOf('/') === 0) {
+        paths = item.substr(1).split('/');
+      }
+    });
 
-        // Set the project url.
-        Formio.setProjectUrl(projectUrl);
+    var protocol = query.protocol || 'https';
+    var host = query.host || 'api.form.io';
+    var baseUrl = protocol + '://' + host;
+    Formio.setBaseUrl(baseUrl);
 
-        // Set the source.
-        if (!query.src) {
-          src = projectUrl + '/' + paths[1];
-          if (paths.length > 3 && paths[2] === 'submission') {
-            src += '/submission/' + paths[3];
-          }
+    if (query.src) {
+      src = query.src;
+    }
+
+    // If there are paths provided.
+    if (paths.length > 1) {
+      var projectUrl = query.host ? (baseUrl + '/' + paths[0]) : (protocol + '://' + paths[0] + '.form.io');
+
+      // Set the project url.
+      Formio.setProjectUrl(projectUrl);
+
+      // Set the source.
+      if (!query.src) {
+        src = projectUrl + '/' + paths[1];
+        if (paths.length > 3 && paths[2] === 'submission') {
+          src += '/submission/' + paths[3];
         }
       }
+    }
 
-      // Allow them to provide SSO tokens to the form viewer.
-      if (query.token) {
-        localStorage.setItem('formioToken', query.token);
-        localStorage.removeItem('formioAppUser');
-        localStorage.removeItem('formioUser');
-      }
+    // Allow them to provide SSO tokens to the form viewer.
+    if (query.token) {
+      localStorage.setItem('formioToken', query.token);
+      localStorage.removeItem('formioAppUser');
+      localStorage.removeItem('formioUser');
+    }
 
-      if (query.theme) {
-        var cssLink = '<link rel="stylesheet" href="lib/bootswatch/dist/';
-        cssLink += query.theme;
-        cssLink += '/bootstrap.min.css" />';
-        document.write(cssLink);
-      }
-    </script>
-    <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css" inline/>
-    <link rel="stylesheet" href="lib/flatpickr/flatpickr.min.css" inline/>
-    <link rel="stylesheet" href="lib/formiojs/formio.form.min.css" inline/>
-    <style type="text/css">
-        .page-break-after {
+    if (query.theme) {
+      var cssLink = '<link rel="stylesheet" href="lib/bootswatch/dist/';
+      cssLink += query.theme;
+      cssLink += '/bootstrap.min.css" />';
+      document.write(cssLink);
+    }
+  </script>
+  <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css" inline />
+  <link rel="stylesheet" href="lib/flatpickr/flatpickr.min.css" inline />
+  <link rel="stylesheet" href="lib/formiojs/formio.form.min.css" inline />
+  <style type="text/css">
+    .page-break-after {
 
-            page-break-after: always;
-            break-after: page;
-        }
+      page-break-after: always;
+      break-after: page;
+    }
 
-        .page-break-before, .page-break {
+    .page-break-before,
+    .page-break {
 
-            page-break-before: always;
-            break-before: page;
-            margin-top: 10px;
-        }
+      page-break-before: always;
+      break-before: page;
+      margin-top: 10px;
+    }
 
-        .main {
-            margin-top: 10px;
-        }
+    .main {
+      margin-top: 10px;
+    }
 
-        .iframe.notheme {
-            background-color: transparent;
-        }
-        .iframe .main {
-            margin:0;
-            padding:0;
-            width: 100%;
-        }
-        .iframe.hasheader .main {
-            margin-bottom: 55px;
-        }
-        .iframe .navbar .container {
-            margin:0;
-            width: 100%;
-        }
-        .navbar .container .navbar-right {
-            margin-right: 0;
-        }
+    .iframe.notheme {
+      background-color: transparent;
+    }
 
-        .navbar {
-            margin-bottom: 0px;
-        }
+    .iframe .main {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+    }
 
-        [ref="input"] {
-            white-space: pre-wrap;
-        }
+    .iframe.hasheader .main {
+      margin-bottom: 55px;
+    }
 
-        /* Components where we want to allow auto page breaks inside,
+    .iframe .navbar .container {
+      margin: 0;
+      width: 100%;
+    }
+
+    .navbar .container .navbar-right {
+      margin-right: 0;
+    }
+
+    .navbar {
+      margin-bottom: 0px;
+    }
+
+    [ref="input"] {
+      white-space: pre-wrap;
+    }
+
+    /* Components where we want to allow auto page breaks inside,
         because they could have a very long content or other components inside*/
-        .formio-component-container,
-        .formio-component-fieldset,
-        .formio-component-columns,
-        .formio-component-tabs,
-        .formio-component-table,
-        .formio-component-panel,
-        .formio-component-panel .card-body,
-        .formio-component-htmlelement,
-        .formio-component-textarea,
-        .formio-component.formio-component-datagrid {
-            page-break-inside: auto;
-            break-inside: auto !important;
-        }
+    .formio-component-container,
+    .formio-component-fieldset,
+    .formio-component-columns,
+    .formio-component-tabs,
+    .formio-component-table,
+    .formio-component-panel,
+    .formio-component-panel .card-body,
+    .formio-component-htmlelement,
+    .formio-component-textarea,
+    .formio-component.formio-component-datagrid {
+      page-break-inside: auto;
+      break-inside: auto !important;
+    }
 
-        .formio-component-panel .card {
-            display: block !important;
-            width: 100%;
-        }
+    .formio-component-panel .card {
+      display: block !important;
+      width: 100%;
+    }
 
-        .formio-component-panel .border {
-          border-bottom: none !important;
-        }
+    .formio-component-panel .border {
+      border-bottom: none !important;
+    }
 
-        .formio-component.formio-component-datagrid tr {
-            page-break-inside: avoid;
-        }
+    .formio-component.formio-component-datagrid tr {
+      page-break-inside: avoid;
+    }
 
-        .fa-spin-custom, .glyphicon-spin {
-            -webkit-animation: spin 1000ms infinite linear;
-            animation: spin 1000ms infinite linear;
-        }
+    .fa-spin-custom,
+    .glyphicon-spin {
+      -webkit-animation: spin 1000ms infinite linear;
+      animation: spin 1000ms infinite linear;
+    }
 
-        input[type=radio]:checked {
-          filter: brightness(0.5);
-        }
+    input[type=radio]:checked {
+      filter: brightness(0.5);
+    }
 
-        @-webkit-keyframes spin {
-            0% {
-                -webkit-transform: rotate(0deg);
-                transform: rotate(0deg);
-            }
-            100% {
-                -webkit-transform: rotate(359deg);
-                transform: rotate(359deg);
-            }
-        }
-        @keyframes spin {
-            0% {
-                -webkit-transform: rotate(0deg);
-                transform: rotate(0deg);
-            }
-            100% {
-                -webkit-transform: rotate(359deg);
-                transform: rotate(359deg);
-            }
-        }
-    </style>
-    <style id="premiumStyles"></style>
-    <script id="premiumScript"></script>
+    @-webkit-keyframes spin {
+      0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+      }
+
+      100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+      }
+    }
+
+    @keyframes spin {
+      0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+      }
+
+      100% {
+        -webkit-transform: rotate(359deg);
+        transform: rotate(359deg);
+      }
+    }
+  </style>
+  <style id="premiumStyles"></style>
+  <script id="premiumScript"></script>
 </head>
+
 <body>
-<script type="text/javascript">
-  var bodyClass = '';
-  if ((!query.hasOwnProperty('header') || parseInt(query.header, 10)) && query.format !== 'html') {
-    document.write(document.getElementById('header-template').innerHTML);
-    bodyClass += 'hasheader ';
-  }
-  if (query.iframe && parseInt(query.iframe, 10)) {
-    bodyClass += 'iframe ';
-    if (!query.theme) {
-      bodyClass += 'notheme ';
+  <script type="text/javascript">
+    var bodyClass = '';
+    if ((!query.hasOwnProperty('header') || parseInt(query.header, 10)) && query.format !== 'html') {
+      document.write(document.getElementById('header-template').innerHTML);
+      bodyClass += 'hasheader ';
     }
-  }
-  if (bodyClass) {
-    document.body.className = bodyClass;
-  }
-
-  // Add the auto page break styles to the header unless they turn them off.
-  if (!query.autoPageBreak || query.autoPageBreak !== 'none') {
-    var style = document.createElement('style');
-    style.setAttribute('style', 'text/css');
-    style.innerHTML = ".formio-component { page-break-inside:avoid; break-inside:avoid; } " +
-      ".formio-component-form { page-break-inside:auto; break-inside:auto; }";
-    document.getElementsByTagName('head')[0].appendChild(style);
-  }
-</script>
-<div class="container-fluid main pf" id="main">
-    <div id="preform"></div>
-</div>
-<script type="text/javascript">
-  window.seamless.connect({container: 'div.main', allowStyleInjection: true});
-  var mainElem = document.getElementById('main');
-  var preFormElem = document.getElementById('preform');
-  var loader = document.getElementById('loader');
-  var titleElem = document.getElementById("form-title");
-  var formioElem = null;
-  var pageBreak = false;
-  preFormElem.innerHTML = loader.innerHTML;
-  var createFormPage = function(form, submission, options) {
-    preFormElem.innerHTML = loader.innerHTML;
-    options = options || {};
-    if (!form) {
-      console.warn('No form object provided');
+    if (query.iframe && parseInt(query.iframe, 10)) {
+      bodyClass += 'iframe ';
+      if (!query.theme) {
+        bodyClass += 'notheme ';
+      }
+    }
+    if (bodyClass) {
+      document.body.className = bodyClass;
     }
 
-    // Create the formio element.
-    if (formioElem) {
-      pageBreak = true;
+    // Add the auto page break styles to the header unless they turn them off.
+    if (!query.autoPageBreak || query.autoPageBreak !== 'none') {
+      var style = document.createElement('style');
+      style.setAttribute('style', 'text/css');
+      style.innerHTML = ".formio-component { page-break-inside:avoid; break-inside:avoid; } " +
+        ".formio-component-form { page-break-inside:auto; break-inside:auto; }";
+      document.getElementsByTagName('head')[0].appendChild(style);
     }
-    formioElem = document.createElement('div');
-    if (pageBreak) {
-      formioElem.setAttribute('class', 'page-break-before');
-    }
-    mainElem.appendChild(formioElem);
+  </script>
+  <div class="container-fluid main pf" id="main"></div>
+  <script type="text/javascript">
+    window.seamless.connect({ container: 'div.main', allowStyleInjection: true });
+    var mainElem = document.getElementById('main');
+    var loader = document.getElementById('loader');
+    var titleElem = document.getElementById("form-title");
+    var logoElem = document.getElementById('logo');
+    var formioElem = null;
+    var pageBreak = false;
 
-    // If the form is a string, then load it first and then try again.
-    if (typeof form === 'string') {
-      var formio = new Formio(form);
-      formio.loadForm().then(function(formObj) {
-        if (!submission && formio.submissionId) {
-          formio.loadSubmission().then(function(subObj) {
+    var createFormPage = function (form, submission, options) {
+      options = options || {};
+      if (!form) {
+        console.warn('No form object provided');
+      }
+
+      // Create the formio element.
+      if (formioElem) {
+        pageBreak = true;
+      }
+      formioElem = document.createElement('div');
+      if (pageBreak) {
+        formioElem.setAttribute('class', 'page-break-before');
+      }
+      mainElem.appendChild(formioElem);
+
+      // If the form is a string, then load it first and then try again.
+      if (typeof form === 'string') {
+        var formio = new Formio(form);
+        return formio.loadForm().then(function (formObj) {
+          if (!submission && formio.submissionId) {
+            return formio.loadSubmission().then(function (subObj) {
+              formObj.src = form;
+              return window.setForm(formObj, subObj, options);
+            });
+          }
+          else {
             formObj.src = form;
-            window.setForm(formObj, subObj, options);
+            return window.setForm(formObj, submission, options);
+          }
+        });
+      }
+
+      var hasTitle = false;
+      var hasLogo = false;
+      if (form.config) {
+        if (form.config.js && form.config.library) {
+          Formio.requireLibrary(form.config.library, form.config.library, form.config.js, true);
+          return Formio.libraries[form.config.library].ready.then(function () {
+            form.config.js = false;
+            return window.setForm(form, submission, options);
           });
         }
-        else {
-          formObj.src = form;
-          window.setForm(formObj, submission, options);
+
+        if (form.config.css) {
+          var customCSS = document.createElement('link');
+          customCSS.setAttribute('rel', 'stylesheet');
+          customCSS.setAttribute('href', form.config.css);
+          document.head.appendChild(customCSS);
         }
-      });
-      return;
-    }
 
-    options.show = {};
-    options.hide = {};
-    FormioUtils.eachComponent(form.components, function(component) {
-      if (component.tags && component.tags.length) {
-        if (component.tags.includes('viewer:show')) {
-          options.show[component.key] = true;
+        if (form.config.logo) {
+          logoElem.setAttribute('src', form.config.logo);
+          hasLogo = true;
         }
-        if (component.tags.includes('viewer:hide')) {
-          options.hide[component.key] = true;
+
+        if (form.config.title) {
+          titleElem.innerHTML = form.config.title;
+          hasTitle = true;
+        }
+
+        if (form.config.navbar) {
+          var navBarElem = document.getElementById('navbar');
+          if (navBarElem) {
+            navBarElem.setAttribute('class', form.config.navbar);
+          }
+        }
+
+        if (form.config.theme) {
+          var cssLink = document.createElement('link');
+          cssLink.setAttribute('rel', 'stylesheet');
+          cssLink.setAttribute('href', `lib/bootswatch/dist/${form.config.theme}/bootstrap.min.css`);
+          document.head.appendChild(cssLink);
         }
       }
-    }, true);
 
-    Formio.icons = 'fontawesome';
-    return Formio.createForm(formioElem, form, options).then(function(instance) {
-      if (preFormElem) {
-        // Remove the entire preform element.
-        mainElem.removeChild(preFormElem);
-        preFormElem = null;
+      if (!hasTitle) {
+        titleElem.innerHTML = form.title;
       }
 
-      // Set the source of the form if it is provided.
-      if (form.src) {
-        instance.url = form.src;
-        instance.nosubmit = false;
+      if (!hasLogo) {
+        logoElem.innerHTML = '';
       }
 
-      if (titleElem) {
-        titleElem.innerHTML = instance.form.title;
-      }
-      if (!submission) {
-        return instance;
-      }
+      options.show = {};
+      options.hide = {};
+      FormioUtils.eachComponent(form.components, function (component) {
+        if (component.tags && component.tags.length) {
+          if (component.tags.includes('viewer:show')) {
+            options.show[component.key] = true;
+          }
+          if (component.tags.includes('viewer:hide')) {
+            options.hide[component.key] = true;
+          }
+        }
+      }, true);
 
-      return new Formio.Promise(function(resolve) {
-        instance.setSubmission(submission).then(function() {
-          instance.dataReady.then(function() {
-            instance.checkData(instance.data, {
-              noValidate: true
+      Formio.icons = 'fontawesome';
+      return Formio.createForm(formioElem, form, options).then(function (instance) {
+        try {
+          mainElem.removeChild(document.getElementById('formio-loader'));
+        }
+        catch (err) {
+          // Do nothing.
+        }
+
+        // Set the source of the form if it is provided.
+        if (form.src) {
+          instance.url = form.src;
+          instance.nosubmit = false;
+        }
+
+        if (!submission) {
+          return instance;
+        }
+
+        return new Formio.Promise(function (resolve) {
+          instance.setSubmission(submission).then(function () {
+            instance.dataReady.then(function () {
+              instance.checkData(instance.data, {
+                noValidate: true
+              });
+              window.requestAnimationFrame(() => resolve(instance));
             });
-            window.requestAnimationFrame(resolve);
           });
         });
       });
-    });
-  };
+    };
 
-  // You must keep "window.setForm = function(form, submission, options)". This
-  // is what the PDF renderer uses to generate a form with predefined form, submission, and options.
-  window.setForm = function(form, submission, options) {
-    if (Array.isArray(submission) && submission.length) {
-      var promises = [];
-      submission.forEach(function(sub) {
-        promises.push(createFormPage(form, sub, options));
+    // You must keep "window.setForm = function(form, submission, options)". This
+    // is what the PDF renderer uses to generate a form with predefined form, submission, and options.
+    window.setForm = function (form, submission, options) {
+      mainElem.innerHTML = loader.innerHTML;
+      if (Array.isArray(submission) && submission.length) {
+        var promises = [];
+        submission.forEach(function (sub) {
+          promises.push(createFormPage(form, sub, options));
+        });
+        return Formio.Promise.all(promises);
+      }
+      return createFormPage(form, submission, options);
+    };
+
+    // See if we require authentication.
+    if (query.auth && !Formio.getToken() && src) {
+      window.setForm(`${Formio.getProjectUrl()}/user/login`).then(function (instance) {
+        instance.on('submitDone', (submission) => {
+          window.setForm(src);
+        });
       });
-      return Formio.Promise.all(promises);
     }
-    return createFormPage(form, submission, options);
-  };
+    else if (src) {
+      window.setForm(src);
+    }
+    else {
+      mainElem.innerHTML = document.getElementById('srcform').innerHTML;
+      var srcBtn = document.getElementById('setsrc');
+      var btnIcon = document.getElementById('btnicon');
+      var formSrcElem = document.getElementById('formsrc');
+      srcBtn.addEventListener('click', function (event) {
+        event.preventDefault();
+        if (!formSrcElem.value) {
+          alert('You must provide a Form Embed URL');
+          return;
+        }
 
-  if (src) {
-    window.setForm(src);
-  }
-  else {
-    preFormElem.innerHTML = document.getElementById('srcform').innerHTML;
-    var srcBtn = document.getElementById('setsrc');
-    var btnIcon = document.getElementById('btnicon');
-    var formSrcElem = document.getElementById('formsrc');
-    srcBtn.addEventListener('click', function(event) {
-      event.preventDefault();
-      if (!formSrcElem.value) {
-        alert('You must provide a Form Embed URL');
-        return;
-      }
+        var formSrc = formSrcElem.value;
+        if (formSrc && formSrc.split('?')[0].match(/\/download$/)) {
+          // This is a pdf form to render.
+          var script = document.createElement('script');
+          script.setAttribute('src', formSrc + '&format=html');
+          document.body.appendChild(script);
+        }
+        else {
+          btnIcon.setAttribute('class', 'glyphicon glyphicon-refresh glyphicon-spin');
+          window.setForm(formSrcElem.value);
+        }
+      });
+    }
 
-      var formSrc = formSrcElem.value;
-      if (formSrc && formSrc.split('?')[0].match(/\/download$/)) {
-        // This is a pdf form to render.
-        var script = document.createElement('script');
-        script.setAttribute('src', formSrc + '&format=html');
-        document.body.appendChild(script);
-      }
-      else {
-        btnIcon.setAttribute('class', 'glyphicon glyphicon-refresh glyphicon-spin');
-        window.setForm(formSrcElem.value);
-      }
-    });
-  }
-
-  if ((!query.hasOwnProperty('branding') || parseInt(query.branding, 10)) && query.format !== 'html') {
-    document.write(document.getElementById('branding').innerHTML);
-  }
-</script>
+    if ((!query.hasOwnProperty('branding') || parseInt(query.branding, 10)) && query.format !== 'html') {
+      document.write(document.getElementById('branding').innerHTML);
+    }
+  </script>
 </body>
+
 </html>
