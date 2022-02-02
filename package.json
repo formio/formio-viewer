@@ -35,6 +35,7 @@
     "@babel/preset-env": "^7.15.8",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.3",
+    "copy-props": "^3.0.1",
     "del": "^6.0.0",
     "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
