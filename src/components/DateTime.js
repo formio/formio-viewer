@@ -5,6 +5,9 @@ export default class ViewerDateTime extends DateTimeComponent {
 
     // Pass along the pdf option to the calendar widget.
     if (this.options.pdf) {
+      if (!this.component.widget) {
+        this.component.widget = {};
+      }
       this.component.widget.type = 'viewercalendar';
     }
   }
