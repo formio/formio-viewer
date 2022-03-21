@@ -5,7 +5,7 @@ export default class ViewerTextField extends TextFieldComponent {
     super(component, options, data);
 
     // Pass along the pdf option to the calendar widget.
-    if (this.options.pdf && this.component.widget.type === 'calendar') {
+    if (this.options.pdf && this.component.widget?.type === 'calendar') {
       this.component.widget.type = 'viewercalendar';
     }
   }
