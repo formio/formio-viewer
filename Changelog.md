@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.52.3
+### Changed
+ - Official Release
+ - Updated formiojs@4.14.4
+
 ## 2.52.3-rc.2
 ### Fixed
  - Fixed issues with pdf crashes when widget is null. 
