@@ -23,7 +23,7 @@
     "core-js": "^3.18.3",
     "flatpickr": "^4.6.6",
     "font-awesome": "^4.7.0",
-    "formiojs": "^4.15.0-rc.12",
+    "formiojs": "^4.14.7-rc.3",
     "seamless": "^1.4.1"
   },
   "devDependencies": {
