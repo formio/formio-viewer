@@ -115,9 +115,7 @@ dialog.fixed {
 .builder-component.has-error .invalid-feedback,
 .formio-component.has-error .invalid-feedback,
 .formio-component.alert-danger .invalid-feedback,
-.formio-component.has-message .invalid-feedback,
-.formio-component-modal-wrapper.has-message .invalid-feedback,
-.formio-component-modal-wrapper.has-error .invalid-feedback {
+.formio-component.has-message .invalid-feedback {
   display: block;
   color: inherit;
   margin-top: 4px;
@@ -158,9 +156,9 @@ dialog.fixed {
 .quill-source-code {
   width: 100%;
   margin: 0px;
-  background: rgb(29, 29, 29);
+  background: #1d1d1d;
   box-sizing: border-box;
-  color: rgb(204, 204, 204);
+  color: #cccccc;
   font-size: 15px;
   outline: none;
   padding: 20px;
@@ -1207,8 +1205,8 @@ div[data-oembed-url] {
   display: table-caption;
   caption-side: bottom;
   word-break: break-word;
-  color: hsl(0deg, 0%, 20%);
-  background-color: hsl(0deg, 0%, 97%);
+  color: #333333;
+  background-color: #f7f7f7;
   padding: 0.6em;
   font-size: 0.75em;
   outline-offset: -1px;
@@ -1291,13 +1289,13 @@ div[data-oembed-url] {
   margin-left: 0;
   margin-right: 0;
   font-style: italic;
-  border-left: solid 5px hsl(0deg, 0%, 80%);
+  border-left: solid 5px #cccccc;
 }
 
 /* ckeditor5-block-quote/theme/blockquote.css */
 .formio-component-content[dir=rtl] blockquote {
   border-left: 0;
-  border-right: solid 5px hsl(0deg, 0%, 80%);
+  border-right: solid 5px #cccccc;
 }
 
 .formio-component-content .text-tiny {
