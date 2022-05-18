@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.52.7-rc.5
+### Changed
+ - Updated formiojs@4.14.8-rc.6
+ - FIO-4681: Limited weight for components containing a long value without spaces.
+
 ## 2.52.7-rc.4
 ### Changed
  - Updated formiojs@4.14.8-rc.5
