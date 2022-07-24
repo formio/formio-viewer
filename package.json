@@ -1,6 +1,6 @@
 {
   "name": "formio-viewer",
-  "version": "2.52.6-rc.2",
+  "version": "2.53.0-rc.1",
   "description": "A Form.io form viewer application",
   "main": "index.js",
   "scripts": {
