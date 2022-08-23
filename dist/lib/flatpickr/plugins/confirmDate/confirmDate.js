@@ -1,7 +1,7 @@
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
     typeof define === 'function' && define.amd ? define(factory) :
-    (global = global || self, global.confirmDatePlugin = factory());
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.confirmDatePlugin = factory());
 }(this, (function () { 'use strict';
 
     /*! *****************************************************************************
@@ -58,9 +58,13 @@
                 return {};
             return __assign({ onKeyDown: function (_, __, ___, e) {
                     var eventTarget = getEventTarget(e);
+                    var isTargetLastFocusableElement = (!fp.config.time_24hr && eventTarget === fp.amPM) ||
+                        (fp.config.time_24hr &&
+                            ((fp.config.enableSeconds && eventTarget === fp.secondElement) ||
+                                (!fp.config.enableSeconds && eventTarget === fp.minuteElement)));
                     if (fp.config.enableTime &&
                         e.key === "Tab" &&
-                        eventTarget === fp.amPM) {
+                        isTargetLastFocusableElement) {
                         e.preventDefault();
                         confirmContainer.focus();
                     }

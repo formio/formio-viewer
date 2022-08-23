@@ -1,7 +1,7 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
-  (global = global || self, factory(global.at = {}));
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.at = {}));
 }(this, (function (exports) { 'use strict';
 
   var fp = typeof window !== "undefined" && window.flatpickr !== undefined
@@ -57,6 +57,7 @@
       rangeSeparator: " bis ",
       scrollTitle: "Zum Ändern scrollen",
       toggleTitle: "Zum Umschalten klicken",
+      time_24hr: true,
   };
   fp.l10ns.at = Austria;
   var at = fp.l10ns;

@@ -1,10 +1,6 @@
 import { CustomLocale } from "../types/locale";
 export declare const Malaysian: CustomLocale;
 declare const _default: {
-    default?: CustomLocale | undefined;
-    hr?: CustomLocale | undefined;
-    th?: CustomLocale | undefined;
-    tr?: CustomLocale | undefined;
     ar?: CustomLocale | undefined;
     at?: CustomLocale | undefined;
     az?: CustomLocale | undefined;
@@ -14,10 +10,12 @@ declare const _default: {
     bs?: CustomLocale | undefined;
     ca?: CustomLocale | undefined;
     cat?: CustomLocale | undefined;
+    ckb?: CustomLocale | undefined;
     cs?: CustomLocale | undefined;
     cy?: CustomLocale | undefined;
     da?: CustomLocale | undefined;
     de?: CustomLocale | undefined;
+    default?: CustomLocale | undefined;
     en?: CustomLocale | undefined;
     eo?: CustomLocale | undefined;
     es?: CustomLocale | undefined;
@@ -29,7 +27,9 @@ declare const _default: {
     gr?: CustomLocale | undefined;
     he?: CustomLocale | undefined;
     hi?: CustomLocale | undefined;
+    hr?: CustomLocale | undefined;
     hu?: CustomLocale | undefined;
+    hy?: CustomLocale | undefined;
     id?: CustomLocale | undefined;
     is?: CustomLocale | undefined;
     it?: CustomLocale | undefined;
@@ -45,6 +45,7 @@ declare const _default: {
     ms?: CustomLocale | undefined;
     my?: CustomLocale | undefined;
     nl?: CustomLocale | undefined;
+    nn?: CustomLocale | undefined;
     no?: CustomLocale | undefined;
     pa?: CustomLocale | undefined;
     pl?: CustomLocale | undefined;
@@ -57,6 +58,8 @@ declare const _default: {
     sq?: CustomLocale | undefined;
     sr?: CustomLocale | undefined;
     sv?: CustomLocale | undefined;
+    th?: CustomLocale | undefined;
+    tr?: CustomLocale | undefined;
     uk?: CustomLocale | undefined;
     vn?: CustomLocale | undefined;
     zh?: CustomLocale | undefined;

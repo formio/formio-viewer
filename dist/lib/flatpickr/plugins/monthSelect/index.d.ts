@@ -4,6 +4,7 @@ export interface Config {
     dateFormat: string;
     altFormat: string;
     theme: string;
+    _stubbedCurrentMonth?: number;
 }
 export interface ElementDate extends Element {
     dateObj: Date;
