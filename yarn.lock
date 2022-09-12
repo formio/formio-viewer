@@ -2953,10 +2953,10 @@ formidable@^1.2.1:
   resolved "https://registry.yarnpkg.com/formidable/-/formidable-1.2.6.tgz#d2a51d60162bbc9b4a055d8457a7c75315d1a168"
   integrity sha512-KcpbcpuLNOwrEjnbpMC0gS+X8ciDoZE1kkqzat4a8vrprf+s9pKNQ/QIwWfbfs4ltgmFl3MD177SNTkve3BwGQ==
 
-formiojs@4.14.9-rc.9:
-  version "4.14.9-rc.9"
-  resolved "https://registry.yarnpkg.com/formiojs/-/formiojs-4.14.9-rc.9.tgz#67a7dbfe8f788a78e6dce7761a6bcabe5c05940c"
-  integrity sha512-XVIq8Y/XGKw0EBMRiZS9cu7pHjA/rMxq3+3IlJyKeK9K4rVgUtL1vNlpsQNkhvVR59pqo1H3d836Oos+iMwq7w==
+formiojs@4.14.9-rc.13:
+  version "4.14.9-rc.13"
+  resolved "https://registry.yarnpkg.com/formiojs/-/formiojs-4.14.9-rc.13.tgz#c123884a50668554eb6d0930148a721049977ba1"
+  integrity sha512-+ay3PDsPOCbtIudLM90MRSgXKLshJXlVTlDihAFW2qhLlRVHq5r/DG4S58Zdapx5HprB7sk97teUjjGvCDES7Q==
   dependencies:
     "@formio/bootstrap3" "^2.12.2"
     "@formio/choices.js" "^9.0.1"
