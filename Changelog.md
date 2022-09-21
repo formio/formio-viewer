@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased: 2.53.0-rc.10]
+### Fixed
+ - FIO-5581: replaced md5 implementation
+
 ## 2.53.0-rc.9
 ### Changed
  - Updated formiojs@4.14.9-rc.16
