@@ -13,6 +13,7 @@ gulp.task('formiojs', () => gulp.src('./node_modules/formiojs/dist/**/*').pipe(g
 gulp.task('seamless', () => gulp.src('./node_modules/seamless/build/**/*').pipe(gulp.dest('dist/lib/seamless')));
 gulp.task('bootstrap', () => gulp.src('./node_modules/bootstrap/dist/**/*').pipe(gulp.dest('dist/lib/bootstrap')));
 gulp.task('bootswatch', () => gulp.src('./node_modules/bootswatch/**/*').pipe(gulp.dest('dist/lib/bootswatch')));
+gulp.task('md5', () => gulp.src('./node_modules/js-md5/**/*').pipe(gulp.dest('dist/lib/js-md5')));
 gulp.task('fa', () => gulp.src('./node_modules/font-awesome/**/*').pipe(gulp.dest('dist/lib/font-awesome')));
 gulp.task('moment-timezone', () => gulp.src('./node_modules/moment-timezone/**/*').pipe(gulp.dest('dist/lib/moment-timezone')));
 gulp.task('fonts', () => gulp.src('./node_modules/font-awesome/fonts/*').pipe(gulp.dest('dist/fonts')));
@@ -29,6 +30,7 @@ gulp.task('build', gulp.series('clean', gulp.parallel(
   'seamless',
   'bootstrap',
   'bootswatch',
+  'md5',
   'fa',
   'moment-timezone',
   'fonts')
