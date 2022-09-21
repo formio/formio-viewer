@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased: 2.53.0-rc.10]
+## 2.53.0-rc.10
 ### Fixed
  - FIO-5581: replaced md5 implementation
 
