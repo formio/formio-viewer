@@ -3348,7 +3348,7 @@ body.formio-dialog-open {
   overflow-x: auto;
 }
 .formio-component-datagrid .datagrid-table, .formio-component-datagrid .datagrid-table td, .formio-component-datagrid .datagrid-table th {
-  border: 2px solid #ddd !important;
+  border: 3px solid #ddd !important;
   padding: 10px;
 }
 .formio-component-datagrid .datagrid-table > tbody > tr > td:last-child {
@@ -3999,6 +3999,10 @@ div[data-oembed-url] {
 }
 .formio-tooltip__wrapper > span {
   font-weight: normal;
+}
+
+.ace_editor, .ace_editor div, .ace_editor span {
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", "Droid Sans Mono", "Consolas", monospace !important;
 }
 
 span[role=link] {
