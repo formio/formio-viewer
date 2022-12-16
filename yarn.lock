@@ -2958,10 +2958,10 @@ formidable@^1.2.1:
   resolved "https://registry.yarnpkg.com/formidable/-/formidable-1.2.6.tgz#d2a51d60162bbc9b4a055d8457a7c75315d1a168"
   integrity sha512-KcpbcpuLNOwrEjnbpMC0gS+X8ciDoZE1kkqzat4a8vrprf+s9pKNQ/QIwWfbfs4ltgmFl3MD177SNTkve3BwGQ==
 
-formiojs@4.14.11-rc.13:
-  version "4.14.11-rc.13"
-  resolved "https://registry.yarnpkg.com/formiojs/-/formiojs-4.14.11-rc.13.tgz#9c9c942647b0ddeb313a5966436bef695cc94af6"
-  integrity sha512-XvYq55CyF3s4X+DFy/YXseuo/oP+c51T84wDPqeOylslsUr/PnKEfrJKnyxmyf9w1Kem4TsKYg95oJ5NPRg6pQ==
+formiojs@4.14.11-rc.15:
+  version "4.14.11-rc.15"
+  resolved "https://registry.npmjs.org/formiojs/-/formiojs-4.14.11-rc.15.tgz#0a97cdb395044f0f11a7ad9e9a6893dec8b47b27"
+  integrity sha512-Eo7ADl5AFVvN7ia0OL9WgCwM8TgTpXNPPWyPppB14Dt401dagSmZZSV+WCBwczWflovyC8R4rkiciJEIKRNvhw==
   dependencies:
     "@formio/bootstrap3" "^2.12.2"
     "@formio/choices.js" "^9.0.1"
@@ -2989,8 +2989,8 @@ formiojs@4.14.11-rc.13:
     jstimezonedetect "^1.0.7"
     jwt-decode "^3.1.2"
     lodash "^4.17.21"
-    moment "^2.29.2"
-    moment-timezone "^0.5.34"
+    moment "^2.29.4"
+    moment-timezone "^0.5.40"
     native-promise-only "^0.8.1"
     quill "^2.0.0-dev.3"
     resize-observer-polyfill "^1.5.1"
@@ -4582,9 +4582,16 @@ moment-timezone@^0.5.34:
   dependencies:
     moment ">= 2.9.0"
 
-"moment@>= 2.9.0", moment@^2.29.2:
+moment-timezone@^0.5.40:
+  version "0.5.40"
+  resolved "https://registry.npmjs.org/moment-timezone/-/moment-timezone-0.5.40.tgz#c148f5149fd91dd3e29bf481abc8830ecba16b89"
+  integrity sha512-tWfmNkRYmBkPJz5mr9GVDn9vRlVZOTe6yqY92rFxiOdWXbjaR0+9LwQnZGGuNR63X456NqmEkbskte8tWL5ePg==
+  dependencies:
+    moment ">= 2.9.0"
+
+"moment@>= 2.9.0", moment@^2.29.4:
   version "2.29.4"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.4.tgz#3dbe052889fe7c1b2ed966fcb3a77328964ef108"
+  resolved "https://registry.npmjs.org/moment/-/moment-2.29.4.tgz#3dbe052889fe7c1b2ed966fcb3a77328964ef108"
   integrity sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==
 
 ms@2.0.0:
