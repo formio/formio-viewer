@@ -73,7 +73,7 @@ Here's an example of updated `imports` in `App.js` to use "slate" theme (using a
 import React from 'react';
 import logo from './logo.svg';
 import 'bootswatch/dist/slate/bootstrap.min.css'; // Added this :boom:
-import './App.css';
+import './App.scss';
 
 function App() {
 ...
