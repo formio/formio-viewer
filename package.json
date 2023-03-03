@@ -1,6 +1,6 @@
 {
   "name": "formio-viewer",
-  "version": "2.54.2-rc.1",
+  "version": "2.54.2-rc.2",
   "description": "A Form.io form viewer application",
   "main": "index.js",
   "scripts": {
@@ -23,7 +23,7 @@
     "core-js": "^3.18.3",
     "flatpickr": "^4.6.6",
     "font-awesome": "^4.7.0",
-    "formiojs": "4.14.13-rc.9",
+    "formiojs": "4.14.13-rc.12",
     "moment-timezone": "^0.5.34",
     "seamless": "^1.4.1"
   },
