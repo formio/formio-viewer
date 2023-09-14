@@ -953,10 +953,10 @@
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.7.tgz#1d572bfbbe14b7704e0ba0f39b74815b84870d70"
   integrity sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==
 
-"@formio/bootstrap3@2.12.3":
-  version "2.12.3"
-  resolved "https://registry.yarnpkg.com/@formio/bootstrap3/-/bootstrap3-2.12.3.tgz#afb3a91773161d77515628f8e9a031aa5104adc6"
-  integrity sha512-/jod5STUSz9wLnniCCZwKvqigLrzHt4jDZ07VUxmnqg1IcPcJKNX1UrY7tBAYWa2lWJ/p1j4bSerC6UWjbdYDQ==
+"@formio/bootstrap3@2.12.4-rc.1":
+  version "2.12.4-rc.1"
+  resolved "https://registry.yarnpkg.com/@formio/bootstrap3/-/bootstrap3-2.12.4-rc.1.tgz#f192d01ed7eb4f9f2779126edfe6a876a0f8873f"
+  integrity sha512-4B5rs+w9tAk5i+wbdw2/NrTxPqnDX7/W19tiTd9lfXnIGQmaj0ecMEVqDmOJg8pIlyU02g3c4ih6JnA/JVmUbA==
   dependencies:
     resize-observer-polyfill "^1.5.1"
 
@@ -3020,12 +3020,12 @@ formidable@^1.2.1:
   resolved "https://registry.yarnpkg.com/formidable/-/formidable-1.2.6.tgz#d2a51d60162bbc9b4a055d8457a7c75315d1a168"
   integrity sha512-KcpbcpuLNOwrEjnbpMC0gS+X8ciDoZE1kkqzat4a8vrprf+s9pKNQ/QIwWfbfs4ltgmFl3MD177SNTkve3BwGQ==
 
-formiojs@4.17.0:
-  version "4.17.0"
-  resolved "https://registry.yarnpkg.com/formiojs/-/formiojs-4.17.0.tgz#8dddc6a8c77d3eaa360362c1569f880dbbdf23de"
-  integrity sha512-HcVTiX7HWEg4FUhNGcSAQ6rOKDVXVf3iwT9poq8snfUkX3qYw4zLis9AQ/iURulB9jTkHK9qX6vy6yRFSHMBAg==
+formiojs@4.17.1-rc.2:
+  version "4.17.1-rc.2"
+  resolved "https://registry.yarnpkg.com/formiojs/-/formiojs-4.17.1-rc.2.tgz#129ce92a48b966385e7cf4a0974d67551dfba948"
+  integrity sha512-nORmiRdGJRtFmVmJG6z+3hJlAZobL2fYIUctsCpsfeSCN7o9AkYlXe9I4VvQcmm+PgdHncntwJyidGgaJEWoIg==
   dependencies:
-    "@formio/bootstrap3" "2.12.3"
+    "@formio/bootstrap3" "2.12.4-rc.1"
     "@formio/choices.js" "10.2.0"
     "@formio/semantic" "2.6.1"
     "@formio/text-mask-addons" "^3.8.0-formio.2"
