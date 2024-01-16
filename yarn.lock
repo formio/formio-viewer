@@ -960,10 +960,10 @@
   dependencies:
     resize-observer-polyfill "^1.5.1"
 
-"@formio/choices.js@10.2.1-rc.1":
-  version "10.2.1-rc.1"
-  resolved "https://registry.yarnpkg.com/@formio/choices.js/-/choices.js-10.2.1-rc.1.tgz#f955e9d81caf5a14e9af34e02285b3d05f478799"
-  integrity sha512-pJIj8UxlbTukHp6oCAdqnzJ6zt6z7W4nCsoNchP5z/LyDlOymOZvcJoa5KRJys/StVGnfiI+wUWDB5IstX6OYA==
+"@formio/choices.js@10.2.1":
+  version "10.2.1"
+  resolved "https://registry.yarnpkg.com/@formio/choices.js/-/choices.js-10.2.1.tgz#d0f5c032d94f33152b6036f6a5bb42fcc4684e31"
+  integrity sha512-NCE5u7jG3XGokJP16MyAbVSUptKu/mpJYAxd4PPIoLiO/l9Do5uoOQ0MgNb9qG9qABJiOX+qNRE8q8RybY/SwQ==
   dependencies:
     deepmerge "^4.2.2"
     fuse.js "^6.6.2"
@@ -3025,13 +3025,13 @@ formidable@^1.2.1:
   resolved "https://registry.yarnpkg.com/formidable/-/formidable-1.2.6.tgz#d2a51d60162bbc9b4a055d8457a7c75315d1a168"
   integrity sha512-KcpbcpuLNOwrEjnbpMC0gS+X8ciDoZE1kkqzat4a8vrprf+s9pKNQ/QIwWfbfs4ltgmFl3MD177SNTkve3BwGQ==
 
-formiojs@4.18.1-rc.3:
-  version "4.18.1-rc.3"
-  resolved "https://registry.yarnpkg.com/formiojs/-/formiojs-4.18.1-rc.3.tgz#e2a7a5e71df5bc19960805824cf4b7fbb942e4df"
-  integrity sha512-S094B7dL/iW3hxfGDmA9DsmEMi8ocEwdb+zs4zky/ZO3upTGdTllQld+e5N+KetAVFe+94W9mpSO6vqdVoteAg==
+formiojs@4.18.1:
+  version "4.18.1"
+  resolved "https://registry.yarnpkg.com/formiojs/-/formiojs-4.18.1.tgz#5df1115d39cc29231e36e5153c9c580e07e67d15"
+  integrity sha512-1xEtww3NBwkJy1WiE5KQHMEM+uCDJNc/Dq/d11xEd3IQqyf41aIvAR4Y4FQToCdo7M7qyNTvR0TiTvXChOkNMA==
   dependencies:
     "@formio/bootstrap3" "2.12.4-rc.1"
-    "@formio/choices.js" "10.2.1-rc.1"
+    "@formio/choices.js" "10.2.1"
     "@formio/semantic" "2.6.1"
     "@formio/text-mask-addons" "^3.8.0-formio.2"
     "@formio/vanilla-text-mask" "^5.1.1-formio.1"
