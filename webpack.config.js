@@ -12,6 +12,7 @@ module.exports = {
     environment: {
       arrowFunction: false
     },
+    hashFunction: "sha512"
   },
   plugins: [
     new webpack.IgnorePlugin({
