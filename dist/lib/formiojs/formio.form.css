@@ -380,7 +380,7 @@ dialog.fixed {
 @charset "UTF-8";
 .formio-loader {
   position: relative;
-  min-height: 60px;
+  min-height: 100px;
 }
 
 .loader-wrapper {
@@ -390,7 +390,6 @@ dialog.fixed {
   left: 0px;
   bottom: 0px;
   right: 0px;
-  height: 120px;
   background-color: rgba(0, 0, 0, 0);
 }
 
@@ -408,6 +407,16 @@ dialog.fixed {
   width: 60px;
   height: 60px;
   animation: spin 2s linear infinite;
+}
+
+.alert-success {
+  position: relative;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  color: #0a3622;
+  background-color: #d1e7dd;
+  border: #a3cfbb;
+  border-radius: 0.375rem;
 }
 
 @keyframes spin {
@@ -777,6 +786,15 @@ td > .formio-form-group {
 }
 .formio-component-file .fileSelector a {
   text-decoration: underline;
+}
+
+.formio-component-file .status {
+  margin-top: 4px;
+  font-size: 0.9rem;
+}
+
+.formio-component-file .list-group-item .fa {
+  cursor: pointer;
 }
 
 .formio-component-file .fileSelector.fileDragOver {
@@ -1237,10 +1255,6 @@ body.formio-dialog-open {
   overflow-wrap: break-word;
 }
 
-.tree-listgroup {
-  flex-direction: row;
-}
-
 .formio-component-submit button[disabled] + .has-error {
   display: block;
 }
@@ -1342,6 +1356,8 @@ body.formio-dialog-open {
 
 .formio-component-datagrid {
   overflow-x: auto;
+  overflow-y: visible;
+  height: auto;
 }
 .formio-component-datagrid .datagrid-table, .formio-component-datagrid .datagrid-table td, .formio-component-datagrid .datagrid-table th {
   border: 3px solid #ddd !important;
@@ -1444,17 +1460,6 @@ td .formio-component-modaledit .formio-modaledit-view-container {
 .formio-component.alert-danger .help-block,
 .formio-component.alert-warning .help-block {
   color: inherit;
-}
-
-.tree__level_even {
-  background-color: #f6f6f6;
-}
-.tree__node-content {
-  margin-bottom: 10px;
-  overflow-wrap: break-word;
-}
-.tree__node-children {
-  margin: 0;
 }
 
 .formio-select-autocomplete-input {
@@ -1581,8 +1586,8 @@ div[data-oembed-url] {
   display: table-caption;
   caption-side: bottom;
   word-break: break-word;
-  color: hsl(0deg, 0%, 20%);
-  background-color: hsl(0deg, 0%, 97%);
+  color: hsl(0, 0%, 20%);
+  background-color: hsl(0, 0%, 97%);
   padding: 0.6em;
   font-size: 0.75em;
   outline-offset: -1px;
@@ -1665,13 +1670,13 @@ div[data-oembed-url] {
   margin-left: 0;
   margin-right: 0;
   font-style: italic;
-  border-left: solid 5px hsl(0deg, 0%, 80%);
+  border-left: solid 5px hsl(0, 0%, 80%);
 }
 
 /* ckeditor5-block-quote/theme/blockquote.css */
 .formio-component-content[dir=rtl] blockquote {
   border-left: 0;
-  border-right: solid 5px hsl(0deg, 0%, 80%);
+  border-right: solid 5px hsl(0, 0%, 80%);
 }
 
 .formio-component-content .text-tiny {
@@ -2020,4 +2025,14 @@ span[role=link] {
 
 .hidden {
   display: none !important;
+}
+
+.align-center {
+  display: flex;
+  align-items: center;
+}
+
+.justify-center {
+  display: flex;
+  justify-content: center;
 }

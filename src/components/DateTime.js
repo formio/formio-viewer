@@ -1,4 +1,5 @@
-import DateTimeComponent from 'formiojs/components/datetime/DateTime';
+import { Components } from '@formio/js';
+const DateTimeComponent = Components.components.datetime;
 export default class ViewerDateTime extends DateTimeComponent {
   constructor(component, options, data) {
     super(component, options, data);
