@@ -1,6 +1,6 @@
 {
   "name": "formio-viewer",
-  "version": "2.60.0-rc.3",
+  "version": "3.0.0-dev.1",
   "description": "A Form.io form viewer application",
   "main": "index.js",
   "scripts": {
@@ -16,6 +16,10 @@
   "bugs": {
     "url": "https://github.com/formio/formio-viewer/issues"
   },
+  "files": [
+    "dist",
+    "index.js"
+  ],
   "homepage": "https://github.com/formio/formio-viewer#readme",
   "dependencies": {
     "@formio/js": "5.0.0-rc.48",
