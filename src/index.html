@@ -261,19 +261,18 @@
     // If the form is a string, then load it first and then try again.
     if (typeof form === 'string') {
       var formio = new Formio(form);
-      formio.loadForm().then(function(formObj) {
+      return formio.loadForm().then(function(formObj) {
         if (!submission && formio.submissionId) {
-          formio.loadSubmission().then(function(subObj) {
+          return formio.loadSubmission().then(function(subObj) {
             formObj.src = form;
-            window.setForm(formObj, subObj, options);
+            return window.setForm(formObj, subObj, options);
           });
         }
         else {
           formObj.src = form;
-          window.setForm(formObj, submission, options);
+          return window.setForm(formObj, submission, options);
         }
       });
-      return;
     }
 
     options.show = {};
@@ -289,7 +288,9 @@
       }
     }, true);
 
+    console.log('Creating form...');
     return Formio.createForm(formioElem, form, options).then(function(instance) {
+      console.log('Form created...');
       if (preFormElem) {
         // Remove the entire preform element.
         mainElem.removeChild(preFormElem);
@@ -309,22 +310,39 @@
         return instance;
       }
 
-      return new Formio.Promise(function(resolve) {
+      return new Formio.Promise(function(resolve, reject) {
+        console.log('Setting submission...');
         instance.setSubmission(submission).then(function() {
+          console.log('Checking for ready data...');
           instance.dataReady.then(function() {
+            console.log('Submission loaded...');
             instance.checkData(instance.data, {
               noValidate: true
             });
             window.requestAnimationFrame(resolve);
+          }).catch(function(err) {
+            console.log('Error waiting for data ready', err.message || err);
+            window.requestAnimationFrame(function() {
+              reject(err);
+            });
+          });
+        }).catch(function(err) {
+          console.log('Error setting submission', err.message || err);
+          window.requestAnimationFrame(function() {
+            reject(err);
           });
         });
       });
+    }).catch(function(err) {
+      console.log('Error creating form', err.message || err);
+      return Promise.reject(err);
     });
   };
 
   // You must keep "window.setForm = function(form, submission, options)". This
   // is what the PDF renderer uses to generate a form with predefined form, submission, and options.
   window.setForm = function(form, submission, options) {
+    console.log('window.setForm...');
     if (Array.isArray(submission) && submission.length) {
       var promises = [];
       submission.forEach(function(sub) {
