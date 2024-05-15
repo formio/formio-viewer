@@ -1,5 +1,5 @@
 {
-	"version": "2024a",
+	"version": "2023c",
 	"countries": {
 		"AD": {
 			"name": "Andorra",
@@ -70,13 +70,14 @@
 				"Antarctica/Palmer",
 				"Antarctica/Rothera",
 				"Antarctica/Troll",
-				"Antarctica/Vostok",
+				"Asia/Urumqi",
 				"Pacific/Auckland",
 				"Pacific/Port_Moresby",
 				"Asia/Riyadh",
 				"Antarctica/McMurdo",
 				"Antarctica/DumontDUrville",
-				"Antarctica/Syowa"
+				"Antarctica/Syowa",
+				"Antarctica/Vostok"
 			]
 		},
 		"AR": {
@@ -2032,7 +2033,7 @@
 				"SC",
 				"TF"
 			],
-			"comments": "Crozet"
+			"comments": "Crozet, Scattered Is"
 		},
 		"Asia/Kabul": {
 			"name": "Asia/Kabul",
@@ -2115,15 +2116,6 @@
 			],
 			"comments": "Troll"
 		},
-		"Antarctica/Vostok": {
-			"name": "Antarctica/Vostok",
-			"lat": -77.6,
-			"long": 106.9,
-			"countries": [
-				"AQ"
-			],
-			"comments": "Vostok"
-		},
 		"America/Argentina/Buenos_Aires": {
 			"name": "America/Argentina/Buenos_Aires",
 			"lat": -33.4,
@@ -2176,7 +2168,7 @@
 			"countries": [
 				"AR"
 			],
-			"comments": "Catamarca (CT), Chubut (CH)"
+			"comments": "Catamarca (CT); Chubut (CH)"
 		},
 		"America/Argentina/La_Rioja": {
 			"name": "America/Argentina/La_Rioja",
@@ -2440,7 +2432,7 @@
 			"countries": [
 				"BR"
 			],
-			"comments": "Pará (east), Amapá"
+			"comments": "Pará (east); Amapá"
 		},
 		"America/Fortaleza": {
 			"name": "America/Fortaleza",
@@ -2602,7 +2594,7 @@
 			"countries": [
 				"CA"
 			],
-			"comments": "Newfoundland, Labrador (SE)"
+			"comments": "Newfoundland; Labrador (southeast)"
 		},
 		"America/Halifax": {
 			"name": "America/Halifax",
@@ -2611,7 +2603,7 @@
 			"countries": [
 				"CA"
 			],
-			"comments": "Atlantic - NS (most areas), PE"
+			"comments": "Atlantic - NS (most areas); PE"
 		},
 		"America/Glace_Bay": {
 			"name": "America/Glace_Bay",
@@ -2648,7 +2640,7 @@
 				"CA",
 				"BS"
 			],
-			"comments": "Eastern - ON & QC (most areas)"
+			"comments": "Eastern - ON, QC (most areas)"
 		},
 		"America/Iqaluit": {
 			"name": "America/Iqaluit",
@@ -2666,7 +2658,7 @@
 			"countries": [
 				"CA"
 			],
-			"comments": "Central - ON (west), Manitoba"
+			"comments": "Central - ON (west); Manitoba"
 		},
 		"America/Resolute": {
 			"name": "America/Resolute",
@@ -2711,7 +2703,7 @@
 			"countries": [
 				"CA"
 			],
-			"comments": "Mountain - AB, BC(E), NT(E), SK(W)"
+			"comments": "Mountain - AB; BC (E); NT (E); SK (W)"
 		},
 		"America/Cambridge_Bay": {
 			"name": "America/Cambridge_Bay",
@@ -2857,9 +2849,10 @@
 			"lat": 43.8,
 			"long": 87.5833,
 			"countries": [
-				"CN"
+				"CN",
+				"AQ"
 			],
-			"comments": "Xinjiang Time"
+			"comments": "Xinjiang Time, Vostok"
 		},
 		"America/Bogota": {
 			"name": "America/Bogota",
@@ -3275,7 +3268,7 @@
 			"countries": [
 				"ID"
 			],
-			"comments": "Borneo (east, south), Sulawesi/Celebes, Bali, Nusa Tengarra, Timor (west)"
+			"comments": "Borneo (east, south); Sulawesi/Celebes, Bali, Nusa Tengarra; Timor (west)"
 		},
 		"Asia/Jayapura": {
 			"name": "Asia/Jayapura",
@@ -3284,7 +3277,7 @@
 			"countries": [
 				"ID"
 			],
-			"comments": "New Guinea (West Papua / Irian Jaya), Malukus/Moluccas"
+			"comments": "New Guinea (West Papua / Irian Jaya); Malukus/Moluccas"
 		},
 		"Europe/Dublin": {
 			"name": "Europe/Dublin",
@@ -4053,7 +4046,7 @@
 				"VG",
 				"VI"
 			],
-			"comments": "AST - QC (Lower North Shore)"
+			"comments": "AST"
 		},
 		"Asia/Gaza": {
 			"name": "Asia/Gaza",
@@ -4375,7 +4368,7 @@
 			"countries": [
 				"RU"
 			],
-			"comments": "MSK+08 - Sakha (E), N Kuril Is"
+			"comments": "MSK+08 - Sakha (E); N Kuril Is"
 		},
 		"Asia/Kamchatka": {
 			"name": "Asia/Kamchatka",
@@ -4762,7 +4755,7 @@
 			"countries": [
 				"US"
 			],
-			"comments": "Mountain - ID (south), OR (east)"
+			"comments": "Mountain - ID (south); OR (east)"
 		},
 		"America/Phoenix": {
 			"name": "America/Phoenix",
@@ -4983,6 +4976,15 @@
 			],
 			"comments": "Syowa"
 		},
+		"Antarctica/Vostok": {
+			"name": "Antarctica/Vostok",
+			"lat": -77.6,
+			"long": 106.9,
+			"countries": [
+				"AQ"
+			],
+			"comments": "Vostok"
+		},
 		"America/Aruba": {
 			"name": "America/Aruba",
 			"lat": 12.5,
@@ -5107,7 +5109,7 @@
 			"countries": [
 				"CA"
 			],
-			"comments": "EST - ON (Atikokan), NU (Coral H)"
+			"comments": "EST - ON (Atikokan); NU (Coral H)"
 		},
 		"America/Creston": {
 			"name": "America/Creston",
