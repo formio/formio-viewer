@@ -1,36 +1,19 @@
-// Journal 4.6.2
+// Journal 5.3.3
 // Bootswatch
 
 
-// Variables ===================================================================
+// Variables
 
 $web-font-path: "https://fonts.googleapis.com/css2?family=News+Cycle:wght@400;700&display=swap" !default;
 @if $web-font-path {
-  @import url($web-font-path);
-}
-// Navbar ======================================================================
-
-.bg-dark {
-  background-color: $black !important;
+  @import url("#{$web-font-path}");
 }
 
-.bg-light {
-  background-color: $white !important;
-  color: $black;
-  border: 1px solid $gray-200;
-
-  &.navbar-fixed-top {
-    border-width: 0 0 1px;
-  }
-
-  &.navbar-fixed-bottom {
-    border-width: 1px 0 0;
-  }
-}
+// Navbar
 
 .navbar {
-  font-size: 18px;
   font-family: $headings-font-family;
+  font-size: 18px;
   font-weight: $headings-font-weight;
 }
 
@@ -41,7 +24,7 @@ $web-font-path: "https://fonts.googleapis.com/css2?family=News+Cycle:wght@400;70
   text-transform: uppercase;
 }
 
-// Buttons =====================================================================
+// Buttons
 
 .btn {
   font-family: $headings-font-family;
@@ -53,7 +36,7 @@ $web-font-path: "https://fonts.googleapis.com/css2?family=News+Cycle:wght@400;70
   }
 }
 
-// Navs ========================================================================
+// Navs
 
 .pagination {
   a:hover {

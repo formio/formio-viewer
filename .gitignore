@@ -1,5 +1,6 @@
 .DS_Store
 .idea
 aws.json
+lib
 node_modules
 bower_components

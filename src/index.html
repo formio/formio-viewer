@@ -4,22 +4,25 @@
     <meta charset="utf-8">
     <title></title>
     <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="lib/bi/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="lib/flatpickr/flatpickr.min.css" />
+    <link rel="stylesheet" href="lib/formiojs/formio.form.min.css" />
     <script id="header-template" type="text/template">
         <nav class="navbar navbar-expand-lg navbar-light bg-light d-print-block">
             <div class="container-fluid">
-                <span class="navbar-brand mb-0 h1" id="form-title">
-                    <img src="assets/logo.png" style="display: inline-block; height: 1.3em;" /> Form Viewer
+                <span class="navbar-brand d-flex align-items-center" id="form-title">
+                    <img src="assets/logo.png" class="d-inline-block align-text-top me-2" style="height: 1.3em;" /><span>Form Viewer</span>
                 </span>
             </div>
         </nav>
     </script>
     <script id="branding" type="text/template"><hr /><h4 class="text-center text-muted">powered by <img src="assets/logo.png" style="height: 1.2em;" /></h4></script>
-    <script id="srcform" type="text/template"><div class="well src-form"><div class="form-group"><label for="formsrc">Form Embed URL</label><input type="text" class="form-control" id="formsrc" name="formsrc" placeholder="https://examples.form.io/example"></div><button type="submit" class="btn btn-primary" id="setsrc"><span class="glyphicon glyphicon-check" id="btnicon"></span> Show Form</button></div></script>
+    <script id="srcform" type="text/template"><div class="well src-form"><div class="form-group"><label for="formsrc">Form Embed URL</label><input type="text" class="form-control mb-2" id="formsrc" name="formsrc" placeholder="https://examples.form.io/example"></div><button type="submit" class="btn btn-primary" id="setsrc"><span class="glyphicon glyphicon-check" id="btnicon"></span> Show Form</button></div></script>
     <script id="loader" type="text/template"><div class="loader-wrapper"><div class="loader text-center"></div></div></script>
-    <script src="lib/flatpickr/flatpickr.min.js" inline></script>
-    <script src="lib/formiojs/formio.form.min.js" inline></script>
-    <script src="lib/seamless/seamless.child.min.js" inline></script>
-    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" inline/>
+    <script src="lib/flatpickr/flatpickr.min.js"></script>
+    <script src="lib/formiojs/formio.form.min.js"></script>
+    <script src="lib/seamless/seamless.child.min.js"></script>
     <script type="text/javascript">
       var query = {};
       var parts = [];
@@ -85,9 +88,6 @@
         document.write(cssLink);
       }
     </script>
-    <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css" inline/>
-    <link rel="stylesheet" href="lib/flatpickr/flatpickr.min.css" inline/>
-    <link rel="stylesheet" href="lib/formiojs/formio.form.min.css" inline/>
     <style type="text/css">
         .page-break-after {
 
@@ -261,19 +261,18 @@
     // If the form is a string, then load it first and then try again.
     if (typeof form === 'string') {
       var formio = new Formio(form);
-      formio.loadForm().then(function(formObj) {
+      return formio.loadForm().then(function(formObj) {
         if (!submission && formio.submissionId) {
-          formio.loadSubmission().then(function(subObj) {
+          return formio.loadSubmission().then(function(subObj) {
             formObj.src = form;
-            window.setForm(formObj, subObj, options);
+            return window.setForm(formObj, subObj, options);
           });
         }
         else {
           formObj.src = form;
-          window.setForm(formObj, submission, options);
+          return window.setForm(formObj, submission, options);
         }
       });
-      return;
     }
 
     options.show = {};
@@ -289,8 +288,9 @@
       }
     }, true);
 
-    Formio.icons = 'fontawesome';
+    console.log('Creating form...');
     return Formio.createForm(formioElem, form, options).then(function(instance) {
+      console.log('Form created...');
       if (preFormElem) {
         // Remove the entire preform element.
         mainElem.removeChild(preFormElem);
@@ -310,22 +310,39 @@
         return instance;
       }
 
-      return new Formio.Promise(function(resolve) {
+      return new Formio.Promise(function(resolve, reject) {
+        console.log('Setting submission...');
         instance.setSubmission(submission).then(function() {
+          console.log('Checking for ready data...');
           instance.dataReady.then(function() {
+            console.log('Submission loaded...');
             instance.checkData(instance.data, {
               noValidate: true
             });
             window.requestAnimationFrame(resolve);
+          }).catch(function(err) {
+            console.log('Error waiting for data ready', err.message || err);
+            window.requestAnimationFrame(function() {
+              reject(err);
+            });
+          });
+        }).catch(function(err) {
+          console.log('Error setting submission', err.message || err);
+          window.requestAnimationFrame(function() {
+            reject(err);
           });
         });
       });
+    }).catch(function(err) {
+      console.log('Error creating form', err.message || err);
+      return Promise.reject(err);
     });
   };
 
   // You must keep "window.setForm = function(form, submission, options)". This
   // is what the PDF renderer uses to generate a form with predefined form, submission, and options.
   window.setForm = function(form, submission, options) {
+    console.log('window.setForm...');
     if (Array.isArray(submission) && submission.length) {
       var promises = [];
       submission.forEach(function(sub) {

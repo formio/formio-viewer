@@ -1,5 +1,5 @@
-import CalendarWidget from 'formiojs/widgets/CalendarWidget';
-import Widgets from 'formiojs/widgets';
+import { Widgets } from '@formio/js';
+const CalendarWidget = Widgets.calendar;
 export class ViewerCalendar extends CalendarWidget {
   constructor(settings, component, instance, index) {
     super(settings, component, instance, index);
