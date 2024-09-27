@@ -3025,10 +3025,10 @@ formidable@^1.2.1:
   resolved "https://registry.yarnpkg.com/formidable/-/formidable-1.2.6.tgz#d2a51d60162bbc9b4a055d8457a7c75315d1a168"
   integrity sha512-KcpbcpuLNOwrEjnbpMC0gS+X8ciDoZE1kkqzat4a8vrprf+s9pKNQ/QIwWfbfs4ltgmFl3MD177SNTkve3BwGQ==
 
-formiojs@4.21.3-rc.1:
-  version "4.21.3-rc.1"
-  resolved "https://registry.yarnpkg.com/formiojs/-/formiojs-4.21.3-rc.1.tgz#20c2013e132520c94af6e93a0a1bf1c8a66883e4"
-  integrity sha512-hNGtYi5ZqE22pw3hUpvyyAsZQ89LJRpDJdQb4gWQumyy/u3QqHMpuh2Ed9dDWEWxQBPgpRm2GOho2O714RA25g==
+formiojs@4.21.4:
+  version "4.21.4"
+  resolved "https://registry.yarnpkg.com/formiojs/-/formiojs-4.21.4.tgz#a79856a529afbe023b6a9a7b09ac366c89de0a54"
+  integrity sha512-USw5aszDXz2fMeZtJypy0E+beLDL42mpQ9ewcOzk3jxvnIGID4Um7TaxZ15thFBD8JkzrpvJi9S+w7WWhRQ1gw==
   dependencies:
     "@formio/bootstrap3" "2.12.4-rc.1"
     "@formio/choices.js" "10.2.1"
@@ -3053,7 +3053,7 @@ formiojs@4.21.3-rc.1:
     fetch-ponyfill "^7.1.0"
     i18next "22.4.12"
     idb "^7.1.1"
-    inputmask "5.0.8"
+    inputmask "^5.0.9"
     ismobilejs "^1.1.1"
     json-logic-js "^2.0.2"
     jstimezonedetect "^1.0.7"
@@ -3660,10 +3660,10 @@ inline-source@~6.1.8:
     svgo "~1.2.2"
     terser "~3.17.0"
 
-inputmask@5.0.8:
-  version "5.0.8"
-  resolved "https://registry.yarnpkg.com/inputmask/-/inputmask-5.0.8.tgz#cd0f70b058c3291a0d4f27de25dbfc179c998bb4"
-  integrity sha512-1WcbyudPTXP1B28ozWWyFa6QRIUG4KiLoyR6LFHlpT4OfTzRqFfWgHFadNvRuMN1S9XNVz9CdNvCGjJi+uAMqQ==
+inputmask@^5.0.9:
+  version "5.0.9"
+  resolved "https://registry.yarnpkg.com/inputmask/-/inputmask-5.0.9.tgz#7bf4e83f5e199c88c0edf28545dc23fa208ef4be"
+  integrity sha512-s0lUfqcEbel+EQXtehXqwCJGShutgieOaIImFKC/r4reYNvX3foyrChl6LOEvaEgxEbesePIrw1Zi2jhZaDZbQ==
 
 internal-slot@^1.0.3:
   version "1.0.3"
