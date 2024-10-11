@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/formio/formio-viewer#readme",
   "dependencies": {
-    "bootstrap": "^4.6.0",
+    "bootstrap": "^5.0.0",
     "bootswatch": "^4.6.0",
     "core-js": "^3.18.3",
     "flatpickr": "^4.6.6",
