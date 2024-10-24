@@ -1,5 +1,5 @@
 {
-  "name": "formio-viewer",
+  "name": "@formio/formio-viewer",
   "version": "2.61.1",
   "description": "A Form.io form viewer application",
   "main": "index.js",
