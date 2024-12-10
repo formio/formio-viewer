@@ -22,7 +22,7 @@
   ],
   "homepage": "https://github.com/formio/formio-viewer#readme",
   "dependencies": {
-    "@formio/js": "5.0.0-rc.48",
+    "@formio/js": "^5.0.0",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "bootswatch": "^5.3.3",
