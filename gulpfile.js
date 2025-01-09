@@ -26,3 +26,8 @@ gulp.task('build', gulp.parallel(
   'bootswatch',
   'moment-timezone'
 ));
+gulp.task('inlinesource', function () {
+  return gulp.src('./dist/*.html')
+      .pipe(plugins.inlineSource())
+      .pipe(gulp.dest('./dist'));
+});
