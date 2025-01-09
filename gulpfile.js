@@ -1,12 +1,17 @@
 var gulp = require('gulp');
 var plugins = require('gulp-load-plugins')();
+var replace = require('gulp-replace');
 var del = require('del');
+var bootstrapIconsVersion = require('./node_modules/bootstrap-icons/package.json').version;
 gulp.task('clean', () => del(['dist/*', 'lib/*']));
-gulp.task('html', () => gulp.src('./src/index.html').pipe(plugins.htmlmin({
-  collapseWhitespace: true,
-  minifyCSS: true,
-  minifyJS: true
-})).pipe(gulp.dest('dist')));
+gulp.task('html', () => gulp.src('./src/index.html')
+  .pipe(replace('https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.min.css', 'https://cdn.jsdelivr.net/npm/bootstrap-icons@' + bootstrapIconsVersion +'/font/bootstrap-icons.min.css'))
+  .pipe(plugins.htmlmin({
+    collapseWhitespace: true,
+    minifyCSS: true,
+    minifyJS: true
+  }))
+  .pipe(gulp.dest('dist')));
 gulp.task('assets', () => gulp.src('./src/assets/**/*.*', { encoding: false }).pipe(gulp.dest('dist/assets')));
 gulp.task('flatpickr', () => gulp.src('./node_modules/flatpickr/dist/**/*', { encoding: false }).pipe(gulp.dest('dist/lib/flatpickr')));
 gulp.task('formiojs', () => gulp.src('./node_modules/@formio/js/dist/**/*', { encoding: false }).pipe(gulp.dest('dist/lib/formiojs')));
