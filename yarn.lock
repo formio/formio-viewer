@@ -14,10 +14,10 @@
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.7.tgz#1d572bfbbe14b7704e0ba0f39b74815b84870d70"
   integrity sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==
 
-"@formio/bootstrap@3.1.0-rc.3":
-  version "3.1.0-rc.3"
-  resolved "https://registry.yarnpkg.com/@formio/bootstrap/-/bootstrap-3.1.0-rc.3.tgz#f385e0bcf60f9a85f0df8e2aca2aee128d3fc6f0"
-  integrity sha512-IsMBjxqfxovyW1nS2hhIpTSob2/724+DirF2KiWAnwp9ykt8puFqzjjH4vNYn7RoDrBrgDzcDyfzeqgBJu7/0A==
+"@formio/bootstrap@3.1.0-rc.4":
+  version "3.1.0-rc.4"
+  resolved "https://registry.yarnpkg.com/@formio/bootstrap/-/bootstrap-3.1.0-rc.4.tgz#2efe6694e4543426f9989dd0960b153c87255cfa"
+  integrity sha512-5JMaQRvYLdaOQN5Hn6waMLZXC4TChwfBWD4pIuuo2/ktOiCPE3g5/zq1EBnpg5MfFaKuMmk/KFaCZJCx6CMDQw==
 
 "@formio/choices.js@^10.2.1":
   version "10.2.1"
@@ -45,12 +45,12 @@
     lodash "^4.17.21"
     moment "^2.29.4"
 
-"@formio/js@5.1.0-rc.23":
-  version "5.1.0-rc.23"
-  resolved "https://registry.yarnpkg.com/@formio/js/-/js-5.1.0-rc.23.tgz#ff26cd5e5a878c68b86f2de7bb8ac24c6ee774e2"
-  integrity sha512-XUo2sxIZsA+KcaX9lIIYptTwt0dOYDsQux+wSKDT5y12bAT8NAUOpSL9b1hqr4KP3IF7sHSWcIoPUdVtKSBI2g==
+"@formio/js@5.1.0-rc.24":
+  version "5.1.0-rc.24"
+  resolved "https://registry.yarnpkg.com/@formio/js/-/js-5.1.0-rc.24.tgz#076a57b06f30311dd833323a940567528361379f"
+  integrity sha512-yrEf+R+QtpiGHyUDlAOvFHJ4JyTumbdX8BMUTFyCi9rmfu51o3sF+4XC1wS07teCYlnFZOcgmcshrXGsUz7rIA==
   dependencies:
-    "@formio/bootstrap" "3.1.0-rc.3"
+    "@formio/bootstrap" "3.1.0-rc.4"
     "@formio/choices.js" "^10.2.1"
     "@formio/core" "2.4.0-rc.12"
     "@formio/text-mask-addons" "^3.8.0-formio.4"
