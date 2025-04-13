@@ -1,4 +1,5 @@
-import TextFieldComponent from 'formiojs/components/textfield/TextField';
+import { Components } from '@formio/js';
+const TextFieldComponent = Components.components.textfield;
 
 export default class ViewerTextField extends TextFieldComponent {
   constructor(component, options, data) {

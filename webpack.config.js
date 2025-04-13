@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 module.exports = {
   mode: 'production',
-  entry: './src/renderer.js',
+  entry: './lib/renderer.js',
   output: {
     library: 'Formio',
     libraryTarget: 'umd',
@@ -20,15 +20,5 @@ module.exports = {
       contextRegExp: /moment$/
     }),
   ],
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader'
-        }
-      }
-    ]
-  }
+  module: {}
 };

@@ -1,4 +1,4 @@
-import { Formio } from 'formiojs/formio.form.js';
+import { Formio } from '@formio/js';
 import Flatpickr from 'flatpickr';
 window.flatpickr = window['flatpickr-css'] = Flatpickr;
 import './components/ViewerCalendar';
