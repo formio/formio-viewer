@@ -1,8 +1,10 @@
 const path = require('path');
 const webpack = require('webpack');
+const development = process.env.IS_DEV;
 module.exports = {
-  mode: 'production',
+  mode: development ? 'development' : 'production',
   entry: './lib/renderer.js',
+  devtool: development ? 'inline-source-map' : false,
   output: {
     library: 'Formio',
     libraryTarget: 'umd',
