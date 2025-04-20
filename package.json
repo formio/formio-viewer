@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "gulp clean && tsc --project tsconfig.json && gulp build && webpack --config webpack.config.js && gulp inlinesource",
-    "build:dev": "IS_DEV=true gulp clean && tsc --project tsconfig.json && gulp build && IS_DEV=true webpack --config webpack.config.js && gulp inlinesource",
+    "build:dev": "NODE_ENV=development gulp clean && tsc --project tsconfig.json && gulp build && IS_DEV=true webpack --config webpack.config.js && gulp inlinesource",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

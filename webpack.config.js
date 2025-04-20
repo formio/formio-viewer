@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-const development = process.env.IS_DEV;
+const development = process.env.NODE_ENV === 'development';
 module.exports = {
   mode: development ? 'development' : 'production',
   entry: './lib/renderer.js',
