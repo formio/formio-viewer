@@ -45,10 +45,10 @@
     lodash "^4.17.21"
     moment "^2.29.4"
 
-"@formio/js@5.1.2-rc.2":
-  version "5.1.2-rc.2"
-  resolved "https://registry.yarnpkg.com/@formio/js/-/js-5.1.2-rc.2.tgz#6ba61724832b1886d74c917f5b9ec6663e9585bf"
-  integrity sha512-5NVw+atOfAyfkoCJkH4al1GpD9mcKADeskl5P46kDPh63zay4RMFz3Q5VgGUz83V154LGmMg844st8KXEXqMRg==
+"@formio/js@5.1.2-rc.4":
+  version "5.1.2-rc.4"
+  resolved "https://registry.yarnpkg.com/@formio/js/-/js-5.1.2-rc.4.tgz#d32c807a9b08cb633ccf6d0c43e8337fd2e4609b"
+  integrity sha512-/GPh4EE21tUj8mHJYqecAvVynxREQ/nH0L1VVP0JnKPgLC9dLdcwROpmeGhkoCqSQUmb28TZbW9G8tfF2GbrrA==
   dependencies:
     "@formio/bootstrap" "3.1.1-rc.2"
     "@formio/choices.js" "^10.2.1"
