@@ -1,8 +1,10 @@
 const path = require('path');
 const webpack = require('webpack');
+const development = process.env.NODE_ENV === 'development';
 module.exports = {
-  mode: 'production',
+  mode: development ? 'development' : 'production',
   entry: './lib/renderer.js',
+  devtool: development ? 'inline-source-map' : false,
   output: {
     library: 'Formio',
     libraryTarget: 'umd',
@@ -12,6 +14,7 @@ module.exports = {
     environment: {
       arrowFunction: false
     },
+    hashFunction: "sha512"
   },
   plugins: [
     new webpack.IgnorePlugin({

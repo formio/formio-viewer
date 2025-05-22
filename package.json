@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "gulp clean && tsc --project tsconfig.json && gulp build && webpack --config webpack.config.js && gulp inlinesource",
+    "build:dev": "NODE_ENV=development gulp clean && tsc --project tsconfig.json && gulp build && IS_DEV=true webpack --config webpack.config.js && gulp inlinesource",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -37,6 +38,7 @@
     "gulp": "^5.0.0",
     "gulp-concat": "^2.6.1",
     "gulp-htmlmin": "^5.0.1",
+    "gulp-if": "^3.0.0",
     "gulp-inline-source": "^4.0.0",
     "gulp-load-plugins": "^2.0.8",
     "gulp-minify-css": "^1.2.3",
