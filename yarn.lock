@@ -29,10 +29,10 @@
     lodash "^4.17.21"
     moment "^2.29.4"
 
-"@formio/js@5.2.1-rc.9":
-  version "5.2.1-rc.9"
-  resolved "https://registry.yarnpkg.com/@formio/js/-/js-5.2.1-rc.9.tgz#f74203ea44fecb375b43ae43fb0352b44d028c73"
-  integrity sha512-KHooDTwrceO6NBAFNrjqIB2LxgRWz+UE1UP2w9qQ5CHMPt7ZBAB4YlPhha031Lku+t/zZR5tiwIAzer+J7i0IQ==
+"@formio/js@5.2.1-rc.11":
+  version "5.2.1-rc.11"
+  resolved "https://registry.yarnpkg.com/@formio/js/-/js-5.2.1-rc.11.tgz#72c617b894470207391e0a8fbb9cc63c84a9fb43"
+  integrity sha512-S52aIIPgmZmBqwwFO5G45DSgqyAlhfnNF/3q2N7sBItUysGVf+AeLHGG5Hec5B39HtDPeO+2dilTgqjTW6Ml3Q==
   dependencies:
     "@formio/bootstrap" "3.1.2-rc.3"
     "@formio/core" "2.5.1-rc.8"
