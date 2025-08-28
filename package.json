@@ -1,6 +1,6 @@
 {
   "name": "@formio/viewer",
-  "version": "3.1.0-rc.21",
+  "version": "3.1.0-rc.22",
   "description": "A Form.io form viewer application",
   "main": "index.js",
   "scripts": {
@@ -22,7 +22,7 @@
   ],
   "homepage": "https://github.com/formio/formio-viewer#readme",
   "dependencies": {
-    "@formio/js": "5.2.1-rc.12",
+    "@formio/js": "5.2.1-rc.17",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "bootswatch": "^5.3.3",
