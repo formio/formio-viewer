@@ -297,8 +297,41 @@
       }
     }, true);
 
+    window.addEventListener('message', (message) => {
+      const {scrollWidth, scrollHeight, formId } = message.data;
+      if (!scrollWidth || !scrollHeight || !formId){
+        return;
+      }
+      console.log(message);
+      const IFrame = document.getElementById(`iframe-${formId}`);
+      IFrame.style.width = `${scrollWidth}px`;
+      IFrame.style.height = `${scrollHeight}px`;
+    });
+
+    async function getNestedForms(components){
+      const queue = components;
+      const subForms = [];
+      while(queue.length > 0){
+        const component = queue.pop();
+        const subFormPromise = component.subFormReady;
+        if (subFormPromise){
+          const subForm = await subFormPromise;
+          subForms.push(subForm);
+          const components = subForm.components;
+          queue.push(...components);
+        }
+      }
+      return subForms
+    }
     console.log('Creating form...');
-    return Formio.createForm(formioElem, form, options).then(function(instance) {
+    return Formio.createForm(formioElem, form, options).then(async function(instance) {
+      const subForms = await getNestedForms(instance.components);
+      for (const subForm of subForms) {
+        if (subForm.iframeReady){
+          console.log("Awaiting Iframe");
+          await subForm.iframeReady;
+        }
+      }
       console.log('Form created...');
       if (preFormElem) {
         // Remove the entire preform element.
