@@ -429,6 +429,14 @@ dialog.fixed {
   position: relative;
 }
 
+.col-form-label.field-required:after {
+  content: none !important;
+}
+
+.required-star {
+  color: #eb0000;
+}
+
 .formio-error-wrapper,
 .formio-warning-wrapper {
   padding: 1em;

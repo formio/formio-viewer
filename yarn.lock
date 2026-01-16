@@ -7,15 +7,15 @@
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.7.tgz#1d572bfbbe14b7704e0ba0f39b74815b84870d70"
   integrity sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==
 
-"@formio/bootstrap@^3.1.3":
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/@formio/bootstrap/-/bootstrap-3.1.3.tgz#a7410cbbb3aad77fcbcafd5b5c4ef28833222a0e"
-  integrity sha512-VRtBKJojV5b8RvcM0Vm+i/byjyydJGoDwKW8f3GkahfVejMocxnU43rEYnhGO/P3izDW5MmjzWKDwMA/l9pcqg==
+"@formio/bootstrap@^3.1.4":
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/@formio/bootstrap/-/bootstrap-3.1.4.tgz#050acb5acec6bcd8eb2769fba9b153c419d35e00"
+  integrity sha512-hcIsoLy55UzdDeZC59TPW5CycIRkr7wg7BMsFyWltRI8pQJs4d7vNPC4nGPddzqFnkQtm3Vf1Va4e0ETTIfXhA==
 
-"@formio/core@^2.5.3":
-  version "2.5.3"
-  resolved "https://registry.yarnpkg.com/@formio/core/-/core-2.5.3.tgz#1b48ce60fe91043396d29c8b0e23284ef2fc34a4"
-  integrity sha512-WFpwCP8LpA+ItEdPdQhCZf2ct6hm5ZcfAkRWcPeXAP0x0KBCUTmbQvRqtY0ayIUejQhzqVAAhN66DJwz6zb95Q==
+"@formio/core@^2.5.4":
+  version "2.5.4"
+  resolved "https://registry.yarnpkg.com/@formio/core/-/core-2.5.4.tgz#51d5f101442a3c35f8ba7dc0760ead4b4834345c"
+  integrity sha512-Q9tCMsT/uyDhVfPwaGU8mFaa5NQ8cImFBbskR5ZRQXylLl9i7pKMfpvL4YvVt+bOcHpLtAgcefpd3xgYOPdDKQ==
   dependencies:
     browser-cookies "^1.2.0"
     core-js "^3.39.0"
@@ -29,13 +29,13 @@
     lodash "^4.17.21"
     moment "^2.29.4"
 
-"@formio/js@5.2.4":
-  version "5.2.4"
-  resolved "https://registry.yarnpkg.com/@formio/js/-/js-5.2.4.tgz#6a316e7a50f94f0d256e60d6eaf9731da40d8cc1"
-  integrity sha512-mQfZ/Vd5cVpCCLnPhZVXTA99F1Jq86W1VU+bx17m95YYQXwyajhXUijtki5be3Xk9DH5spYxajB4Q4XVy5Udzw==
+"@formio/js@5.2.6":
+  version "5.2.6"
+  resolved "https://registry.yarnpkg.com/@formio/js/-/js-5.2.6.tgz#1dbf50f3652a587e853e6378f560805cf442f8b6"
+  integrity sha512-59LI0wwjTNcYIDz8AxzQnhAadIz5GkjwC8kgNMmVkLi+Ay1V4bjA/jrY9X78qDa78pPXwea/wB0YCRy+E/veuQ==
   dependencies:
-    "@formio/bootstrap" "^3.1.3"
-    "@formio/core" "^2.5.3"
+    "@formio/bootstrap" "^3.1.4"
+    "@formio/core" "^2.5.4"
     "@formio/text-mask-addons" "^3.8.0-formio.4"
     "@formio/vanilla-text-mask" "^5.1.1-formio.1"
     abortcontroller-polyfill "^1.7.5"
